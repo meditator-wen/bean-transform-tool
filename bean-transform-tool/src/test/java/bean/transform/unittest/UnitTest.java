@@ -26,27 +26,6 @@ public class UnitTest {
 
     BeanTransform beanTransFormsHandler =null;
 
-    /**
-     *  1 很荣幸代表团队来发表感言
-     *  首先 说几点感谢吧，
-     *  第一是感谢主管和领导们对AI-TRAFFIC 产品研发过程中的关心和支持，提供各种资源协调帮助
-     *  第二 是感谢组内兄弟伙伴，在研发过程中大家共同努力攻克难点，
-     *  顶着压力，加班加点保障项目开发进度，并积极参与落地推广过程中的而维护工作
-     *  最后要感谢下兄弟团队，董明董工轻舟团队，测试团队，还有时空团队，
-     *  轻舟是AI-TRAFFIC 的底座保障，测试是我们产品对外出口的保障，时空团队提供预测能力
-     *
-     *  目前，IA-TRAFFIC在在几十个个项目中落地推广使用，
-     *  在交通秩序管控、交通仿真、态势研判、业务方面带来了比较可观的商业价值，也得到了用户的认可。
-     *  可以说这也是对公司成就客户、价值为本理念的很好的实践吧。
-     *
-     *  接下来想说下对未来的展望，希望新的一年，我们AI-TRAFFIC 产品能够继续做大做强，积极推进技术改革，
-     *  在云域一体化框架下完成产品的功能升级，为客户带来更大的价值，
-     *  在国家交通强国的号召下继续也为交通事业贡献发光发热。希望我们组员能够继续保持战斗热情。
-     *
-     *  最后，提前给大家拜个年，祝虎年快乐心想事成。
-     *  *
-     * @return
-     */
 
     public CopyFrom  createCopyFrom(){
         CopyFrom from = new CopyFrom();
@@ -164,6 +143,24 @@ public class UnitTest {
         twoLayerInnerMap.put("layer2",mapInnerElement);
         twoLayerMap.put("layer1",twoLayerInnerMap);
         from.setTwoLayerMap(twoLayerMap);
+
+
+        Inner mapContainListInnerElement = new Inner();
+
+        mapInnerElement.setGreenRatio(30);
+        mapInnerElement.setPhaseId("1");
+        mapInnerElement.setPhaseName("phase2 in mapContainList field");
+        mapInnerElement.setPhaseSeqNo("3");
+        mapInnerElement.setRed(3);
+        mapInnerElement.setYellow(3);
+        Map<String, List<Inner>> mapContainListField = new HashMap<>();
+
+        List<Inner> mapContainListList = new ArrayList<>();
+
+        mapContainListList.add(mapContainListInnerElement);
+        mapContainListField.put("fieldMapwithList", mapContainListList);
+        from.setMapContainList(mapContainListField);
+
         return from;
     }
 

@@ -169,6 +169,16 @@ public class CopyTo {
 
     private Map<String, Map<String,Inner>> twoLayerMap;
 
+    public Map<String, List<Inner>> getMapContainList() {
+        return mapContainList;
+    }
+
+    public void setMapContainList(Map<String, List<Inner>> mapContainList) {
+        this.mapContainList = mapContainList;
+    }
+
+    private Map<String, List<Inner>> mapContainList;
+
     public int[][][] getIntThreeDems() {
         return intThreeDems;
     }

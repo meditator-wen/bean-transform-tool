@@ -157,6 +157,15 @@ public class CopyFrom {
     }
 
     private Map<String, Map<String,Inner>> twoLayerMap;
+    private Map<String, List<Inner>> mapContainList;
+
+    public Map<String, List<Inner>> getMapContainList() {
+        return mapContainList;
+    }
+
+    public void setMapContainList(Map<String, List<Inner>> mapContainList) {
+        this.mapContainList = mapContainList;
+    }
 
     public Date getDateField() {
         return dateField;
