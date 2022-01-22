@@ -109,7 +109,7 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
         String internalName = generateClassname.replace('.', '/');
 
         // 创建类名
-        LOG.info("context.getClassVersion()= {}", AbstractComplexTypeStrategy.getClassVersion());
+        // LOG.info("context.getClassVersion()= {}", AbstractComplexTypeStrategy.getClassVersion());
         beanTransformsImplClassWriter.visit(AbstractComplexTypeStrategy.getClassVersion(),
                 ACC_PUBLIC + ACC_FINAL,
                 internalName,

@@ -556,6 +556,12 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     public static int getClassVersion() {
+        /**
+         * @Description: 根据用户环境获取类字节码主版本号
+         * @Author: wangwen
+         * @Date: 2022/1/22 15:08
+         * @return: int
+         **/
         int classVersion = 52;
         int cafebabe = 0xCAFEBABE;
         DataInputStream dataInputStream = null;
