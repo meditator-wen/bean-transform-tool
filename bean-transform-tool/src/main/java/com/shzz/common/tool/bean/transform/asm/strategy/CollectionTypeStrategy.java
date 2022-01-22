@@ -392,5 +392,9 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     @Override
     public void clearThreadLocal() {
         super.clearThreadLocal();
+        sourceTypeList_Local.remove();
+        targetTypeList_Local.remove();
+        sourceClassList_Local.remove();
+
     }
 }

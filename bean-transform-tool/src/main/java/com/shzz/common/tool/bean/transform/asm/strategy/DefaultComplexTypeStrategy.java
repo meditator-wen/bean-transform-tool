@@ -73,8 +73,9 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
 
         TransformUtilGenerate.checkGenerateClassname(generateClassname);
         String internalName = generateClassname.replace('.', '/');
+
         // 创建类名
-        extensTransformImplClassWriter.visit(52,
+        extensTransformImplClassWriter.visit(getClassVersion(),
                 ACC_PUBLIC+ACC_FINAL,
                 internalName,
                 null,

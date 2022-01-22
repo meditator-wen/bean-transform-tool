@@ -376,5 +376,6 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         sourceTypeList_Local.remove();
         sourceClassList_Local.remove();
 
+
     }
 }

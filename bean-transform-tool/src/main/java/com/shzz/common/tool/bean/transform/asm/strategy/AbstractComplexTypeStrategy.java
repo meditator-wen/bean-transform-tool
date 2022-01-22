@@ -10,7 +10,13 @@ import com.shzz.common.tool.bean.transform.Transform;
 import com.shzz.common.tool.bean.transform.asm.*;
 import com.shzz.common.tool.bean.transform.asm.context.AbstractContext;
 import org.objectweb.asm.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.*;
 
 import java.lang.reflect.Type;
@@ -28,6 +34,9 @@ import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
  * @Created by wen wang
  */
 public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy {
+
+    private static final Logger LOG = LoggerFactory.getLogger("AbstractComplexTypeStrategy");
+
     public static final String ELEMENT_TRANSFORM_MEDIAN = "_Elememnt";
     public static final String TARGET_VARIABLE_NAME = "targetVar";
     public static final String TEMP_ELEMENT_VARIABLE_NAME = "tempElement";
@@ -40,7 +49,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 //    public static final int COLLECTION_TO_ARRAY_PATTERN = 4;
 
 
-    protected ThreadLocal<AbstractContext> registerContext_local=new ThreadLocal<>();
+    protected ThreadLocal<AbstractContext> registerContext_local = new ThreadLocal<>();
 
     protected ThreadLocal<Class> sourceElementType_local = new ThreadLocal<>();
     protected ThreadLocal<Class> targetElementType_local = new ThreadLocal<>();
@@ -55,7 +64,6 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
 
     protected ThreadLocal<MethodVisitor> extensTransformMethodVisitor_Local = new ThreadLocal<>();
-
 
 
     protected Map<String, LocalVariableInfo> defineLocalVar(Label startOfMethodBeanTransformsLable, Label endOfMethodBeanTransformsLable, Class rawType, Class elemType, StrategyMode pattern, String ownerClassInternalName) {
@@ -182,10 +190,10 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
          *  Collection 接口下子接口有三大类
          *  Set   List  Queue, 如果是这几种接口类型,子类实现类可能有多种形式。本工具统一以 HashSet ArrayList  ArrayDeque 来表示
          */
-        if((!Modifier.isAbstract(rawType.getModifiers()))&&(!Modifier.isPublic(rawType.getModifiers()))){
+        if ((!Modifier.isAbstract(rawType.getModifiers())) && (!Modifier.isPublic(rawType.getModifiers()))) {
             // 接口或者抽象类修饰符为abstract, 非abstract修饰符 的collection 子类都可直接 new 指令生成新对象
             return rawType;
-        }else if (List.class.isAssignableFrom(rawType)) {
+        } else if (List.class.isAssignableFrom(rawType)) {
             return ArrayList.class;
         } else if (Set.class.isAssignableFrom(rawType)) {
             return HashSet.class;
@@ -274,7 +282,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
     protected String getOwnerClassInternalName() {
 
-        String generateClassname =this.registerContext_local.get().geneClassName();
+        String generateClassname = this.registerContext_local.get().geneClassName();
 
         String generateClassInternalName = generateClassname.replace('.', '/');
         return generateClassInternalName;
@@ -417,16 +425,15 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     public abstract void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception;
 
 
-
     @Override
-    public  Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
+    public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
         ClassWriter extensTransformImplClassWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 
         TransformUtilGenerate.checkGenerateClassname(generateClassname);
         String internalName = generateClassname.replace('.', '/');
         // 创建类
-        extensTransformImplClassWriter.visit(52,
-                ACC_PUBLIC+ACC_FINAL,
+        extensTransformImplClassWriter.visit(getClassVersion(),
+                ACC_PUBLIC + ACC_FINAL,
                 internalName,
                 null,
                 TransformUtilGenerate.OBJECT_CLASS_INTERNAL_NAME, new String[]{TransformUtilGenerate.EXTENSION_TRANSFORM_CLASS_INTERNAL_NAME});
@@ -486,18 +493,18 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
         extensTransformImplClassWriter.visitEnd();
 
 
-        if(Objects.isNull(this.targetElementType_local.get())||Objects.isNull(this.sourceElementType_local.get())){
+        if (Objects.isNull(this.targetElementType_local.get()) || Objects.isNull(this.sourceElementType_local.get())) {
             // 执行过geneInstruction 方法后targetElementType  sourceElementType 写入ThreadLocal缓存中
-            throw  new BeanTransformException("0x00fa","复杂类型对应的内部元素类型解析失败","sourceBeanType: "+sourceBeanType.getTypeName()+"  "+sourceBeanType.getClass().getSimpleName()+"  targetType: "+targetType.getTypeName()+"  "+targetType.getClass().getSimpleName());
+            throw new BeanTransformException("0x00fa", "复杂类型对应的内部元素类型解析失败", "sourceBeanType: " + sourceBeanType.getTypeName() + "  " + sourceBeanType.getClass().getSimpleName() + "  targetType: " + targetType.getTypeName() + "  " + targetType.getClass().getSimpleName());
         }
         // 集合类内部元素
-        UniversalClassTypeStrategy universalClassTypeStrategy=new UniversalClassTypeStrategy();
+        UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
 
-        BeanTransFormsHandler elementTransForms = (BeanTransFormsHandler)universalClassTypeStrategy.generate(this.sourceElementType_local.get(),
+        BeanTransFormsHandler elementTransForms = (BeanTransFormsHandler) universalClassTypeStrategy.generate(this.sourceElementType_local.get(),
                 this.targetElementType_local.get(),
                 true,
                 true,
-                null,null);
+                null, null);
         byte[] classBytes = extensTransformImplClassWriter.toByteArray();
         Class extendClassImpl = TransformUtilGenerate.loadASMGenerateClass(classBytes, generateClassname);
         Constructor<?> constructor = extendClassImpl.getDeclaredConstructor();//默认构造方法；
@@ -517,16 +524,16 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
         Map<String, ExtensionObjectTransform> innerExtensionObjectTransformMap = new HashMap<>(4);
 
         String geneConvertField = fieldNamePrefix + TransformUtilGenerate.EXTEND_IMPL_FIELD_NAME_SUFFIX;
-        innerExtensionObjectTransformMap.put(geneConvertField,autoCreateExtensionObjectTransform);
+        innerExtensionObjectTransformMap.put(geneConvertField, autoCreateExtensionObjectTransform);
         clearThreadLocal();
         return innerExtensionObjectTransformMap;
     }
 
-    public StrategyMode chooseStrategyMode(Type sourceBeanType, Type targetType) throws Exception{
+    public StrategyMode chooseStrategyMode(Type sourceBeanType, Type targetType) throws Exception {
         return null;
     }
 
-    public void clearThreadLocal(){
+    public void clearThreadLocal() {
         registerContext_local.remove();
         sourceElementType_local.remove();
         targetElementType_local.remove();
@@ -547,6 +554,37 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
         }
         return matchStrategy;
     }
+
+    public static int getClassVersion() {
+        int classVersion = 52;
+        int cafebabe = 0xCAFEBABE;
+        DataInputStream dataInputStream = null;
+        try {
+            String className = AbstractComplexTypeStrategy.class.getName();
+            dataInputStream = new DataInputStream(ClassLoader.getSystemResourceAsStream(className.replace('.', '/') + ".class"));
+
+            if (dataInputStream.readInt() == cafebabe) {
+                int minVersion = dataInputStream.readUnsignedShort();
+                int majorVersion = dataInputStream.readUnsignedShort();
+
+                classVersion = majorVersion;
+            }
+        } catch (Exception e) {
+            LOG.error(e.toString());
+        } finally {
+            try {
+                if (Objects.nonNull(dataInputStream)) {
+                    dataInputStream.close();
+                }
+            } catch (IOException e) {
+                LOG.error(e.toString());
+            }
+        }
+        return classVersion;
+    }
+
+
+
 
 
 }

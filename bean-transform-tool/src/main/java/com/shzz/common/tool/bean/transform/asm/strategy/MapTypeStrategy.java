@@ -39,26 +39,33 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     public static final String TEMP_KEY_VARIABLE_NAME = "tempKey";
     public static final String TEMP_VALUE_VARIABLE_NAME = "tempValue";
     public static final String SOURCE_MAP_VARIABLE_NAME = "sourceMapVar";
-    // 目标类Map 字段 key 类型
+    // 目标类Map 字段 key值 类型
     private Type targetKeyType;
-    // 目标类Map 字段 key RawClass
+    // 目标类Map 字段 key值 RawClass
     private Class targetKeyRawClass;
-    //  源类 Map 字段 key RawClass
+    //  源类 Map 字段 key值 Type
     private Type sourceKeyType;
+    //  源类 Map 字段 key值 RawClass
     private Class sourceKeyRawClass;
+    //  目标类Map 字段 value值 Type
     private Type targetValueType;
+    //  目标类Map 字段 value值 RawClass
     private Class targetValueRawClass;
+    //  源类 Map 字段 value值 Type
     private Type sourceValueType;
+    //  源类 Map 字段 value值 RawClass
     private Class sourceValueRawClass;
     // 目标类Map 字段RawClass
     private Class targetMapRawClass;
     // 源类Map 字段RawClass
     private Class sourceMapRawClass;
-
+    //上下文信息，记录需要转换的两个字段信息
     private AbstractContext registerContext;
-
+    //基于源类 Map 字段和目标类Map 字段 key 值生成的转换的类描述信息
     private String keyTransformClassDescription;
+    //基于源类 Map 字段和目标类Map 字段 value 值生成的转换的类描述信息
     private String valueTransformClassDescription;
+    //基于源类 Map 字段和目标类Map 字段 生成的转换的类类名，（包路径中"." 替换成 "/" 转成）
     private String internalName;
 
     // Map 类型转换类命名编号，如果有多层嵌套Map或者多个Map类型 字段,编号依次增加
@@ -472,8 +479,9 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
 
         checkGenerateClassname(generateClassname);
         internalName = generateClassname.replace('.', '/');
+
         // 创建类
-        classWriter.visit(52,
+        classWriter.visit(getClassVersion(),
                 ACC_PUBLIC + ACC_FINAL,
                 internalName,
                 null,

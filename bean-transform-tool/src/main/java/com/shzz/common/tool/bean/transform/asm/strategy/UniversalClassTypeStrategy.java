@@ -43,6 +43,7 @@ import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
 
     AbstractContext context;
+
     public UniversalClassTypeStrategy(AbstractContext context){
         this.context=context;
     }
@@ -83,8 +84,6 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
     }
 
 
-
-
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
         boolean flag=false;
@@ -110,7 +109,8 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
         String internalName = generateClassname.replace('.', '/');
 
         // 创建类名
-        beanTransformsImplClassWriter.visit(52,
+        LOG.info("context.getClassVersion()= {}", AbstractComplexTypeStrategy.getClassVersion());
+        beanTransformsImplClassWriter.visit(AbstractComplexTypeStrategy.getClassVersion(),
                 ACC_PUBLIC + ACC_FINAL,
                 internalName,
                 null,
@@ -359,12 +359,6 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
                                         innerExtensionObjectTransformMap.put(key,(ExtensionObjectTransform)transform);
                                     }
 
-//                                else if(BeanTransFormsHandler.class.isAssignableFrom(transform.getClass())){
-//                                    innerBeanTransFormsHandlerMap.put(geneConvertField, (BeanTransFormsHandler)transform);
-//                                    //记录需要转换的字段对应的类型，写方法调用时参数通过 getfield 指令获取，提高效率
-//                                    innerFieldClassMap.put(geneTargetFieldTypeField, field.getType());
-//                                    innerFieldClassMap.put(geneSourceFieldTypeField, resloveInfo.getSourceFieldType());
-//                                }
                                 }
 
                             }
