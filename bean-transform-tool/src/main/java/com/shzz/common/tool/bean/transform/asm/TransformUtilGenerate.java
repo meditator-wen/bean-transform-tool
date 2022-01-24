@@ -120,39 +120,42 @@ public class TransformUtilGenerate {
     public static Class loadASMGenerateClass(byte[] bytes, String generateClassname) throws Exception {
         //将二进制流写到本地磁盘上
         FileOutputStream fos = null;
-
-        FileInputStream fin = null;
         int lastIndex = generateClassname.lastIndexOf(".");
+        String packageTopath=generateClassname.substring(0,lastIndex).replace(".",File.separator);
         String className = generateClassname.substring(lastIndex + 1);
-        //   String classFilePath=generateClassname.replaceAll(".",File.separator);
-        // File classFile = new File(classFilePath+".class");
-        File classFile = new File(className + ".class");
+        //String fullPath=TransformUtilGenerate.class.getResource("/")+File.separator+packageTopath+File.separator+className + ".class";
+        String fullPath=System.getProperty("user.dir")+File.separator+"generate"+File.separator+packageTopath+className + ".class";
 
         CustomeClassLoader customeClassLoader = new CustomeClassLoader();
-
 
         Class geneImplClass = null;
         try {
 
+
+             // 创建类元信息
+
+            CustomeClassLoader.putClassByte(generateClassname, bytes);
+            geneImplClass = customeClassLoader.loadClass(generateClassname);
+            File classFile = new File(fullPath);
             // 写到本地文件
             if (SystemProperties.getClassOutputFlag()) {
+               if(!classFile.getParentFile().exists()){
+
+                   classFile.getParentFile().mkdirs();
+               }
+               // classFile.createNewFile();
                 fos = new FileOutputStream(classFile);
                 fos.write(bytes);
                 fos.close();
+                LOG.info("ASM generate class file directory is: "+classFile.getParentFile().getPath());
             }
-             // 创建类元信息
-            customeClassLoader.putClassByte(generateClassname, bytes);
-            geneImplClass = customeClassLoader.loadClass(generateClassname);
-//            fin=new FileInputStream(classFile);
-//            byte[] loadClassByte=new byte[fin.available()];
-//            fin.read(loadClassByte);
-//            customeClassLoader.putClassByte(generateClassname, loadClassByte); // 创建类元信息
-//            geneImplClass = customeClassLoader.loadClass(generateClassname);
-//
-//            fin.close();
 
         } catch (IOException e) {
             LOG.error(e.toString());
+        }finally {
+            if(Objects.nonNull(fos)){
+                fos.close();
+            }
         }
         return geneImplClass;
     }

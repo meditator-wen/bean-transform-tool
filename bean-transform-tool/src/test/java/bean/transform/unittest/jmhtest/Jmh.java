@@ -15,6 +15,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -89,9 +90,11 @@ public class Jmh {
     public static void main(String[] args) throws RunnerException {
         //String[] args
         //String[] args
+        String docPath = System.getProperty("user.dir")+File.separator+"doc"+File.separator+"benchMarkTest.log";;
+        System.out.println("jmh test output path: "+docPath);
         Options options = new OptionsBuilder()
                 .include(Jmh.class.getSimpleName())
-                .output("D:\\github projects\\opensource-bean-transform-tool\\bean-transform-tool\\doc\\benchMarkTest.log")
+                .output(docPath)
                 .build();
         new Runner(options).run();
     }
