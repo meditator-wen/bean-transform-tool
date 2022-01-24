@@ -48,13 +48,30 @@
             <scope>test</scope>
         </dependency>
 
-
-        <!-- https://mvnrepository.com/artifact/org.springframework/org.springframework.beans -->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/org.springframework.beans &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework</groupId>-->
 <!--            <artifactId>org.springframework.beans</artifactId>-->
 <!--            <version>3.2.2.RELEASE</version>-->
 <!--        </dependency>-->
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>org.springframework.beans</artifactId>
+            <version>3.2.2.RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/org.springframework.beans-3.2.5.RELEASE.jar</systemPath>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>3.2.5.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
         <dependency>
@@ -101,7 +118,6 @@
         </dependency>
 
 
-
         <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -124,7 +140,7 @@
 
         </dependency>
 
-   </dependencies>
+    </dependencies>
 
     <build>
         <plugins>

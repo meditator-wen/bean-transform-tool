@@ -147,12 +147,12 @@ public class UnitTest {
 
         Inner mapContainListInnerElement = new Inner();
 
-        mapInnerElement.setGreenRatio(30);
-        mapInnerElement.setPhaseId("1");
-        mapInnerElement.setPhaseName("phase2 in mapContainList field");
-        mapInnerElement.setPhaseSeqNo("3");
-        mapInnerElement.setRed(3);
-        mapInnerElement.setYellow(3);
+        mapContainListInnerElement.setGreenRatio(30);
+        mapContainListInnerElement.setPhaseId("1");
+        mapContainListInnerElement.setPhaseName("phase2 in mapContainList field");
+        mapContainListInnerElement.setPhaseSeqNo("3");
+        mapContainListInnerElement.setRed(3);
+        mapContainListInnerElement.setYellow(3);
         Map<String, List<Inner>> mapContainListField = new HashMap<>();
 
         List<Inner> mapContainListList = new ArrayList<>();
@@ -190,6 +190,8 @@ public class UnitTest {
 
         int loop = 1;
 
+        bean.transform.unittest.jmhtest.CopyTo copyTo8 = new bean.transform.unittest.jmhtest.CopyTo();
+        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
 
 
 
