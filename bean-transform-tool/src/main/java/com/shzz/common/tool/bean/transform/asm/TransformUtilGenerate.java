@@ -147,7 +147,7 @@ public class TransformUtilGenerate {
                 fos = new FileOutputStream(classFile);
                 fos.write(bytes);
                 fos.close();
-                LOG.info("ASM generate class file directory is: "+classFile.getParentFile().getPath());
+                LOG.info("Generate classes store into specific path : "+classFile.getParentFile().getPath());
             }
 
         } catch (IOException e) {
