@@ -285,6 +285,9 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
 
                 ResloveInfo resloveInfo = TypeTransformAssist.reslove(field, targetClass, sourceBeanClass);
 
+                if (Objects.isNull(resloveInfo)) {
+                    continue;
+                }
                 String implClass = resloveInfo.getExtensionObjectTransformImplClass();
                 String geneConvertField = field.getName() + TransformUtilGenerate.EXTEND_IMPL_FIELD_NAME_SUFFIX;
                 String geneSourceFieldTypeField = field.getName() + TransformUtilGenerate.SOURCE_FIELD_CLASS_FIELD_SUFFIX;

@@ -294,6 +294,10 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
         for (Field iterField : effectiveFieldList) {
 
             ResloveInfo resloveInfo = TypeTransformAssist.reslove(iterField, targetClass, sourceBeanClass);
+            if (Objects.isNull(resloveInfo)) {
+                continue;
+            }
+
             // 浅拷贝模式下，如果源类和目标类 对应字段是同一类型，则可以执行，否则只能深拷贝处理
             String iterFiledClassName = iterField.getType().getName();
             String sourceFiledClassName = resloveInfo.getSourceFieldType().getName();

@@ -630,7 +630,7 @@ public class TypeTransformAssist {
                 LOG.warn("类{}中字段{} {} 对应的set 方法 {}不存在，忽略该字段", targetClass.getSimpleName(), field.getGenericType().getTypeName(), field.getName(), setFunctionName);
                 LOG.error(e.toString());
                 // 如果本类字段无set 方法，则源类对应字段信息无需解析。后续遍历转换该字段时忽略
-                return resloveInfo;
+                return null;
             }
 
 
