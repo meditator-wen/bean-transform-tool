@@ -124,13 +124,12 @@ public class TransformUtilGenerate {
         String packageTopath=generateClassname.substring(0,lastIndex).replace(".",File.separator);
         String className = generateClassname.substring(lastIndex + 1);
         //String fullPath=TransformUtilGenerate.class.getResource("/")+File.separator+packageTopath+File.separator+className + ".class";
-        String fullPath=System.getProperty("user.dir")+File.separator+"generate"+File.separator+packageTopath+className + ".class";
+        String fullPath = System.getProperty("user.dir") + File.separator + "generate" + File.separator + packageTopath + File.separator + className + ".class";
 
         CustomeClassLoader customeClassLoader = new CustomeClassLoader();
 
         Class geneImplClass = null;
         try {
-
 
              // 创建类元信息
 
@@ -139,15 +138,18 @@ public class TransformUtilGenerate {
             File classFile = new File(fullPath);
             // 写到本地文件
             if (SystemProperties.getClassOutputFlag()) {
-               if(!classFile.getParentFile().exists()){
 
-                   classFile.getParentFile().mkdirs();
-               }
+                if(!classFile.getParentFile().exists()){
+
+                    classFile.getParentFile().mkdirs();
+                } else {
+
+                }
                // classFile.createNewFile();
                 fos = new FileOutputStream(classFile);
                 fos.write(bytes);
                 fos.close();
-                LOG.info("Generate classes store into specific path : "+classFile.getParentFile().getPath());
+                LOG.info("Generate classes:{} store into specific path : {} ", generateClassname, classFile.getParentFile().getPath());
             }
 
         } catch (IOException e) {

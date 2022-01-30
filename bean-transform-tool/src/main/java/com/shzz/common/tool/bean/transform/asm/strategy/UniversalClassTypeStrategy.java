@@ -57,7 +57,7 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
     private final Map<String, Map<String, ExtensionObjectTransform>> extensionObjectTransformMap = new ConcurrentHashMap<>();
     private final Map<String, Map<String, BeanTransFormsHandler>> beanTransFormsHandlerMap = new ConcurrentHashMap<>();
     private final Map<String, Map<String, Class>> fieldClassMap = new ConcurrentHashMap<>();
-    public static final Map<StrategyMode, Class<? extends AbstractComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
+    private static final Map<StrategyMode, Class<? extends AbstractComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
 
 
 

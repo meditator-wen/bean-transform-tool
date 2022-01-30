@@ -15,7 +15,7 @@ import java.util.List;
  * @Created by wen wang
  */
 
-public class CopyTo {
+public class BeanTo {
 
     private double douVar;
 
@@ -436,11 +436,9 @@ public class CopyTo {
     }
 
 
-
-
-    public void setDouVar(int douVar) {
-        this.douVar = douVar;
-    }
+//    public void setDouVar(double douVar) {
+//        this.douVar = douVar;
+//    }
 
 
 

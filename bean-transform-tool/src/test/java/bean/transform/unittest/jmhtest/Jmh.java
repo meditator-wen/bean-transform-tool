@@ -2,12 +2,12 @@ package bean.transform.unittest.jmhtest;
 
 import bean.transform.unittest.entity.Inner;
 import bean.transform.unittest.entity.ListElement;
+
 import com.shzz.common.tool.bean.transform.BeanTransform;
-import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
 import com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate;
 
 import bean.transform.unittest.jmhtest.mapperstruct.MapperStructConvert;
-import com.alibaba.fastjson.JSON;
+import fr.xebia.extras.selma.Selma;
 import net.sf.cglib.beans.BeanCopier;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
  * @Created by wen wang
  */
 
-@BenchmarkMode(Mode.All) // 指定mode为Mode.AverageTime
-@OutputTimeUnit(TimeUnit.MICROSECONDS) // 指定输出的耗时时长的单位
+@BenchmarkMode({Mode.All}) // 指定mode为Mode.AverageTime
+@OutputTimeUnit(TimeUnit.SECONDS) // 指定输出的耗时时长的单位
 @Warmup(iterations = 2, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 50, time = 3, timeUnit = TimeUnit.SECONDS)
 @Fork(1)
@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class Jmh {
 
 
-    BeanCopier copier = BeanCopier.create(CopyFrom.class, CopyTo.class, false);
+    BeanCopier copier = BeanCopier.create(BeanFrom.class, BeanTo.class, false);
 
     BeanTransform beanTransFormsHandler = null;
 
@@ -45,28 +45,30 @@ public class Jmh {
 
     MapperStructConvert mapperStructConvert = MapperStructConvert.INSTANCE;
 
+    // Get SelmaMapper
+    // SelmaMapper selmaMapper = Selma.builder(SelmaMapper.class).build();
 
     public Jmh() {
         try {
-            beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
+            beanTransFormsHandler = TransformUtilGenerate.generate(BeanFrom.class, BeanTo.class, true, true, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    CopyFrom from = createCopyFrom();
+    BeanFrom from = createCopyFrom();
 
     @Benchmark
     public void benchMarkMapStruct() throws Exception {
-        CopyTo copyTo4 = new CopyTo();
-        copyTo4 = mapperStructConvert.transform(from);
+        BeanTo beanTo4 = new BeanTo();
+        beanTo4 = mapperStructConvert.transform(from);
 
     }
 
     @Benchmark
     public void benchMarkSpringBeanUtils() throws Exception {
-        CopyTo copyTo3 = new CopyTo();
-        org.springframework.beans.BeanUtils.copyProperties(from, copyTo3);
+        BeanTo beanTo3 = new BeanTo();
+        org.springframework.beans.BeanUtils.copyProperties(from, beanTo3);
 
 
     }
@@ -75,16 +77,23 @@ public class Jmh {
     @Benchmark
     public void benchMarkBeanTransformsHandler() throws Exception {
 
-        CopyTo copyTo2 = beanTransFormsHandler.beanTransform(CopyFrom.class,
+        BeanTo beanTo2 = beanTransFormsHandler.beanTransform(BeanFrom.class,
                 from,
-                CopyTo.class);
+                BeanTo.class);
     }
 
 
     @Benchmark
     public void benchMarkBeanManual() throws Exception {
 
-        CopyTo manualCopy = manual.transformManual(from);
+        BeanTo manualCopy = manual.transformManual(from);
+    }
+
+
+    @Benchmark
+    public void benchMarkSelmaMapper() throws Exception {
+
+        // BeanTo selmaCopy = selmaMapper.asCopyTo(from);
     }
 
     public static void main(String[] args) throws RunnerException {
@@ -100,8 +109,8 @@ public class Jmh {
     }
 
 
-    public CopyFrom createCopyFrom() {
-        CopyFrom from = new CopyFrom();
+    public BeanFrom createCopyFrom() {
+        BeanFrom from = new BeanFrom();
 
         from.setCarDirection(2);
         from.setDistrict("xxx");

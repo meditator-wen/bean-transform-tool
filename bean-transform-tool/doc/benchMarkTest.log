@@ -1,7 +1,7 @@
 # JMH version: 1.33
 # VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
 # VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
-# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=56485:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
 # Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
 # Warmup: 2 iterations, 1 s each
 # Measurement: 50 iterations, 3 s each
@@ -10,17 +10,1702 @@
 # Benchmark mode: Throughput, ops/time
 # Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual
 
-# Run progress: 0.00% complete, ETA 00:30:24
+# Run progress: 0.00% complete, ETA 00:38:00
 # Fork: 1 of 1
 # Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
 WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
 WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-5.168 ops/us
-# Warmup Iteration   2: 6.317 ops/us
-Iteration   1: 6.551 ops/us
-Iteration   2: 6.759 ops/us
-Iteration   3: 6.507 ops/us
-Iteration   4: 5.746 ops/us
-Iteration   5: 
+4738888.936 ops/s
+# Warmup Iteration   2: 5985622.075 ops/s
+Iteration   1: 6194187.394 ops/s
+Iteration   2: 6177061.789 ops/s
+Iteration   3: 6374790.955 ops/s
+Iteration   4: 6656885.620 ops/s
+Iteration   5: 6651879.223 ops/s
+Iteration   6: 5841159.112 ops/s
+Iteration   7: 6293271.759 ops/s
+Iteration   8: 6786007.031 ops/s
+Iteration   9: 7315013.247 ops/s
+Iteration  10: 6592076.444 ops/s
+Iteration  11: 7316001.324 ops/s
+Iteration  12: 6238164.362 ops/s
+Iteration  13: 7125241.669 ops/s
+Iteration  14: 7156895.367 ops/s
+Iteration  15: 7433255.569 ops/s
+Iteration  16: 7414949.428 ops/s
+Iteration  17: 7328370.146 ops/s
+Iteration  18: 7377643.874 ops/s
+Iteration  19: 7217022.012 ops/s
+Iteration  20: 7272776.880 ops/s
+Iteration  21: 7160318.642 ops/s
+Iteration  22: 7198528.213 ops/s
+Iteration  23: 7250866.510 ops/s
+Iteration  24: 7293788.731 ops/s
+Iteration  25: 6567907.593 ops/s
+Iteration  26: 6339628.398 ops/s
+Iteration  27: 5938254.116 ops/s
+Iteration  28: 6817420.346 ops/s
+Iteration  29: 6227030.100 ops/s
+Iteration  30: 6301155.111 ops/s
+Iteration  31: 6937237.633 ops/s
+Iteration  32: 6043649.956 ops/s
+Iteration  33: 7354320.243 ops/s
+Iteration  34: 7308734.425 ops/s
+Iteration  35: 7296235.141 ops/s
+Iteration  36: 7384602.001 ops/s
+Iteration  37: 7057985.095 ops/s
+Iteration  38: 7348188.197 ops/s
+Iteration  39: 7281851.317 ops/s
+Iteration  40: 7344132.460 ops/s
+Iteration  41: 7293836.996 ops/s
+Iteration  42: 7257027.815 ops/s
+Iteration  43: 7307033.702 ops/s
+Iteration  44: 7345431.849 ops/s
+Iteration  45: 7097190.139 ops/s
+Iteration  46: 7254783.524 ops/s
+Iteration  47: 7272180.404 ops/s
+Iteration  48: 6741702.911 ops/s
+Iteration  49: 7161774.509 ops/s
+Iteration  50: 7299786.609 ops/s
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual":
+  6944904.718 ±(99.9%) 233366.098 ops/s [Average]
+  (min, avg, max) = (5841159.112, 6944904.718, 7433255.569), stdev = 471411.063
+  CI (99.9%): [6711538.620, 7178270.816] (assumes normal distribution)
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler
+
+# Run progress: 6.67% complete, ETA 00:35:58
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+4382420.929 ops/s
+# Warmup Iteration   2: 5218583.728 ops/s
+Iteration   1: 5667978.810 ops/s
+Iteration   2: 6195650.972 ops/s
+Iteration   3: 6197780.679 ops/s
+Iteration   4: 6349076.101 ops/s
+Iteration   5: 6139411.753 ops/s
+Iteration   6: 6443787.997 ops/s
+Iteration   7: 5777485.726 ops/s
+Iteration   8: 5773551.925 ops/s
+Iteration   9: 5909120.897 ops/s
+Iteration  10: 6104299.051 ops/s
+Iteration  11: 5978399.954 ops/s
+Iteration  12: 6079696.996 ops/s
+Iteration  13: 6116755.173 ops/s
+Iteration  14: 6018069.115 ops/s
+Iteration  15: 5952033.125 ops/s
+Iteration  16: 6011395.724 ops/s
+Iteration  17: 6052775.215 ops/s
+Iteration  18: 5631862.601 ops/s
+Iteration  19: 6074487.163 ops/s
+Iteration  20: 5954280.378 ops/s
+Iteration  21: 4990590.989 ops/s
+Iteration  22: 5998502.703 ops/s
+Iteration  23: 5978905.419 ops/s
+Iteration  24: 6066060.737 ops/s
+Iteration  25: 5931277.691 ops/s
+Iteration  26: 5872185.666 ops/s
+Iteration  27: 6014198.681 ops/s
+Iteration  28: 5966630.389 ops/s
+Iteration  29: 5995681.051 ops/s
+Iteration  30: 5984646.798 ops/s
+Iteration  31: 5943380.948 ops/s
+Iteration  32: 5974620.700 ops/s
+Iteration  33: 5998299.778 ops/s
+Iteration  34: 5947460.796 ops/s
+Iteration  35: 5969978.076 ops/s
+Iteration  36: 6006654.797 ops/s
+Iteration  37: 5980880.064 ops/s
+Iteration  38: 5903271.966 ops/s
+Iteration  39: 5702795.081 ops/s
+Iteration  40: 5695445.369 ops/s
+Iteration  41: 5398450.801 ops/s
+Iteration  42: 5939862.162 ops/s
+Iteration  43: 5853000.427 ops/s
+Iteration  44: 5956764.680 ops/s
+Iteration  45: 5856030.458 ops/s
+Iteration  46: 5958751.037 ops/s
+Iteration  47: 5976873.740 ops/s
+Iteration  48: 5800655.549 ops/s
+Iteration  49: 5991549.911 ops/s
+Iteration  50: 5949246.685 ops/s
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler":
+  5940611.050 ±(99.9%) 108125.223 ops/s [Average]
+  (min, avg, max) = (4990590.989, 5940611.050, 6443787.997), stdev = 218418.299
+  CI (99.9%): [5832485.827, 6048736.273] (assumes normal distribution)
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct
+
+# Run progress: 13.33% complete, ETA 00:33:19
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+3570361.857 ops/s
+# Warmup Iteration   2: 4406027.211 ops/s
+Iteration   1: 4664136.374 ops/s
+Iteration   2: 4713006.119 ops/s
+Iteration   3: 4722797.311 ops/s
+Iteration   4: 4539872.045 ops/s
+Iteration   5: 4656012.742 ops/s
+Iteration   6: 4708644.217 ops/s
+Iteration   7: 4675797.957 ops/s
+Iteration   8: 4490340.853 ops/s
+Iteration   9: 4204915.864 ops/s
+Iteration  10: 4368105.299 ops/s
+Iteration  11: 4646428.410 ops/s
+Iteration  12: 4630886.317 ops/s
+Iteration  13: 4675204.034 ops/s
+Iteration  14: 4706718.608 ops/s
+Iteration  15: 4564771.166 ops/s
+Iteration  16: 4657879.152 ops/s
+Iteration  17: 4732639.586 ops/s
+Iteration  18: 4702463.072 ops/s
+Iteration  19: 4758374.116 ops/s
+Iteration  20: 4752764.574 ops/s
+Iteration  21: 4704146.541 ops/s
+Iteration  22: 4702851.654 ops/s
+Iteration  23: 4714183.896 ops/s
+Iteration  24: 4615663.217 ops/s
+Iteration  25: 4719636.244 ops/s
+Iteration  26: 4766746.640 ops/s
+Iteration  27: 4365973.961 ops/s
+Iteration  28: 4743196.876 ops/s
+Iteration  29: 3905964.457 ops/s
+Iteration  30: 4481256.061 ops/s
+Iteration  31: 4794922.316 ops/s
+Iteration  32: 4842926.464 ops/s
+Iteration  33: 4827796.014 ops/s
+Iteration  34: 4805772.251 ops/s
+Iteration  35: 4776068.033 ops/s
+Iteration  36: 4815045.601 ops/s
+Iteration  37: 4845614.674 ops/s
+Iteration  38: 4800533.110 ops/s
+Iteration  39: 4764035.505 ops/s
+Iteration  40: 4757906.044 ops/s
+Iteration  41: 4735190.319 ops/s
+Iteration  42: 4830248.348 ops/s
+Iteration  43: 4815184.109 ops/s
+Iteration  44: 4784518.586 ops/s
+Iteration  45: 4797585.268 ops/s
+Iteration  46: 4818384.455 ops/s
+Iteration  47: 4756216.224 ops/s
+Iteration  48: 4755752.134 ops/s
+Iteration  49: 4293917.190 ops/s
+Iteration  50: 4317391.463 ops/s
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct":
+  4664527.709 ±(99.9%) 92222.413 ops/s [Average]
+  (min, avg, max) = (3905964.457, 4664527.709, 4845614.674), stdev = 186293.837
+  CI (99.9%): [4572305.296, 4756750.123] (assumes normal distribution)
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkSelmaMapper
+
+# Run progress: 20.00% complete, ETA 00:30:45
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+1786111913.196 ops/s
+# Warmup Iteration   2: 1792647962.132 ops/s
+Iteration   1: 1409323551.048 ops/s
+Iteration   2: 1392301844.640 ops/s
+Iteration   3: 1358167302.185 ops/s
+Iteration   4: 1395833950.295 ops/s
+Iteration   5: 1382639992.322 ops/s
+Iteration   6: 1394311290.860 ops/s
+Iteration   7: 1388904235.287 ops/s
+Iteration   8: 1409803436.099 ops/s
+Iteration   9: 1374218694.967 ops/s
+Iteration  10: 1380659150.569 ops/s
+Iteration  11: 1406827807.462 ops/s
+Iteration  12: 1391368832.264 ops/s
+Iteration  13: 1400651787.754 ops/s
+Iteration  14: 1392800242.890 ops/s
+Iteration  15: 1397957087.536 ops/s
+Iteration  16: 1390109757.469 ops/s
+Iteration  17: 1394912002.850 ops/s
+Iteration  18: 1336112392.844 ops/s
+Iteration  19: 1406067270.245 ops/s
+Iteration  20: 1341010780.405 ops/s
+Iteration  21: 1396587620.075 ops/s
+Iteration  22: 1405963439.540 ops/s
+Iteration  23: 1396314030.870 ops/s
+Iteration  24: 1356326564.775 ops/s
+Iteration  25: 1399543175.385 ops/s
+Iteration  26: 1403304121.285 ops/s
+Iteration  27: 1394520892.968 ops/s
+Iteration  28: 1387113443.845 ops/s
+Iteration  29: 1403837007.105 ops/s
+Iteration  30: 1402563805.606 ops/s
+Iteration  31: 1405456140.882 ops/s
+Iteration  32: 1369095068.003 ops/s
+Iteration  33: 1383624087.767 ops/s
+Iteration  34: 1409409013.053 ops/s
+Iteration  35: 1411942572.627 ops/s
+Iteration  36: 1374884691.161 ops/s
+Iteration  37: 1394367189.575 ops/s
+Iteration  38: 1332742592.532 ops/s
+Iteration  39: 1397367516.100 ops/s
+Iteration  40: 1378560931.947 ops/s
+Iteration  41: 1262063191.930 ops/s
+Iteration  42: 1361075273.466 ops/s
+Iteration  43: 1401466862.081 ops/s
+Iteration  44: 1413938152.298 ops/s
+Iteration  45: 1400498615.905 ops/s
+Iteration  46: 1398208302.837 ops/s
+Iteration  47: 1403772606.992 ops/s
+Iteration  48: 1401789383.756 ops/s
+Iteration  49: 1371731565.406 ops/s
+Iteration  50: 1405719444.251 ops/s
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkSelmaMapper":
+  1387355374.280 ±(99.9%) 13104072.065 ops/s [Average]
+  (min, avg, max) = (1262063191.930, 1387355374.280, 1413938152.298), stdev = 26470873.845
+  CI (99.9%): [1374251302.216, 1400459446.345] (assumes normal distribution)
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkSpringBeanUtils
+
+# Run progress: 26.66% complete, ETA 00:28:10
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+<failure>
+
+java.lang.NullPointerException
+	at org.springframework.core.BridgeMethodResolver.findBridgedMethod(BridgeMethodResolver.java:69)
+	at org.springframework.beans.GenericTypeAwarePropertyDescriptor.<init>(GenericTypeAwarePropertyDescriptor.java:67)
+	at org.springframework.beans.CachedIntrospectionResults.buildGenericTypeAwarePropertyDescriptor(CachedIntrospectionResults.java:316)
+	at org.springframework.beans.CachedIntrospectionResults.<init>(CachedIntrospectionResults.java:273)
+	at org.springframework.beans.CachedIntrospectionResults.forClass(CachedIntrospectionResults.java:149)
+	at org.springframework.beans.BeanUtils.getPropertyDescriptors(BeanUtils.java:362)
+	at org.springframework.beans.BeanUtils.copyProperties(BeanUtils.java:600)
+	at org.springframework.beans.BeanUtils.copyProperties(BeanUtils.java:531)
+	at bean.transform.unittest.jmhtest.Jmh.benchMarkSpringBeanUtils(Jmh.java:71)
+	at bean.transform.unittest.jmhtest.jmh_generated.Jmh_benchMarkSpringBeanUtils_jmhTest.benchMarkSpringBeanUtils_thrpt_jmhStub(Jmh_benchMarkSpringBeanUtils_jmhTest.java:121)
+	at bean.transform.unittest.jmhtest.jmh_generated.Jmh_benchMarkSpringBeanUtils_jmhTest.benchMarkSpringBeanUtils_Throughput(Jmh_benchMarkSpringBeanUtils_jmhTest.java:83)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.openjdk.jmh.runner.BenchmarkHandler$BenchmarkTask.call(BenchmarkHandler.java:475)
+	at org.openjdk.jmh.runner.BenchmarkHandler$BenchmarkTask.call(BenchmarkHandler.java:458)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:830)
+
+
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual
+
+# Run progress: 33.33% complete, ETA 00:20:32
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+≈ 10⁻⁷ s/op
+# Warmup Iteration   2: ≈ 10⁻⁷ s/op
+Iteration   1: ≈ 10⁻⁷ s/op
+Iteration   2: ≈ 10⁻⁷ s/op
+Iteration   3: ≈ 10⁻⁷ s/op
+Iteration   4: ≈ 10⁻⁷ s/op
+Iteration   5: ≈ 10⁻⁷ s/op
+Iteration   6: ≈ 10⁻⁷ s/op
+Iteration   7: ≈ 10⁻⁷ s/op
+Iteration   8: ≈ 10⁻⁷ s/op
+Iteration   9: ≈ 10⁻⁷ s/op
+Iteration  10: ≈ 10⁻⁷ s/op
+Iteration  11: ≈ 10⁻⁷ s/op
+Iteration  12: ≈ 10⁻⁷ s/op
+Iteration  13: ≈ 10⁻⁷ s/op
+Iteration  14: ≈ 10⁻⁷ s/op
+Iteration  15: ≈ 10⁻⁷ s/op
+Iteration  16: ≈ 10⁻⁷ s/op
+Iteration  17: ≈ 10⁻⁷ s/op
+Iteration  18: ≈ 10⁻⁷ s/op
+Iteration  19: ≈ 10⁻⁷ s/op
+Iteration  20: ≈ 10⁻⁷ s/op
+Iteration  21: ≈ 10⁻⁷ s/op
+Iteration  22: ≈ 10⁻⁷ s/op
+Iteration  23: ≈ 10⁻⁷ s/op
+Iteration  24: ≈ 10⁻⁷ s/op
+Iteration  25: ≈ 10⁻⁷ s/op
+Iteration  26: ≈ 10⁻⁷ s/op
+Iteration  27: ≈ 10⁻⁷ s/op
+Iteration  28: ≈ 10⁻⁷ s/op
+Iteration  29: ≈ 10⁻⁷ s/op
+Iteration  30: ≈ 10⁻⁷ s/op
+Iteration  31: ≈ 10⁻⁷ s/op
+Iteration  32: ≈ 10⁻⁷ s/op
+Iteration  33: ≈ 10⁻⁷ s/op
+Iteration  34: ≈ 10⁻⁷ s/op
+Iteration  35: ≈ 10⁻⁷ s/op
+Iteration  36: ≈ 10⁻⁷ s/op
+Iteration  37: ≈ 10⁻⁷ s/op
+Iteration  38: ≈ 10⁻⁷ s/op
+Iteration  39: ≈ 10⁻⁷ s/op
+Iteration  40: ≈ 10⁻⁷ s/op
+Iteration  41: ≈ 10⁻⁷ s/op
+Iteration  42: ≈ 10⁻⁷ s/op
+Iteration  43: ≈ 10⁻⁷ s/op
+Iteration  44: ≈ 10⁻⁷ s/op
+Iteration  45: ≈ 10⁻⁷ s/op
+Iteration  46: ≈ 10⁻⁷ s/op
+Iteration  47: ≈ 10⁻⁷ s/op
+Iteration  48: ≈ 10⁻⁷ s/op
+Iteration  49: ≈ 10⁻⁷ s/op
+Iteration  50: ≈ 10⁻⁷ s/op
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual":
+  ≈ 10⁻⁷ s/op
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler
+
+# Run progress: 40.00% complete, ETA 00:19:14
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+≈ 10⁻⁷ s/op
+# Warmup Iteration   2: ≈ 10⁻⁷ s/op
+Iteration   1: ≈ 10⁻⁷ s/op
+Iteration   2: ≈ 10⁻⁷ s/op
+Iteration   3: ≈ 10⁻⁷ s/op
+Iteration   4: ≈ 10⁻⁷ s/op
+Iteration   5: ≈ 10⁻⁷ s/op
+Iteration   6: ≈ 10⁻⁷ s/op
+Iteration   7: ≈ 10⁻⁷ s/op
+Iteration   8: ≈ 10⁻⁷ s/op
+Iteration   9: ≈ 10⁻⁷ s/op
+Iteration  10: ≈ 10⁻⁷ s/op
+Iteration  11: ≈ 10⁻⁷ s/op
+Iteration  12: ≈ 10⁻⁷ s/op
+Iteration  13: ≈ 10⁻⁷ s/op
+Iteration  14: ≈ 10⁻⁷ s/op
+Iteration  15: ≈ 10⁻⁷ s/op
+Iteration  16: ≈ 10⁻⁷ s/op
+Iteration  17: ≈ 10⁻⁷ s/op
+Iteration  18: ≈ 10⁻⁷ s/op
+Iteration  19: ≈ 10⁻⁷ s/op
+Iteration  20: ≈ 10⁻⁷ s/op
+Iteration  21: ≈ 10⁻⁷ s/op
+Iteration  22: ≈ 10⁻⁷ s/op
+Iteration  23: ≈ 10⁻⁷ s/op
+Iteration  24: ≈ 10⁻⁷ s/op
+Iteration  25: ≈ 10⁻⁷ s/op
+Iteration  26: ≈ 10⁻⁷ s/op
+Iteration  27: ≈ 10⁻⁷ s/op
+Iteration  28: ≈ 10⁻⁷ s/op
+Iteration  29: ≈ 10⁻⁷ s/op
+Iteration  30: ≈ 10⁻⁷ s/op
+Iteration  31: ≈ 10⁻⁷ s/op
+Iteration  32: ≈ 10⁻⁷ s/op
+Iteration  33: ≈ 10⁻⁷ s/op
+Iteration  34: ≈ 10⁻⁷ s/op
+Iteration  35: ≈ 10⁻⁷ s/op
+Iteration  36: ≈ 10⁻⁷ s/op
+Iteration  37: ≈ 10⁻⁷ s/op
+Iteration  38: ≈ 10⁻⁷ s/op
+Iteration  39: ≈ 10⁻⁷ s/op
+Iteration  40: ≈ 10⁻⁷ s/op
+Iteration  41: ≈ 10⁻⁷ s/op
+Iteration  42: ≈ 10⁻⁷ s/op
+Iteration  43: ≈ 10⁻⁷ s/op
+Iteration  44: ≈ 10⁻⁷ s/op
+Iteration  45: ≈ 10⁻⁷ s/op
+Iteration  46: ≈ 10⁻⁷ s/op
+Iteration  47: ≈ 10⁻⁷ s/op
+Iteration  48: ≈ 10⁻⁷ s/op
+Iteration  49: ≈ 10⁻⁷ s/op
+Iteration  50: ≈ 10⁻⁷ s/op
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler":
+  ≈ 10⁻⁷ s/op
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct
+
+# Run progress: 46.66% complete, ETA 00:17:35
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+≈ 10⁻⁷ s/op
+# Warmup Iteration   2: ≈ 10⁻⁷ s/op
+Iteration   1: ≈ 10⁻⁷ s/op
+Iteration   2: ≈ 10⁻⁷ s/op
+Iteration   3: ≈ 10⁻⁷ s/op
+Iteration   4: ≈ 10⁻⁷ s/op
+Iteration   5: ≈ 10⁻⁷ s/op
+Iteration   6: ≈ 10⁻⁷ s/op
+Iteration   7: ≈ 10⁻⁷ s/op
+Iteration   8: ≈ 10⁻⁷ s/op
+Iteration   9: ≈ 10⁻⁷ s/op
+Iteration  10: ≈ 10⁻⁷ s/op
+Iteration  11: ≈ 10⁻⁷ s/op
+Iteration  12: ≈ 10⁻⁷ s/op
+Iteration  13: ≈ 10⁻⁷ s/op
+Iteration  14: ≈ 10⁻⁷ s/op
+Iteration  15: ≈ 10⁻⁷ s/op
+Iteration  16: ≈ 10⁻⁷ s/op
+Iteration  17: ≈ 10⁻⁷ s/op
+Iteration  18: ≈ 10⁻⁷ s/op
+Iteration  19: ≈ 10⁻⁷ s/op
+Iteration  20: ≈ 10⁻⁷ s/op
+Iteration  21: ≈ 10⁻⁷ s/op
+Iteration  22: ≈ 10⁻⁷ s/op
+Iteration  23: ≈ 10⁻⁷ s/op
+Iteration  24: ≈ 10⁻⁷ s/op
+Iteration  25: ≈ 10⁻⁷ s/op
+Iteration  26: ≈ 10⁻⁷ s/op
+Iteration  27: ≈ 10⁻⁷ s/op
+Iteration  28: ≈ 10⁻⁷ s/op
+Iteration  29: ≈ 10⁻⁷ s/op
+Iteration  30: ≈ 10⁻⁷ s/op
+Iteration  31: ≈ 10⁻⁷ s/op
+Iteration  32: ≈ 10⁻⁷ s/op
+Iteration  33: ≈ 10⁻⁷ s/op
+Iteration  34: ≈ 10⁻⁷ s/op
+Iteration  35: ≈ 10⁻⁷ s/op
+Iteration  36: ≈ 10⁻⁷ s/op
+Iteration  37: ≈ 10⁻⁷ s/op
+Iteration  38: ≈ 10⁻⁷ s/op
+Iteration  39: ≈ 10⁻⁷ s/op
+Iteration  40: ≈ 10⁻⁷ s/op
+Iteration  41: ≈ 10⁻⁷ s/op
+Iteration  42: ≈ 10⁻⁷ s/op
+Iteration  43: ≈ 10⁻⁷ s/op
+Iteration  44: ≈ 10⁻⁷ s/op
+Iteration  45: ≈ 10⁻⁷ s/op
+Iteration  46: ≈ 10⁻⁷ s/op
+Iteration  47: ≈ 10⁻⁷ s/op
+Iteration  48: ≈ 10⁻⁷ s/op
+Iteration  49: ≈ 10⁻⁷ s/op
+Iteration  50: ≈ 10⁻⁷ s/op
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct":
+  ≈ 10⁻⁷ s/op
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkSelmaMapper
+
+# Run progress: 53.33% complete, ETA 00:15:43
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+≈ 10⁻⁹ s/op
+# Warmup Iteration   2: ≈ 10⁻⁹ s/op
+Iteration   1: ≈ 10⁻⁹ s/op
+Iteration   2: ≈ 10⁻⁹ s/op
+Iteration   3: ≈ 10⁻⁹ s/op
+Iteration   4: ≈ 10⁻⁹ s/op
+Iteration   5: ≈ 10⁻⁹ s/op
+Iteration   6: ≈ 10⁻⁹ s/op
+Iteration   7: ≈ 10⁻⁹ s/op
+Iteration   8: ≈ 10⁻⁹ s/op
+Iteration   9: ≈ 10⁻⁹ s/op
+Iteration  10: ≈ 10⁻⁹ s/op
+Iteration  11: ≈ 10⁻⁹ s/op
+Iteration  12: ≈ 10⁻⁹ s/op
+Iteration  13: ≈ 10⁻⁹ s/op
+Iteration  14: ≈ 10⁻⁹ s/op
+Iteration  15: ≈ 10⁻⁹ s/op
+Iteration  16: ≈ 10⁻⁹ s/op
+Iteration  17: ≈ 10⁻⁹ s/op
+Iteration  18: ≈ 10⁻⁹ s/op
+Iteration  19: ≈ 10⁻⁹ s/op
+Iteration  20: ≈ 10⁻⁹ s/op
+Iteration  21: ≈ 10⁻⁹ s/op
+Iteration  22: ≈ 10⁻⁹ s/op
+Iteration  23: ≈ 10⁻⁹ s/op
+Iteration  24: ≈ 10⁻⁹ s/op
+Iteration  25: ≈ 10⁻⁹ s/op
+Iteration  26: ≈ 10⁻⁹ s/op
+Iteration  27: ≈ 10⁻⁹ s/op
+Iteration  28: ≈ 10⁻⁹ s/op
+Iteration  29: ≈ 10⁻⁹ s/op
+Iteration  30: ≈ 10⁻⁹ s/op
+Iteration  31: ≈ 10⁻⁹ s/op
+Iteration  32: ≈ 10⁻⁹ s/op
+Iteration  33: ≈ 10⁻⁹ s/op
+Iteration  34: ≈ 10⁻⁹ s/op
+Iteration  35: ≈ 10⁻⁹ s/op
+Iteration  36: ≈ 10⁻⁹ s/op
+Iteration  37: ≈ 10⁻⁹ s/op
+Iteration  38: ≈ 10⁻⁹ s/op
+Iteration  39: ≈ 10⁻⁹ s/op
+Iteration  40: ≈ 10⁻⁹ s/op
+Iteration  41: ≈ 10⁻⁹ s/op
+Iteration  42: ≈ 10⁻⁹ s/op
+Iteration  43: ≈ 10⁻⁹ s/op
+Iteration  44: ≈ 10⁻⁹ s/op
+Iteration  45: ≈ 10⁻⁹ s/op
+Iteration  46: ≈ 10⁻⁹ s/op
+Iteration  47: ≈ 10⁻⁹ s/op
+Iteration  48: ≈ 10⁻⁹ s/op
+Iteration  49: ≈ 10⁻⁹ s/op
+Iteration  50: ≈ 10⁻⁹ s/op
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkSelmaMapper":
+  ≈ 10⁻⁹ s/op
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkSpringBeanUtils
+
+# Run progress: 59.99% complete, ETA 00:13:41
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+<failure>
+
+java.lang.NullPointerException
+	at org.springframework.core.BridgeMethodResolver.findBridgedMethod(BridgeMethodResolver.java:69)
+	at org.springframework.beans.GenericTypeAwarePropertyDescriptor.<init>(GenericTypeAwarePropertyDescriptor.java:67)
+	at org.springframework.beans.CachedIntrospectionResults.buildGenericTypeAwarePropertyDescriptor(CachedIntrospectionResults.java:316)
+	at org.springframework.beans.CachedIntrospectionResults.<init>(CachedIntrospectionResults.java:273)
+	at org.springframework.beans.CachedIntrospectionResults.forClass(CachedIntrospectionResults.java:149)
+	at org.springframework.beans.BeanUtils.getPropertyDescriptors(BeanUtils.java:362)
+	at org.springframework.beans.BeanUtils.copyProperties(BeanUtils.java:600)
+	at org.springframework.beans.BeanUtils.copyProperties(BeanUtils.java:531)
+	at bean.transform.unittest.jmhtest.Jmh.benchMarkSpringBeanUtils(Jmh.java:71)
+	at bean.transform.unittest.jmhtest.jmh_generated.Jmh_benchMarkSpringBeanUtils_jmhTest.benchMarkSpringBeanUtils_avgt_jmhStub(Jmh_benchMarkSpringBeanUtils_jmhTest.java:190)
+	at bean.transform.unittest.jmhtest.jmh_generated.Jmh_benchMarkSpringBeanUtils_jmhTest.benchMarkSpringBeanUtils_AverageTime(Jmh_benchMarkSpringBeanUtils_jmhTest.java:152)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.openjdk.jmh.runner.BenchmarkHandler$BenchmarkTask.call(BenchmarkHandler.java:475)
+	at org.openjdk.jmh.runner.BenchmarkHandler$BenchmarkTask.call(BenchmarkHandler.java:458)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:830)
+
+
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Sampling time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual
+
+# Run progress: 66.66% complete, ETA 00:10:16
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+≈ 10⁻⁶ s/op
+# Warmup Iteration   2: ≈ 10⁻⁷ s/op
+Iteration   1: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   2: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   3: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   4: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration   5: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration   6: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   7: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   8: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   9: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  10: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  11: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  12: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻³ s/op
+
+Iteration  13: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  14: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  15: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  16: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  17: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  18: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  19: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  20: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  21: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  22: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  23: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  24: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  25: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.004 s/op
+
+Iteration  26: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  27: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  28: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  29: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  30: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  31: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  32: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  33: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  34: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  35: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  36: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  37: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  38: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.002 s/op
+
+Iteration  39: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  40: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  41: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  42: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   0.002 s/op
+
+Iteration  43: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  44: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  45: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  46: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  47: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  48: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p1.00:   0.001 s/op
+
+Iteration  49: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  50: ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanManual·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanManual·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanManual·p1.00:   ≈ 10⁻⁴ s/op
+
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual":
+  N = 3876470
+  mean =     ≈ 10⁻⁷ ±(99.9%) 0.001 s/op
+
+  Histogram, s/op:
+    [0.000, 0.000) = 3876440 
+    [0.000, 0.001) = 3 
+    [0.001, 0.001) = 1 
+    [0.001, 0.001) = 3 
+    [0.001, 0.001) = 11 
+    [0.001, 0.002) = 9 
+    [0.002, 0.002) = 1 
+    [0.002, 0.002) = 1 
+    [0.002, 0.002) = 0 
+    [0.002, 0.003) = 0 
+    [0.003, 0.003) = 0 
+    [0.003, 0.003) = 0 
+    [0.003, 0.003) = 0 
+    [0.003, 0.004) = 0 
+    [0.004, 0.004) = 1 
+
+  Percentiles, s/op:
+      p(0.0000) =     ≈ 10⁻⁷ s/op
+     p(50.0000) =     ≈ 10⁻⁷ s/op
+     p(90.0000) =     ≈ 10⁻⁷ s/op
+     p(95.0000) =     ≈ 10⁻⁷ s/op
+     p(99.0000) =     ≈ 10⁻⁶ s/op
+     p(99.9000) =     ≈ 10⁻⁵ s/op
+     p(99.9900) =     ≈ 10⁻⁴ s/op
+     p(99.9990) =     ≈ 10⁻⁴ s/op
+     p(99.9999) =      0.001 s/op
+    p(100.0000) =      0.004 s/op
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Sampling time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler
+
+# Run progress: 73.32% complete, ETA 00:08:24
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+≈ 10⁻⁶ s/op
+# Warmup Iteration   2: ≈ 10⁻⁷ s/op
+Iteration   1: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   2: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration   3: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁵ s/op
+
+Iteration   4: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   5: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   6: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   7: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration   8: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration   9: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  10: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  11: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  12: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  13: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  14: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  15: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  16: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  17: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  18: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  19: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  20: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  21: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  22: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  23: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  24: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  25: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  26: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  27: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  28: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  29: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  30: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  31: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  32: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  33: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  34: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  35: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  36: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  37: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  38: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  39: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  40: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   0.001 s/op
+
+Iteration  41: ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.00:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.50:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.90:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.95:   ≈ 10⁻⁷ s/op
+                 benchMarkBeanTransformsHandler·p0.99:   ≈ 10⁻⁶ s/op
+                 benchMarkBeanTransformsHandler·p0.999:  ≈ 10⁻⁵ s/op
+                 benchMarkBeanTransformsHandler·p0.9999: ≈ 10⁻⁴ s/op
+                 benchMarkBeanTransformsHandler·p1.00:   ≈ 10⁻⁴ s/op
+
+Iteration  42: 

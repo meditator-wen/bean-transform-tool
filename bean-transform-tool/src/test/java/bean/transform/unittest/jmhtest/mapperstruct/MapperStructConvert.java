@@ -1,7 +1,7 @@
 package bean.transform.unittest.jmhtest.mapperstruct;
 
-import bean.transform.unittest.jmhtest.CopyFrom;
-import bean.transform.unittest.jmhtest.CopyTo;
+import bean.transform.unittest.jmhtest.BeanFrom;
+import bean.transform.unittest.jmhtest.BeanTo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.control.DeepClone;
@@ -17,5 +17,5 @@ import org.mapstruct.factory.Mappers;
 public interface MapperStructConvert {
      MapperStructConvert INSTANCE = Mappers.getMapper(MapperStructConvert.class);
 
-    CopyTo transform(CopyFrom from);
+    BeanTo transform(BeanFrom from);
 }

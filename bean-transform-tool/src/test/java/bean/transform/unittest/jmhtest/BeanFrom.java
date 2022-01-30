@@ -2,6 +2,7 @@ package bean.transform.unittest.jmhtest;
 
 import bean.transform.unittest.entity.Inner;
 import bean.transform.unittest.entity.ListElement;
+import fr.xebia.extras.selma.Mapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +14,9 @@ import java.util.List;
  * @Date 2021/10/16 13:00
  * @Created by wen wang
  */
-public class CopyFrom {
+
+
+public class BeanFrom {
 
     private double douVar;
 

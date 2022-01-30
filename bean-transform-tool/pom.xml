@@ -48,11 +48,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/org.springframework.beans &ndash;&gt;-->
+        <!--                &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/org.springframework.beans &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework</groupId>-->
 <!--            <artifactId>org.springframework.beans</artifactId>-->
-<!--            <version>3.2.2.RELEASE</version>-->
+        <!--            <version>5.2.1.RELEASE</version>-->
 <!--        </dependency>-->
 
 
@@ -64,12 +64,27 @@
             <systemPath>${project.basedir}/lib/org.springframework.beans-3.2.5.RELEASE.jar</systemPath>
         </dependency>
 
+        <!-- scope provided because the processor is only needed at compile time-->
+        <dependency>
+            <groupId>fr.xebia.extras</groupId>
+            <artifactId>selma-processor</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- This is the only real dependency you will have in your binaries -->
+        <dependency>
+            <groupId>fr.xebia.extras</groupId>
+            <artifactId>selma</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>3.2.5.RELEASE</version>
+            <version>5.2.19.RELEASE</version>
             <scope>test</scope>
         </dependency>
 

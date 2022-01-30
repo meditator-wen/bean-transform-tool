@@ -1,7 +1,7 @@
 package bean.transform.unittest;
 
+import bean.transform.unittest.jmhtest.BeanTo;
 import com.shzz.common.tool.bean.transform.BeanTransform;
-import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
 import com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate;
 import bean.transform.unittest.entity.*;
 import com.alibaba.fastjson.JSON;
@@ -190,8 +190,8 @@ public class UnitTest {
 
         int loop = 1;
 
-        bean.transform.unittest.jmhtest.CopyTo copyTo8 = new bean.transform.unittest.jmhtest.CopyTo();
-        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
+//        CopyTo copyTo8 = new CopyTo();
+//        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
 
 
 

@@ -1,7 +1,5 @@
 package bean.transform.unittest.jmhtest;
 
-import bean.transform.unittest.jmhtest.CopyFrom ;
-import bean.transform.unittest.jmhtest.CopyTo ;
 import bean.transform.unittest.entity.Inner;
 import bean.transform.unittest.entity.ListElement;
 
@@ -17,11 +15,11 @@ import java.util.List;
  */
 public class Manual {
 
-    public CopyTo transformManual(CopyFrom from) {
+    public BeanTo transformManual(BeanFrom from) {
         if (from == null) {
             return null;
         } else {
-            CopyTo copyTo = new CopyTo();
+            BeanTo beanTo = new BeanTo();
             List<ListElement> list=from.getListElementList();
             if (list == null) {
                 return null;
@@ -41,37 +39,37 @@ public class Manual {
 
                 }
 
-                copyTo.setListElementList(list1);
+                beanTo.setListElementList(list1);
             }
 
 
-            copyTo.setRoadId(from.getRoadId());
-            copyTo.setRoadLength(from.getRoadLength());
-            copyTo.setRoadDirection(from.getRoadDirection());
-            copyTo.setLaneNum(from.getLaneNum());
-            copyTo.setDistrict(from.getDistrict());
-            copyTo.setOtherDistrict(from.getOtherDistrict());
-            copyTo.setRoadName(from.getRoadName());
-            copyTo.setRoadType(from.getRoadType());
-            copyTo.setRoadData(from.getRoadData());
-            copyTo.setRoadIn(from.getRoadIn());
-            copyTo.setRoadOut(from.getRoadOut());
-            copyTo.setDouVar(from.getDouVar());
-            copyTo.setCharacterValue(from.getCharacterValue());
-            copyTo.setPoi(from.getPoi());
-            copyTo.setNodeFrom(from.getNodeFrom());
-            copyTo.setNodeTo(from.getNodeTo());
-            copyTo.setIntersectionFrom(from.getIntersectionFrom());
-            copyTo.setIntersectionTo(from.getIntersectionTo());
-            copyTo.setRoadNameFrom(from.getRoadNameFrom());
-            copyTo.setRoadNameTo(from.getRoadNameTo());
-            copyTo.setLaneWidth(from.getLaneWidth());
-            copyTo.setDivider(from.getDivider());
-            copyTo.setFfs(from.getFfs());
-            copyTo.setStreetId(from.getStreetId());
-            copyTo.setThresholdId(from.getThresholdId());
-            copyTo.setCarDirection(from.getCarDirection());
-            copyTo.setGridId(from.getGridId());
+            beanTo.setRoadId(from.getRoadId());
+            beanTo.setRoadLength(from.getRoadLength());
+            beanTo.setRoadDirection(from.getRoadDirection());
+            beanTo.setLaneNum(from.getLaneNum());
+            beanTo.setDistrict(from.getDistrict());
+            beanTo.setOtherDistrict(from.getOtherDistrict());
+            beanTo.setRoadName(from.getRoadName());
+            beanTo.setRoadType(from.getRoadType());
+            beanTo.setRoadData(from.getRoadData());
+            beanTo.setRoadIn(from.getRoadIn());
+            beanTo.setRoadOut(from.getRoadOut());
+            beanTo.setDouVar(from.getDouVar());
+            beanTo.setCharacterValue(from.getCharacterValue());
+            beanTo.setPoi(from.getPoi());
+            beanTo.setNodeFrom(from.getNodeFrom());
+            beanTo.setNodeTo(from.getNodeTo());
+            beanTo.setIntersectionFrom(from.getIntersectionFrom());
+            beanTo.setIntersectionTo(from.getIntersectionTo());
+            beanTo.setRoadNameFrom(from.getRoadNameFrom());
+            beanTo.setRoadNameTo(from.getRoadNameTo());
+            beanTo.setLaneWidth(from.getLaneWidth());
+            beanTo.setDivider(from.getDivider());
+            beanTo.setFfs(from.getFfs());
+            beanTo.setStreetId(from.getStreetId());
+            beanTo.setThresholdId(from.getThresholdId());
+            beanTo.setCarDirection(from.getCarDirection());
+            beanTo.setGridId(from.getGridId());
 
 
             Inner inner= from.getInner();
@@ -82,8 +80,8 @@ public class Manual {
             inner1.setGreenRatio(inner.getGreenRatio());
             inner1.setRed(inner.getRed());
             inner1.setYellow(inner.getYellow());
-            copyTo.setInner(inner1);
-            return copyTo;
+            beanTo.setInner(inner1);
+            return beanTo;
         }
     }
 
