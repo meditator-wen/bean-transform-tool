@@ -154,8 +154,8 @@ public class BeanTo {
 
     private Integer thresholdId =-1;
 
-    @BeanFieldInfo(sourceFieldName = "dateField",autoTransform = true)
-    private Date dateFiled ;
+//    @BeanFieldInfo(sourceFieldName = "dateField",autoTransform = true)
+//    private Date dateFiled ;
 
     @BeanFieldInfo(userExtend = false,extensionObjectTransformImplClass = "com.akfd.methodhandle.compare.ListTransforms")
     private List<ListElement>  listElementList=new ArrayList<>();
@@ -313,13 +313,13 @@ public class BeanTo {
         this.poi = poi;
     }
 
-    public Date getDateFiled() {
-        return dateFiled;
-    }
-
-    public void setDateFiled(Date dateFiled) {
-        this.dateFiled = dateFiled;
-    }
+//    public Date getDateFiled() {
+//        return dateFiled;
+//    }
+//
+//    public void setDateFiled(Date dateFiled) {
+//        this.dateFiled = dateFiled;
+//    }
 
     public String getNodeFrom() {
         return nodeFrom;

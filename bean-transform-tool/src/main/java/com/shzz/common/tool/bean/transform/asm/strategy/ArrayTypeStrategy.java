@@ -35,16 +35,12 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     // 数组维数targetArrayDems，一维和多维对应的字节码指令不同,每层新建数组时需要更新维度值，
     ThreadLocal<Integer> targetArrayDems = new ThreadLocal<>();
 
-
     ThreadLocal<List<Type>> sourceTypeList_Local=new ThreadLocal<>();
     ThreadLocal<List<Class>> sourceClassList_Local=new ThreadLocal<>();
 
     public ArrayTypeStrategy(AbstractContext context) {
         this.registerContext_local.set(context);
     }
-
-
-
 
     private void createArray(Class arrayRawClass, Class arrayElemClass, int dems, MethodVisitor mv, int lengthVarIndex) {
         //数组长度变量

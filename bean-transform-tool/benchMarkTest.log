@@ -1,0 +1,287 @@
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=53028:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual
+
+# Run progress: 0.00% complete, ETA 00:12:40
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+5154593.987 ops/s
+# Warmup Iteration   2: 5791945.882 ops/s
+Iteration   1: 5826101.203 ops/s
+Iteration   2: 6770340.625 ops/s
+Iteration   3: 6863338.695 ops/s
+Iteration   4: 6822207.353 ops/s
+Iteration   5: 6553346.234 ops/s
+Iteration   6: 6532685.247 ops/s
+Iteration   7: 7151940.345 ops/s
+Iteration   8: 7015257.264 ops/s
+Iteration   9: 6940680.119 ops/s
+Iteration  10: 7155536.654 ops/s
+Iteration  11: 7135713.092 ops/s
+Iteration  12: 7060835.107 ops/s
+Iteration  13: 6387694.258 ops/s
+Iteration  14: 7151227.757 ops/s
+Iteration  15: 7140940.299 ops/s
+Iteration  16: 7171577.968 ops/s
+Iteration  17: 6995419.238 ops/s
+Iteration  18: 7108712.681 ops/s
+Iteration  19: 7025913.404 ops/s
+Iteration  20: 7223464.809 ops/s
+Iteration  21: 6398955.457 ops/s
+Iteration  22: 6851507.775 ops/s
+Iteration  23: 7127715.403 ops/s
+Iteration  24: 7168127.301 ops/s
+Iteration  25: 7231510.969 ops/s
+Iteration  26: 6490041.992 ops/s
+Iteration  27: 6786489.509 ops/s
+Iteration  28: 7129039.012 ops/s
+Iteration  29: 7062908.010 ops/s
+Iteration  30: 7102681.060 ops/s
+Iteration  31: 7155618.723 ops/s
+Iteration  32: 7161055.400 ops/s
+Iteration  33: 7097822.481 ops/s
+Iteration  34: 6940269.748 ops/s
+Iteration  35: 6833421.008 ops/s
+Iteration  36: 6737051.779 ops/s
+Iteration  37: 7214096.774 ops/s
+Iteration  38: 7166316.433 ops/s
+Iteration  39: 7154148.543 ops/s
+Iteration  40: 7101875.706 ops/s
+Iteration  41: 6456127.171 ops/s
+Iteration  42: 7074647.625 ops/s
+Iteration  43: 7106993.224 ops/s
+Iteration  44: 7184932.137 ops/s
+Iteration  45: 7221768.385 ops/s
+Iteration  46: 7089316.488 ops/s
+Iteration  47: 6674919.651 ops/s
+Iteration  48: 6874631.398 ops/s
+Iteration  49: 7119831.443 ops/s
+Iteration  50: 7088296.638 ops/s
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual":
+  6956700.992 ±(99.9%) 141822.775 ops/s [Average]
+  (min, avg, max) = (5826101.203, 6956700.992, 7231510.969), stdev = 286489.022
+  CI (99.9%): [6814878.217, 7098523.767] (assumes normal distribution)
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=53028:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler
+
+# Run progress: 20.00% complete, ETA 00:10:18
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+5331935.535 ops/s
+# Warmup Iteration   2: 6523752.102 ops/s
+Iteration   1: 6809214.944 ops/s
+Iteration   2: 6953544.602 ops/s
+Iteration   3: 6987592.559 ops/s
+Iteration   4: 6897960.989 ops/s
+Iteration   5: 7045654.873 ops/s
+Iteration   6: 6780774.480 ops/s
+Iteration   7: 6974609.534 ops/s
+Iteration   8: 6920185.135 ops/s
+Iteration   9: 6894376.292 ops/s
+Iteration  10: 6209224.527 ops/s
+Iteration  11: 6841747.462 ops/s
+Iteration  12: 6920520.335 ops/s
+Iteration  13: 6909384.211 ops/s
+Iteration  14: 6874377.599 ops/s
+Iteration  15: 6773135.616 ops/s
+Iteration  16: 7050191.261 ops/s
+Iteration  17: 6169963.530 ops/s
+Iteration  18: 6896614.504 ops/s
+Iteration  19: 6740319.045 ops/s
+Iteration  20: 6967142.331 ops/s
+Iteration  21: 6922687.676 ops/s
+Iteration  22: 6877867.359 ops/s
+Iteration  23: 6954579.510 ops/s
+Iteration  24: 6965942.239 ops/s
+Iteration  25: 6893480.357 ops/s
+Iteration  26: 5767418.257 ops/s
+Iteration  27: 4374123.169 ops/s
+Iteration  28: 5522723.595 ops/s
+Iteration  29: 6041354.433 ops/s
+Iteration  30: 5085205.478 ops/s
+Iteration  31: 5864808.011 ops/s
+Iteration  32: 6013611.954 ops/s
+Iteration  33: 6028128.545 ops/s
+Iteration  34: 6012313.490 ops/s
+Iteration  35: 6063215.679 ops/s
+Iteration  36: 5941837.358 ops/s
+Iteration  37: 6032363.161 ops/s
+Iteration  38: 5475476.420 ops/s
+Iteration  39: 5992454.933 ops/s
+Iteration  40: 6019846.133 ops/s
+Iteration  41: 6043455.376 ops/s
+Iteration  42: 5991939.210 ops/s
+Iteration  43: 6071173.794 ops/s
+Iteration  44: 6034338.963 ops/s
+Iteration  45: 6047619.371 ops/s
+Iteration  46: 5974246.240 ops/s
+Iteration  47: 5987215.906 ops/s
+Iteration  48: 5935178.563 ops/s
+Iteration  49: 6075024.610 ops/s
+Iteration  50: 5145189.861 ops/s
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler":
+  6335427.070 ±(99.9%) 302622.975 ops/s [Average]
+  (min, avg, max) = (4374123.169, 6335427.070, 7050191.261), stdev = 611313.380
+  CI (99.9%): [6032804.095, 6638050.045] (assumes normal distribution)
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=53028:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct
+
+# Run progress: 40.00% complete, ETA 00:07:42
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+3423890.197 ops/s
+# Warmup Iteration   2: 3901630.625 ops/s
+Iteration   1: 4284492.815 ops/s
+Iteration   2: 4265868.815 ops/s
+Iteration   3: 4239683.497 ops/s
+Iteration   4: 4222349.988 ops/s
+Iteration   5: 4005141.657 ops/s
+Iteration   6: 4187539.918 ops/s
+Iteration   7: 4231087.860 ops/s
+Iteration   8: 3946052.387 ops/s
+Iteration   9: 4290765.858 ops/s
+Iteration  10: 4252997.405 ops/s
+Iteration  11: 4339534.273 ops/s
+Iteration  12: 4291380.877 ops/s
+Iteration  13: 4281181.662 ops/s
+Iteration  14: 4235018.883 ops/s
+Iteration  15: 4241051.216 ops/s
+Iteration  16: 4249358.873 ops/s
+Iteration  17: 4300449.056 ops/s
+Iteration  18: 4118219.819 ops/s
+Iteration  19: 3789736.134 ops/s
+Iteration  20: 4172425.583 ops/s
+Iteration  21: 4260975.030 ops/s
+Iteration  22: 4236047.027 ops/s
+Iteration  23: 4247026.499 ops/s
+Iteration  24: 4268860.544 ops/s
+Iteration  25: 4233759.202 ops/s
+Iteration  26: 4251264.997 ops/s
+Iteration  27: 4221658.430 ops/s
+Iteration  28: 4204783.486 ops/s
+Iteration  29: 3997705.137 ops/s
+Iteration  30: 4245276.404 ops/s
+Iteration  31: 4202080.573 ops/s
+Iteration  32: 4314411.167 ops/s
+Iteration  33: 4460442.691 ops/s
+Iteration  34: 4265597.304 ops/s
+Iteration  35: 4325296.713 ops/s
+Iteration  36: 3846071.026 ops/s
+Iteration  37: 4446410.366 ops/s
+Iteration  38: 4618464.177 ops/s
+Iteration  39: 4481810.424 ops/s
+Iteration  40: 4782709.922 ops/s
+Iteration  41: 4931538.480 ops/s
+Iteration  42: 4902833.789 ops/s
+Iteration  43: 4511960.155 ops/s
+Iteration  44: 4896885.111 ops/s
+Iteration  45: 4881730.149 ops/s
+Iteration  46: 4900660.582 ops/s
+Iteration  47: 4860670.771 ops/s
+Iteration  48: 4977791.016 ops/s
+Iteration  49: 4868579.485 ops/s
+Iteration  50: 4336170.491 ops/s
+
+
+Result "bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct":
+  4358476.154 ±(99.9%) 143423.379 ops/s [Average]
+  (min, avg, max) = (3789736.134, 4358476.154, 4977791.016), stdev = 289722.320
+  CI (99.9%): [4215052.776, 4501899.533] (assumes normal distribution)
+
+
+# JMH version: 1.33
+# VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
+# VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=53028:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
+# Warmup: 2 iterations, 1 s each
+# Measurement: 50 iterations, 3 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkSelmaMapper
+
+# Run progress: 60.00% complete, ETA 00:05:08
+# Fork: 1 of 1
+# Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+5019806.500 ops/s
+# Warmup Iteration   2: 6781916.408 ops/s
+Iteration   1: 7262458.985 ops/s
+Iteration   2: 7028776.238 ops/s
+Iteration   3: 6157115.395 ops/s
+Iteration   4: 6517188.619 ops/s
+Iteration   5: 6935736.721 ops/s
+Iteration   6: 6412010.090 ops/s
+Iteration   7: 6387084.558 ops/s
+Iteration   8: 6553427.605 ops/s
+Iteration   9: 6540114.563 ops/s
+Iteration  10: 6804148.652 ops/s
+Iteration  11: 5246285.569 ops/s
+Iteration  12: 5749435.247 ops/s
+Iteration  13: 6340861.636 ops/s
+Iteration  14: 6861154.586 ops/s
+Iteration  15: 6883406.721 ops/s
+Iteration  16: 7080772.774 ops/s
+Iteration  17: 6966536.094 ops/s
+Iteration  18: 6170025.725 ops/s
+Iteration  19: 5851727.976 ops/s
+Iteration  20: 5597424.959 ops/s
+Iteration  21: 5932766.865 ops/s
+Iteration  22: 6083257.050 ops/s
+Iteration  23: 6371856.519 ops/s
+Iteration  24: 7132764.384 ops/s
+Iteration  25: 6440410.933 ops/s
+Iteration  26: 6098206.405 ops/s
+Iteration  27: 5695503.191 ops/s
+Iteration  28: 6676267.362 ops/s
+Iteration  29: 

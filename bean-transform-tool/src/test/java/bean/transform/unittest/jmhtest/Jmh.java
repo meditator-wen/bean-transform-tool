@@ -3,6 +3,7 @@ package bean.transform.unittest.jmhtest;
 import bean.transform.unittest.entity.Inner;
 import bean.transform.unittest.entity.ListElement;
 
+import bean.transform.unittest.jmhtest.selma.SelmaMapper;
 import com.shzz.common.tool.bean.transform.BeanTransform;
 import com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate;
 
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @Created by wen wang
  */
 
-@BenchmarkMode({Mode.All}) // 指定mode为Mode.AverageTime
+@BenchmarkMode({Mode.Throughput}) // 指定mode为Mode.AverageTime
 @OutputTimeUnit(TimeUnit.SECONDS) // 指定输出的耗时时长的单位
 @Warmup(iterations = 2, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 50, time = 3, timeUnit = TimeUnit.SECONDS)
@@ -45,8 +46,8 @@ public class Jmh {
 
     MapperStructConvert mapperStructConvert = MapperStructConvert.INSTANCE;
 
-    // Get SelmaMapper
-    // SelmaMapper selmaMapper = Selma.builder(SelmaMapper.class).build();
+    //Get SelmaMapper
+    SelmaMapper selmaMapper = Selma.builder(SelmaMapper.class).build();
 
     public Jmh() {
         try {
@@ -93,7 +94,7 @@ public class Jmh {
     @Benchmark
     public void benchMarkSelmaMapper() throws Exception {
 
-        // BeanTo selmaCopy = selmaMapper.asCopyTo(from);
+        BeanTo selmaCopy = selmaMapper.asCopyTo(from);
     }
 
     public static void main(String[] args) throws RunnerException {

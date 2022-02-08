@@ -137,7 +137,7 @@ public class CopyTo {
      **/
     private Inner inner;
 
-//    @BeanFieldInfo(sourceFieldName = "innerDoubleList")
+    @BeanFieldInfo(sourceFieldName = "innerDoubleList")
     Inner[][] innerarray;
 
     public Inner[][] getInnerarray() {
@@ -340,13 +340,13 @@ public class CopyTo {
         this.poi = poi;
     }
 
-    public Date getDateFiled() {
-        return dateFiled;
-    }
-
-    public void setDateFiled(Date dateFiled) {
-        this.dateFiled = dateFiled;
-    }
+//    public Date getDateFiled() {
+//        return dateFiled;
+//    }
+//
+//    public void setDateFiled(Date dateFiled) {
+//        this.dateFiled = dateFiled;
+//    }
 
     public String getNodeFrom() {
         return nodeFrom;
