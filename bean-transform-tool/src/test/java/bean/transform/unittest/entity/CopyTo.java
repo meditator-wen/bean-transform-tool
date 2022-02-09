@@ -137,7 +137,7 @@ public class CopyTo {
      **/
     private Inner inner;
 
-    @BeanFieldInfo(sourceFieldName = "innerDoubleList")
+    //  @BeanFieldInfo(sourceFieldName = "innerDoubleList")
     Inner[][] innerarray;
 
     public Inner[][] getInnerarray() {

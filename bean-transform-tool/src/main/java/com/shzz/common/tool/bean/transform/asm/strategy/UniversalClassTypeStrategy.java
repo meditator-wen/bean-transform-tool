@@ -58,8 +58,13 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
     private final Map<String, Map<String, BeanTransFormsHandler>> beanTransFormsHandlerMap = new ConcurrentHashMap<>();
     private final Map<String, Map<String, Class>> fieldClassMap = new ConcurrentHashMap<>();
     private static final Map<StrategyMode, Class<? extends AbstractComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
+    // cache 缓存 targetClass 实现了 BeanTransFormsHandler 转换对象的字段信息
+    // key 是targetClass fullname + field name ,在BeanTransformsMethodAdapter 使用cache。
+    private static final Map<String, Boolean> cache = new ConcurrentHashMap<>();
 
-
+    public static boolean hasBeanTransFormsHandler(String key) {
+        return cache.containsKey(key) && cache.get(key);
+    }
 
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
@@ -323,7 +328,6 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
                     }
                 } else {
 
-                    Context transformTypeContext = new TransformTypeContext(resloveInfo.getSourceField(), field, targetClass);
 
                     if ((!resloveInfo.isUserExtend())) {
                         // class 类型，
@@ -352,7 +356,10 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
                                 continue;
                             }
 
+                            cache.put(targetClass.getName() + field.getName(), true);
+
                         } else {
+                            Context transformTypeContext = new TransformTypeContext(resloveInfo.getSourceField(), field, targetClass);
                             Map<String, ? extends Transform> tempMap = transformTypeContext.geneTransform(resloveInfo.getSourceField().getGenericType(), field.getGenericType(), field.getName());
                             if (Objects.nonNull(tempMap) && (!tempMap.isEmpty())) {
                                 Set<String> keySet= tempMap.keySet();

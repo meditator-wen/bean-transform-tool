@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode({Mode.Throughput}) // 指定mode为Mode.AverageTime
 @OutputTimeUnit(TimeUnit.SECONDS) // 指定输出的耗时时长的单位
 @Warmup(iterations = 2, time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 50, time = 3, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 50, time = 2, timeUnit = TimeUnit.SECONDS)
 @Fork(1)
 @Threads(1)
 @State(Scope.Benchmark)

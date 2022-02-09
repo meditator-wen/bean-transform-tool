@@ -259,7 +259,7 @@ public class UnitTest {
             for (int K = 0; K < times; ++K) {
 
                 copyTo3 = new CopyTo();
-                org.springframework.beans.BeanUtils.copyProperties(from, copyTo3);
+                //  org.springframework.beans.BeanUtils.copyProperties(from, copyTo3);
                 //   org.springframework.beans.BeanUtils.copyProperties(from,copyTo3);
 
 

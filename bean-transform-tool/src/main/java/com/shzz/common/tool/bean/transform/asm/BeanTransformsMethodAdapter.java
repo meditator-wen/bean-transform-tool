@@ -9,6 +9,9 @@ package com.shzz.common.tool.bean.transform.asm;
 
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
 import com.shzz.common.tool.bean.transform.SystemProperties;
+import com.shzz.common.tool.bean.transform.asm.context.Context;
+import com.shzz.common.tool.bean.transform.asm.context.TransformTypeContext;
+import com.shzz.common.tool.bean.transform.asm.strategy.UniversalClassTypeStrategy;
 import com.shzz.common.tool.code.BeanTransformException;
 
 
@@ -118,30 +121,17 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                                                       int recursions) {
 
         // 通过get 方法获取的变量，先存入局部变量表，供下轮递归使用（只针对fieldType是自定义类型的情况）
-        // 先创建目标对象
-
-//        mv.visitVarInsn(Opcodes.ALOAD, findSourceObjectIndex(recursions, preSourceObjectVarNum));
-//
-//        if (recursions <= 1) {
-//            mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceBeanClass)); //类型检查
-//        }
 
         // 2022-01-29 新增，为了提高效率，sourceObject参数 先转成对应类对象存在新变量中，每次加载转换后的变量，避免多次转换
         mv.visitVarInsn(Opcodes.ALOAD, castsourceBeanVariableInfo.getIndex());
 
         mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, sourceClassInternalName, resloveInfo.getSourceFieldGetFunctionName(), resloveInfo.getSourceFieldGetFunctionDescriptor(), false);
-
         int newTempSourceObjectVarNum = startVarOffSetRecursion;
-        String tempSourceObjectVarAlias = LOCAL_VAR_PREFIX + recursions + "_" + (newTempSourceObjectVarNum); // 本次递归的第二个，编号为1
+        // 本次递归的第二个，编号为1
+        String tempSourceObjectVarAlias = LOCAL_VAR_PREFIX + recursions + "_" + (newTempSourceObjectVarNum);
 
-        LocalVariableInfo tempSourceObjectVarInfo = new VariableDefine()
-                .alias(tempSourceObjectVarAlias)
-                .name(tempSourceObjectVarAlias)
-                .descriptor(org.objectweb.asm.Type.getDescriptor(resloveInfo.getSourceFieldType()))
-                .signature(org.objectweb.asm.Type.getDescriptor(resloveInfo.getSourceFieldType()))
-                .start(new Label())
-                .end(endOfMethodBeanTransformsLable)
-                .index(varOffset++)
+        LocalVariableInfo tempSourceObjectVarInfo = new VariableDefine().alias(tempSourceObjectVarAlias).name(tempSourceObjectVarAlias).descriptor(org.objectweb.asm.Type.getDescriptor(resloveInfo.getSourceFieldType()))
+                .signature(org.objectweb.asm.Type.getDescriptor(resloveInfo.getSourceFieldType())).start(new Label()).end(endOfMethodBeanTransformsLable).index(varOffset++)
                 .define();
         localVariableMap.put(tempSourceObjectVarAlias, tempSourceObjectVarInfo);
         mv.visitVarInsn(Opcodes.ASTORE, tempSourceObjectVarInfo.getIndex()); // 下轮递归使用该变量值
@@ -257,14 +247,10 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
         String castSourceVarName = LOCAL_VAR_PREFIX + recursions + "_" + (startVarOffSetRecursion++);
 
         //LocalVariableInfo
-        castsourceBeanVariableInfo = new VariableDefine().alias(castSourceVarName)
-                .descriptor(org.objectweb.asm.Type.getDescriptor(sourceBeanClass))
-                .name(castSourceVarName)
-                .signature(org.objectweb.asm.Type.getDescriptor(sourceBeanClass))
-                .start(new Label())
-                .end(endOfMethodBeanTransformsLable)
-                .index(varOffset++)
-                .define();
+        castsourceBeanVariableInfo = new VariableDefine().alias(castSourceVarName).descriptor(org.objectweb.asm.Type.getDescriptor(sourceBeanClass))
+                .name(castSourceVarName).signature(org.objectweb.asm.Type.getDescriptor(sourceBeanClass))
+                .start(new Label()).end(endOfMethodBeanTransformsLable)
+                .index(varOffset++).define();
         localVariableMap.put(castsourceBeanVariableInfo.getAlias(), castsourceBeanVariableInfo);
         mv.visitVarInsn(Opcodes.ALOAD, findSourceObjectIndex(recursions, tempSourceObjectVarNum));
 
@@ -343,16 +329,6 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
             }
 
-//            if ((!isDeepCopy) && TypeTransformAssist.isWrapsType(iterField.getType())
-//                    && (!(iterFiledClassName.equals(sourceFiledClassName)))) {
-//                LOG.warn("浅拷贝模式，Wraps类型。目标类字段{} {} 与源类对应字段{} {} 类型不一致，无法浅拷贝，忽略该字段," +
-//                                "如有需要可重新设置 BeanTransFormsHandler generate方法 isDeepCopy 参数为true",
-//                        iterFiledClassName,
-//                        iterField.getName(),
-//                        sourceFiledClassName,
-//                        resloveInfo.getSourceFieldName());
-//                continue;
-//            }
 
             if ((!permitBaseTypeInterconvert) && TypeTransformAssist.isBaseType(iterField.getType())
                     && (!(iterFiledClassName.equals(sourceFiledClassName)))) {
@@ -385,6 +361,8 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                 Type filedGenericType = iterField.getGenericType();
 
                 String generateClassInternalName = generateClassname.replace('.', '/');
+
+                // 数组类对象，参数化泛型、类型变量、泛型数组、通配泛型
                 boolean flag = (filedGenericType instanceof GenericArrayType) ||
                         (filedGenericType instanceof TypeVariable) ||
                         (filedGenericType instanceof WildcardType) ||
@@ -414,7 +392,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                     mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, EXTENSION_TRANSFORM_INTERFACE_NAME, EXTENSION_TRANSFORM_METHOD_NAME, EXTENSION_TRANSFORM_METHOD_DESC, true);
 
                     mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(iterField.getType()));
-                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, targetClassInternalName, resloveInfo.getTargetFieldSetFunctionName(), resloveInfo.getTargetFieldSetFunctionDescriptor(), false);//                   mv.visitJumpInsn(Opcodes.GOTO,fieldBranchExitLabel[fieldOffset]);
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, targetClassInternalName, resloveInfo.getTargetFieldSetFunctionName(), resloveInfo.getTargetFieldSetFunctionDescriptor(), false);
 
 
                 } else {
@@ -426,11 +404,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                         Label jumpIfNull = new Label();
                         if (TypeTransformAssist.isWrapsOrStringType(resloveInfo.getSourceFieldType()) &&
                                 (SystemProperties.getWrapsTypeDeepyCopyFlag()||(iterField.getType() != resloveInfo.getSourceFieldType()))) {
-                            // (iterField.getType() != resloveInfo.getSourceFieldType())
-//                            mv.visitVarInsn(Opcodes.ALOAD, findSourceObjectIndex(recursions, tempSourceObjectVarNum));
-//                            if (recursions <= 1) {
-//                                mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceBeanClass)); //类型检查
-//                            }
+
                             // 2022-01-29 新增，为了提高效率，sourceObject参数 先转成对应类对象存在新变量中，每次加载转换后的变量，避免多次转换
                             mv.visitVarInsn(Opcodes.ALOAD, castsourceBeanVariableInfo.getIndex());
                             mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, sourceClassInternalName, resloveInfo.getSourceFieldGetFunctionName(), resloveInfo.getSourceFieldGetFunctionDescriptor(), false);
@@ -439,11 +413,6 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
                         //变量targetObjectVar 入栈，调用set方法，基础类型的源类字段
                         mv.visitVarInsn(Opcodes.ALOAD, localVariableMap.get(recursionFunctionVarNameAtStart).getIndex());
-//                        mv.visitVarInsn(Opcodes.ALOAD, findSourceObjectIndex(recursions, tempSourceObjectVarNum));
-//
-//                        if (recursions <= 1) {
-//                            mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceBeanClass)); //类型检查
-//                        }
                         // 2022-01-29 新增，为了提高效率，sourceObject参数 先转成对应类对象存在新变量中，每次加载转换后的变量，避免多次转换
                         mv.visitVarInsn(Opcodes.ALOAD, castsourceBeanVariableInfo.getIndex());
 
@@ -464,12 +433,11 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                             //源类字段和目标类字段有继承关系时，做浅拷贝模式要先强制转换为父类型然后目标类对象set 方法
                             mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(iterField.getType()));
                         }
-                        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, targetClassInternalName, resloveInfo.getTargetFieldSetFunctionName(), resloveInfo.getTargetFieldSetFunctionDescriptor(), false);//                   mv.visitJumpInsn(Opcodes.GOTO,fieldBranchExitLabel[fieldOffset]);
+                        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, targetClassInternalName, resloveInfo.getTargetFieldSetFunctionName(), resloveInfo.getTargetFieldSetFunctionDescriptor(), false);
 
                         if (TypeTransformAssist.isWrapsOrStringType(resloveInfo.getSourceFieldType()) &&
                                 (SystemProperties.getWrapsTypeDeepyCopyFlag()||(iterField.getType() != resloveInfo.getSourceFieldType()))) {
-                            //&&(iterField.getType() != resloveInfo.getSourceFieldType())
-                            //
+
                             mv.visitLabel(jumpIfNull);
                             if (fieldOffset < fieldBranchs - 1) {
                                 mv.visitJumpInsn(Opcodes.GOTO, fieldBranchEntranceLabel[fieldOffset + 1]);
@@ -482,12 +450,10 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                     } else if (isDeepCopy && (!TypeTransformAssist.isBaseType(iterField.getType())) &&
                             (!TypeTransformAssist.isBaseType(resloveInfo.getSourceFieldType()))) {
                         /**
-                         * 其他自定义引用类型字段、数组类对象，参数化泛型、类型变量、泛型数组、通配泛型等，深拷贝模式下需要递归处理
+                         * 其他自定义引用类型字段，深拷贝模式下需要递归处理
                          * 基础类型字段，Object 对象不做处理
-                         *  数组类对象，参数化泛型、类型变量、泛型数组、通配泛型等 请继承{@link ExtensionObjectTransform } 自行实现，具体操作请参见 beanTransforms 方法说明
                          *
                          */
-
 
                         mv.visitLabel(fieldBranchEntranceLabel[fieldOffset]);
                         LocalVariableInfo tempSourceObjectVarInfo = newTempVar(sourceClassInternalName, resloveInfo, startVarOffSetRecursion++, tempSourceObjectVarNum, recursions);
@@ -512,14 +478,13 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                                 mv.visitVarInsn(Opcodes.ALOAD, localVariableMap.get(recursionFunctionVarNameAtStart).getIndex());
                                 mv.visitTypeInsn(Opcodes.NEW, DATA_TYPE_INTERNAL_NAME);
                                 mv.visitInsn(Opcodes.DUP);
-                                // 2022-01-29 新增，为了提高效率，sourceObject参数 先转成对应类对象存在新变量中，每次加载转换后的变量，避免多次转换
-                                // mv.visitVarInsn(Opcodes.ALOAD,castsourceBeanVariableInfo.getIndex());
                                 mv.visitVarInsn(Opcodes.ALOAD, tempSourceObjectVarInfo.getIndex());
                                 //Date  getTime() 方法调用
                                 mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, DATA_TYPE_INTERNAL_NAME, "getTime", "()J", false);
                                 mv.visitMethodInsn(Opcodes.INVOKESPECIAL, DATA_TYPE_INTERNAL_NAME, INIT_METHOD_NAME, DATA_TYPE_INIT_METHOD_DESCRIPTOR, false);
 
-                            } else if (resloveInfo.isAutoTransform()) {
+                            } else if (resloveInfo.isAutoTransform() && UniversalClassTypeStrategy.hasBeanTransFormsHandler(targetClass.getName() + iterField.getName())) {
+
                                 // 调用递归创建的转换类对象，这些对象在实例化过程中已经赋值给对应字段，这里直接通过字段getfield指令 获取，然后调用其转换方法
                                 mv.visitVarInsn(Opcodes.ALOAD, localVariableMap.get(recursionFunctionVarNameAtStart).getIndex());
                                 mv.visitVarInsn(Opcodes.ALOAD, SELF_OBJECT_VAR_OFFSET);

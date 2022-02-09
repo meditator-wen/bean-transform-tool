@@ -90,10 +90,6 @@ public class TransformTypeContext extends AbstractContext {
 
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String fieldNamePrefix) throws Exception {
-        //, TransformUtilGenerate transformUtilGenerate
-
-        Collection<Class<? extends ComplexTypeStrategy>> strategyImplClasses = typeStrategyHashMap.values();
-
         Set<Integer> prioritys = typeStrategyHashMap.keySet();
         List<Integer> sorts = new ArrayList<>();
         sorts.addAll(prioritys);
