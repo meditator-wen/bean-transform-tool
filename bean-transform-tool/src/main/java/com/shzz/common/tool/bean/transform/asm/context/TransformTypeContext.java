@@ -9,6 +9,7 @@ import com.shzz.common.tool.bean.transform.asm.strategy.*;
 import com.shzz.common.tool.bean.transform.asm.strategy.ArrayTypeStrategy;
 import com.shzz.common.tool.bean.transform.asm.strategy.MapTypeStrategy;
 import com.shzz.common.tool.code.BeanTransformException;
+import com.shzz.common.tool.code.CommonCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +80,7 @@ public class TransformTypeContext extends AbstractContext {
          **/
         if (typeStrategyHashMap.containsKey(priority)) {
             Class originalStrategyClass = typeStrategyHashMap.get(priority);
-            throw new BeanTransformException("0xffb0", "注册转换策略异常", "指定的优先级 " + priority + " 已经有对应策略类: " + originalStrategyClass.getName());
+            throw new BeanTransformException(CommonCode.STRATEGY_REGISTER_UNSUPPORT.getErrorCode(), CommonCode.STRATEGY_REGISTER_UNSUPPORT.getErrorOutline(), "指定的优先级 " + priority + " 已经有对应策略类: " + originalStrategyClass.getName());
         } else {
             typeStrategyHashMap.put(priority, strategyClass);
         }

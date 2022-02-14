@@ -1,6 +1,7 @@
 package com.shzz.common.tool.bean.transform.asm.strategy;
 
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
+import com.shzz.common.tool.bean.transform.SystemProperties;
 import com.shzz.common.tool.bean.transform.Transform;
 import com.shzz.common.tool.bean.transform.asm.*;
 import com.shzz.common.tool.bean.transform.asm.context.AbstractContext;
@@ -9,6 +10,7 @@ import com.shzz.common.tool.code.BeanTransformException;
 import com.shzz.common.tool.bean.transform.Transform;
 import com.shzz.common.tool.bean.transform.asm.*;
 import com.shzz.common.tool.bean.transform.asm.context.AbstractContext;
+import com.shzz.common.tool.code.CommonCode;
 import org.objectweb.asm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +45,6 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     public static final String ITERATOR_VARIABLE_NAME = "iterator";
     public static final String ARRAY_LENGTH_VARIABLE_NAME = "arrayLength";
     public static final String ARRAY_INDEX_VARIABLE_NAME = "index";
-//    public static final int COLLECTION_TO_COLLECTION_PATTERN = 1;
-//    public static final int ARRAY_TO_COLLECTION_PATTERN = 2;
-//    public static final int ARRAY_TO_ARRAY_PATTERN = 3;
-//    public static final int COLLECTION_TO_ARRAY_PATTERN = 4;
-
 
     protected ThreadLocal<AbstractContext> registerContext_local = new ThreadLocal<>();
 
@@ -138,7 +135,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
     }
 
-    public static boolean collectionMatchArrayType(List<Class> arrayTypeList, List<Type> typeList) {
+    public static boolean collectionMatchArrayType(List<Class> arrayTypeList, List<Type> typeList) throws Exception {
         /**
          * @description: 嵌套Collection 和 多维数组转换匹配条件判断
          * 1 层数一致
@@ -173,6 +170,25 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
                 match = false;
             } else if (!(typeList.get(layers - 1) instanceof Class)) {
                 match = false;
+            }
+
+            Class arrayEleClass = arrayTypeList.get(layers - 1);
+            Class collectionEleClass = (Class) typeList.get(layers - 1);
+
+            boolean matchConditional1 = (TypeTransformAssist.isBaseType(arrayEleClass) && (!TypeTransformAssist.isBaseType(collectionEleClass)));
+            boolean matchConditional2 = (!TypeTransformAssist.isBaseType(arrayEleClass) && (TypeTransformAssist.isBaseType(collectionEleClass)));
+
+            if (matchConditional1 || matchConditional2) {
+                if (SystemProperties.getStrictModeFlag()) {
+                    // 系统配置 strict.mode.flag 如果是严格模式，不转换，抛出异常
+                    throw new BeanTransformException(CommonCode.TYPE_MISMATCH.getErrorCode(),
+                            CommonCode.TYPE_MISMATCH.getErrorOutline(),
+                            "数组元素类型:" + arrayEleClass.getSimpleName() + "， 集合元素类型："
+                                    + collectionEleClass.getSimpleName() +
+                                    " 无法转换, 如需默认转换，请在代码中设置系统变量strict.mode.flag=false ");
+
+                }
+
             }
 
 
@@ -223,16 +239,16 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
             // 最内层元素是 泛型变量类型、泛型数组，通配泛型，自动化深拷贝模式暂不予处理，反回空栈，后续考虑拓展
             if (!(type instanceof Class)) {
 
-                throw new BeanTransformException("0xff1f", "泛型实参类型不符合要求 ", "集合类型最内层元素非Class 类型：" + type.getTypeName());
+                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素非Class 类型：" + type.getTypeName());
             } else if ((type == Object.class)) {
-                throw new BeanTransformException("0xff1f", "泛型实参类型不符合要求 ", "集合类型最内层元素Object类型");
+                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素Object类型");
 
             } else if (Map.class.isAssignableFrom(((Class) type))) {
-                throw new BeanTransformException("0xff1f", "泛型实参类型不符合要求 ", "集合类型最内层元素Object类型");
+                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素Object类型");
 
                 // todo 其他类型后面完善
             } else if ((((Class) type).isArray())) {
-                throw new BeanTransformException("0xff1f", "泛型实参类型不符合要求 ", "集合类型最内层元素是数组类型类型:" + type.getTypeName());
+                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素是数组类型类型:" + type.getTypeName());
 
             }
 
@@ -243,13 +259,12 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
     }
 
-    protected void transformByteCode(Map<String, LocalVariableInfo> defineLocalVar, int layer, Class sourceElemType, MethodVisitor mv, String newMethodPrefix, StrategyMode pattern) {
+    protected void transformByteCode(Map<String, LocalVariableInfo> defineLocalVar, int layer, Class sourceElemType, MethodVisitor mv, String newMethodPrefix) {
         // 调用虚方法，转换集合迭代元素，this 参数入栈
         LocalVariableInfo thisVar = defineLocalVar.get("this");
         LocalVariableInfo tempElement = defineLocalVar.get(TEMP_ELEMENT_VARIABLE_NAME);
 
         String ownerClassInternalName = getOwnerClassInternalName();
-
 
         if (sourceElemType != this.sourceElementType_local.get()) {
 
@@ -262,6 +277,18 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
                     methodName(newMethodPrefix, (layer + 1)), BeanTransformsMethodAdapter.EXTENSION_TRANSFORM_METHOD_DESC, false);
 
         } else {
+
+            if (Objects.nonNull(targetElementType_local.get()) &&
+                    Objects.nonNull(sourceElementType_local.get())) {
+
+                if (TypeTransformAssist.isBaseType(targetElementType_local.get()) &&
+                        TypeTransformAssist.isBaseType(sourceElementType_local.get())) {
+
+
+                }
+
+
+            }
 
             String sourceElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.SOURCE_FIELD_CLASS_FIELD_SUFFIX;
             String targetElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.TARGET_FIELD_CLASS_FIELD_SUFFIX;

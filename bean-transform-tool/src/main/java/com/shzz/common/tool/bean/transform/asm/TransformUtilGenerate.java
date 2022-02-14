@@ -10,6 +10,7 @@ import com.shzz.common.tool.bean.transform.asm.strategy.*;
 import com.shzz.common.tool.bean.transform.asm.context.TransformTypeContext;
 import com.shzz.common.tool.code.BeanTransformException;
 import com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode;
+import com.shzz.common.tool.code.CommonCode;
 import org.objectweb.asm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,7 +167,7 @@ public class TransformUtilGenerate {
 
         if (Objects.isNull(generateClassname)) {
             //todo  错误枚举后续完善
-            throw new BeanTransformException("0x0fff", "请传入正确类名", "创建类名称为空");
+            throw new BeanTransformException(CommonCode.CLASS_NAME_NULL_EXCEPTION.getErrorCode(), CommonCode.CLASS_NAME_NULL_EXCEPTION.getErrorOutline(), "创建类名称为空,请传入正确类型");
         }
         //todo 异常检测
         return true;

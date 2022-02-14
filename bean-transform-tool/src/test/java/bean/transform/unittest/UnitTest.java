@@ -101,6 +101,21 @@ public class UnitTest {
         threeNestList.add(ll);
         from.setThreeNestList(threeNestList);
 
+
+        List<List<List<String>>> threeNestStringList = new ArrayList<>();
+        List<List<String>> llStrings = new ArrayList<>();
+        List<String> lStrings = new ArrayList<>();
+        List<String> lStrings2 = new ArrayList<>();
+        lStrings.add("2022.022");
+        lStrings.add("2022.023");
+        lStrings.add("2022.024");
+
+        lStrings2.add("2023.023");
+        llStrings.add(lStrings);
+        llStrings.add(lStrings2);
+        threeNestStringList.add(llStrings);
+        from.setThreeNestStringList(threeNestStringList);
+
         Inner[][] innerArray=new Inner[2][1];
         List<List<Inner>> innerDoubleList=new ArrayList<>();
         List<Inner> innerList=new ArrayList<>();
@@ -186,9 +201,9 @@ public class UnitTest {
 
 
         CopyFrom from=createCopyFrom();
-        int times = 1;
+        int times = 1000000;
 
-        int loop = 1;
+        int loop = 5;
 
 //        CopyTo copyTo8 = new CopyTo();
 //        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
@@ -239,10 +254,10 @@ public class UnitTest {
                         from,
                         CopyTo.class);
 
-                from.getInnerDoubleList().get(0).get(1).setPhaseName("修改phase");
+                //  from.getInnerDoubleList().get(0).get(1).setPhaseName("修改phase");
 
-                System.out.println("修改 from ="+JSON.toJSONString(from));
-                System.out.println("修改 copyTo2 ="+JSON.toJSONString(copyTo2));
+                // System.out.println("修改 from ="+JSON.toJSONString(from));
+                // System.out.println("修改 copyTo2 ="+JSON.toJSONString(copyTo2));
 
                 //  System.out.println("from="+JSON.toJSONString(from));
                 // System.out.println("copyTo2="+JSON.toJSONString(copyTo2));

@@ -1,6 +1,7 @@
 package com.shzz.common.tool.bean.transform.asm.strategy;
 
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
+import com.shzz.common.tool.bean.transform.SystemProperties;
 import com.shzz.common.tool.bean.transform.Transform;
 import com.shzz.common.tool.bean.transform.asm.*;
 
@@ -12,6 +13,8 @@ import com.shzz.common.tool.bean.transform.asm.BeanTransformsMethodAdapter;
 import com.shzz.common.tool.bean.transform.asm.LocalVariableInfo;
 import com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate;
 import com.shzz.common.tool.bean.transform.asm.context.AbstractContext;
+import com.shzz.common.tool.code.BeanTransformException;
+import com.shzz.common.tool.code.CommonCode;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -50,7 +53,7 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
 
     public static final String SUPER_CLASS_NAME = org.objectweb.asm.Type.getInternalName(BeanTransFormsHandler.class);
 
-    public static boolean collectionMatchCollection(List<Type> typeListSource, List<Type> typeListTarget) {
+    public static boolean collectionMatchCollection(List<Type> typeListSource, List<Type> typeListTarget) throws Exception {
         /**
          * @description: 嵌套Collection 和 嵌套Collection 转换匹配条件判断
          * 1  层数一致
@@ -88,6 +91,24 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             }
 
 
+            Class targetCollectionEleClass = (Class) typeListTarget.get(layers - 1);
+            Class sourceCollectionClass = (Class) typeListSource.get(layers - 1);
+
+            boolean matchConditional1 = (TypeTransformAssist.isBaseType(targetCollectionEleClass) && (!TypeTransformAssist.isBaseType(sourceCollectionClass)));
+            boolean matchConditional2 = (!TypeTransformAssist.isBaseType(targetCollectionEleClass) && (TypeTransformAssist.isBaseType(sourceCollectionClass)));
+
+            if (matchConditional1 || matchConditional2) {
+                if (SystemProperties.getStrictModeFlag()) {
+                    // 系统配置 strict.mode.flag 如果是严格模式，不转换，抛出异常
+                    throw new BeanTransformException(CommonCode.TYPE_MISMATCH.getErrorCode(),
+                            CommonCode.TYPE_MISMATCH.getErrorOutline(),
+                            "源集合元素类型:" + sourceCollectionClass.getSimpleName()
+                                    + "， 目标集合元素类型：" + targetCollectionEleClass.getSimpleName()
+                                    + " , 无法转换, 如需默认转换，请在代码中设置系统变量strict.mode.flag=false");
+
+                }
+
+            }
         }
         return match;
 
@@ -168,7 +189,8 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             extensTransformMethodVisitor.visitVarInsn(Opcodes.ASTORE, iteratorVar.getIndex());
             extensTransformMethodVisitor.visitLabel(iteratorVar.getStart());
             Label iteratorGotoLabel = new Label();
-            extensTransformMethodVisitor.visitLabel(iteratorGotoLabel); // hasNext 回跳标签
+            // hasNext 回跳标签
+            extensTransformMethodVisitor.visitLabel(iteratorGotoLabel);
             extensTransformMethodVisitor.visitVarInsn(Opcodes.ALOAD, iteratorVar.getIndex());
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Iterator.class), "hasNext", "()Z", true);
             extensTransformMethodVisitor.visitJumpInsn(Opcodes.IFEQ, whileJump);
@@ -187,7 +209,8 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             // 目标类对象 调用Collection add 方法，目标对象变量入栈，
             extensTransformMethodVisitor.visitVarInsn(Opcodes.ALOAD, targetVar.getIndex());
 
-            transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix, pattern);
+            // transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix, pattern);
+            transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix);
 
             // 调用add 方法,相关参数已经入栈
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Collection.class), "add", "(Ljava/lang/Object;)Z", true);
@@ -220,7 +243,8 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             extensTransformMethodVisitor.visitVarInsn(Opcodes.ALOAD, targetVar.getIndex());
 
             // 临时对象转换
-            transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix, pattern);
+            // transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix, pattern);
+            transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix);
             // 调用目标对象(集合)add 方法，转换后对象加入集合
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Collection.class), "add", "(Ljava/lang/Object;)Z", true);
             extensTransformMethodVisitor.visitInsn(Opcodes.POP);
@@ -319,7 +343,8 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             Class targetRawType = null;
             Class sourceRawType = null;
             Class sourceElemType = null;
-           // Class sourceArrayElemClass=null;
+
+            // Class sourceArrayElemClass=null;
             if(StrategyMode.COLLECTION_TO_COLLECTION_PATTERN==mode){
                targetRawType = (Class) ((ParameterizedType) this.targetTypeList_Local.get().get(layer)).getRawType();
                sourceRawType = (Class) ((ParameterizedType)  this.sourceTypeList_Local.get().get(layer)).getRawType();
@@ -332,6 +357,7 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
                  targetRawType = (Class) ((ParameterizedType) this.targetTypeList_Local.get().get(layer)).getRawType();
                  sourceRawType = sourceClassList_Local.get().get(layer);
                  sourceElemType =  sourceClassList_Local.get().get(layer + 1);
+
             }
 
 

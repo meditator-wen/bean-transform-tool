@@ -16,6 +16,7 @@ import com.shzz.common.tool.bean.transform.asm.*;
 import com.shzz.common.tool.bean.transform.asm.context.AbstractContext;
 import com.shzz.common.tool.bean.transform.asm.context.Context;
 import com.shzz.common.tool.bean.transform.asm.context.TransformTypeContext;
+import com.shzz.common.tool.code.CommonCode;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -300,7 +301,7 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
                 if (resloveInfo.isUserExtend() && (!(Objects.isNull(implClass) || implClass.isEmpty()))) {
 
                     if ((Objects.isNull(extendsTransformList)) && (extendsTransformList.isEmpty())) {
-                        throw new BeanTransformException("0x00ff", "extendsTransformList参数不符合要求", "缺少字段 " + field.getName() + "所要求的 " + implClass + " 转换类对象");
+                        throw new BeanTransformException(CommonCode.EXTENDS_TRANSFORM_ERROR.getErrorCode(), CommonCode.EXTENDS_TRANSFORM_ERROR.getErrorOutline(), "缺少字段 " + field.getName() + "所要求的 " + implClass + " 转换类对象");
                     }
 
                     for (ExtensionObjectTransform ext : extendsTransformList) {
@@ -324,7 +325,7 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
                                 field.getName(),
                                 implClass);
 
-                        throw new BeanTransformException("0x00ff", "extendsTransformList参数不符合要求", "缺少字段 " + field.getName() + "所要求的 " + implClass + " 转换类对象");
+                        throw new BeanTransformException(CommonCode.EXTENDS_TRANSFORM_ERROR.getErrorCode(), CommonCode.EXTENDS_TRANSFORM_ERROR.getErrorOutline(), "缺少字段 " + field.getName() + "所要求的 " + implClass + " 转换类对象");
                     }
                 } else {
 

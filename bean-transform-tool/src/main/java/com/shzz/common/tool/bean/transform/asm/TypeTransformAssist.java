@@ -4,6 +4,7 @@ import com.shzz.common.tool.bean.BeanFieldInfo;
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
 import com.shzz.common.tool.bean.transform.SystemProperties;
 import com.shzz.common.tool.code.BeanTransformException;
+import com.shzz.common.tool.code.CommonCode;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -62,13 +63,52 @@ public class TypeTransformAssist {
                 || (short.class == type) || (int.class == type) || (boolean.class == type));
     }
 
+    private static boolean stringToWarp(Class warpType, MethodVisitor mv) throws Exception {
+
+        if (isWrapsOrStringType(warpType) && (warpType != String.class)) {
+            String numberWrapTypeInternalName = org.objectweb.asm.Type.getInternalName(warpType);
+            // 执行包装方法  valueOf 返回值入栈
+
+            // valueOf(String s)   方法描述信息
+            String methodDescriptor = org.objectweb.asm.Type.getMethodDescriptor(org.objectweb.asm.Type.getType(warpType), org.objectweb.asm.Type.getType(String.class));
+
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC,
+                    numberWrapTypeInternalName,
+                    "valueOf",
+                    methodDescriptor,
+                    false);
+
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
+
+    private static boolean stringToNumber(Class numberType, MethodVisitor mv) throws Exception {
+        if (isPrimitiveType(numberType)) {
+            //先转换为对应的包装类型,调用 包装类静态方法 valueOf(String s) 转换。
+            Class numberWrapType = typeMap(numberType);
+
+            stringToWarp(numberWrapType, mv);
+            // 转换成
+            wrapsOrStringToPrimitive(numberType, numberWrapType, mv);
+
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
 
 
     protected static void primitiveToPrimitive(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         // 处理原始类型之间强转 ,注意，调用该方法前源类对象的字段值要求已经入栈
         if ((!isPrimitiveType(sourceClass)) || (!isPrimitiveType(targetClass))) {
 
-            throw new BeanTransformException("0xfff0", "类型转换不符合要求", "primitiveToPrimitive 方法只处理原始类型之间的相互转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
+            throw new BeanTransformException(CommonCode.TYPE_MISMATCH.getErrorCode(), CommonCode.TYPE_MISMATCH.getErrorOutline(), "primitiveToPrimitive 方法只处理原始类型之间的相互转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
         }
         if (targetClass == sourceClass) {
             // 不执行任何转换指令，上层自行处理
@@ -84,10 +124,12 @@ public class TypeTransformAssist {
             } else if (sourceClass == double.class) {
                 mv.visitInsn(Opcodes.D2I);
             } else if (sourceClass == String.class) {
-                //基础类型 String到 数值型类型不予转换，
+                if (!stringToNumber(long.class, mv)) {
+                    // String到 数值型类型无法转换，设置默认值
+                    mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0常量 int
+                    mv.visitInsn(Opcodes.ICONST_0);
+                }
 
-                mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0常量 int
-                mv.visitInsn(Opcodes.ICONST_0);
             }
 
             /**
@@ -116,9 +158,14 @@ public class TypeTransformAssist {
                  */
                 mv.visitInsn(Opcodes.I2F);
             } else if (String.class == sourceClass) {
-                //基础类型 String到 数值型类型不予转换，
-                mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0 float常量
-                mv.visitInsn(Opcodes.FCONST_0);
+                if (!stringToNumber(long.class, mv)) {
+                    // String到 数值型类型无法转换，设置默认值
+                    //把已经入栈的String 变量出栈，重新入栈0 常量 float
+
+                    mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0 float常量
+                    mv.visitInsn(Opcodes.FCONST_0);
+                }
+
             }
 
 
@@ -135,9 +182,14 @@ public class TypeTransformAssist {
                  */
                 mv.visitInsn(Opcodes.I2L);
             } else if (String.class == sourceClass) {
-                //基础类型 String到 数值型类型不予转换，
-                mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0 常量 long
-                mv.visitInsn(Opcodes.LCONST_0);
+
+                if (!stringToNumber(long.class, mv)) {
+                    // String到 数值型类型无法转换，设置默认值
+                    //把已经入栈的String 变量出栈，重新入栈0 常量 long
+                    mv.visitInsn(Opcodes.POP);
+                    mv.visitInsn(Opcodes.LCONST_0);
+                }
+
             }
         } else if (targetClass == double.class) {
             if (sourceClass == float.class) {
@@ -152,16 +204,20 @@ public class TypeTransformAssist {
                  */
                 mv.visitInsn(Opcodes.I2D);
             } else if (String.class == sourceClass) {
-                //基础类型 String到 数值型类型不予转换，
-                mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0 常量 double
-                mv.visitInsn(Opcodes.DCONST_0);
+
+                if (!stringToNumber(double.class, mv)) {
+                    // String到 数值型类型无法转换，设置默认值
+                    mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0 常量 double
+                    mv.visitInsn(Opcodes.DCONST_0);
+                }
+
             }
         } else if (targetClass == String.class) {
             String targetClassInternalName = org.objectweb.asm.Type.getInternalName(targetClass);
             org.objectweb.asm.Type returnType = org.objectweb.asm.Type.getType(targetClass);
             String methodDescriptor = "";
             if ((sourceClass == byte.class) || (sourceClass == short.class)) {
-                //String.valueOf  参数无 byte 以及short  类型，这种统调用 valueOf(int i)
+                //String.valueOf  参数无 byte 以及short  类型，这种统一调用 valueOf(int i)
                 // 方法描述符如下
                 methodDescriptor = org.objectweb.asm.Type.getMethodDescriptor(returnType, org.objectweb.asm.Type.getType(int.class));
             } else {
@@ -223,10 +279,10 @@ public class TypeTransformAssist {
 
         if ((!isPrimitiveType(targetClass)) || (!isWrapsOrStringType(sourceClass))) {
             // todo
-            throw new BeanTransformException("0xfff1", "类型转换不符合要求", "wrapsOrStringToPrimitive 方法只处理包装类或者String类到原始类型的转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
+            throw new BeanTransformException(CommonCode.TYPE_MISMATCH.getErrorCode(), CommonCode.TYPE_MISMATCH.getErrorOutline(), "wrapsOrStringToPrimitive 方法只处理包装类或者String类到原始类型的转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
         }
         if (targetClass == sourceClass) {
-            // 不执行任何转换指令
+            // 不执行任何转换指令,只有String  to String 一种情况，其他的两类型不会相同
             return;
         }
 
@@ -272,7 +328,7 @@ public class TypeTransformAssist {
          */
         if ((!isPrimitiveType(sourceClass)) || (!isWrapsOrStringType(targetClass))) {
             // todo
-            throw new BeanTransformException("0xfff2", "类型转换不符合要求", "primitiveToWrapsOrString 方法只处理原始类型到包装类或者String类之间的相互转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
+            throw new BeanTransformException(CommonCode.TYPE_MISMATCH.getErrorCode(), CommonCode.TYPE_MISMATCH.getErrorOutline(), "primitiveToWrapsOrString 方法只处理原始类型到包装类或者String类之间的相互转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
         }
         if (targetClass == sourceClass) {
             // 不执行任何转换指令
@@ -323,18 +379,26 @@ public class TypeTransformAssist {
          */
         if ((!isWrapsOrStringType(sourceClass)) || (!isWrapsOrStringType(targetClass))) {
             // todo
-            throw new BeanTransformException("0xfff3", "类型转换不符合要求", "wrapsOrStringToWrapsOrString 方法只处理包装类或者String类之间的相互转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
+            throw new BeanTransformException(CommonCode.TYPE_UNSUPPORT.getErrorCode(), CommonCode.TYPE_UNSUPPORT.getErrorOutline(), "wrapsOrStringToWrapsOrString 方法只处理包装类或者String类之间的相互转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
 
         }
         if ((targetClass == sourceClass)&&(!SystemProperties.getWrapsTypeDeepyCopyFlag())) {
 
             return;
         }
-        // 先转为原始类型
-        wrapsOrStringToPrimitive(typeMap(targetClass), sourceClass, mv);
-        // 再转换为包装类或者String 类型
 
-        primitiveToWrapsOrString(targetClass, typeMap(targetClass), mv);
+        if ((sourceClass == String.class) && isWrapsOrStringType(targetClass)) {
+
+            stringToWarp(targetClass, mv);
+
+        } else {
+            // 先转为原始类型
+            wrapsOrStringToPrimitive(typeMap(targetClass), sourceClass, mv);
+            // 再转换为包装类或者String 类型
+
+            primitiveToWrapsOrString(targetClass, typeMap(targetClass), mv);
+        }
+
 
     }
 
@@ -558,8 +622,7 @@ public class TypeTransformAssist {
                 || (targetClass==Object.class)) {
 
 
-
-            throw new BeanTransformException("0xffff", "待转换类不符合要求",
+            throw new BeanTransformException(CommonCode.TYPE_UNSUPPORT.getErrorCode(), CommonCode.TYPE_UNSUPPORT.getErrorOutline(),
                     "顶层目标类（即，字段的owner 类）是数组类，Map、 Collection 子类、Object类,不予处理，如果是内层字段类型" +
                             "请继承ExtensionObjectTransform 自定义实现，具体操作请参见 beanTransforms 方法说明 ");
 
@@ -571,7 +634,7 @@ public class TypeTransformAssist {
                 || Collection.class.isAssignableFrom(sourceBeanClass)
                 ||  (targetClass==Object.class)) {
 
-            throw new BeanTransformException("0xffff", "源类类型不符合要求",
+            throw new BeanTransformException(CommonCode.TYPE_UNSUPPORT.getErrorCode(), CommonCode.TYPE_UNSUPPORT.getErrorOutline(),
                     "顶层源类（即，字段的owner 类）是数组类，Map、 Collection 子类、Object类,不予处理，如果是内层字段类型" +
                             "请继承ExtensionObjectTransform 自定义实现，具体操作请参见 beanTransforms 方法说明 ");
 

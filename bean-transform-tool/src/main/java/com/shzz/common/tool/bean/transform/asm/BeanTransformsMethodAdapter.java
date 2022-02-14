@@ -141,7 +141,13 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
     }
 
-
+    private boolean resloveInfoEffective(ResloveInfo resloveInfo) {
+        return (!Objects.isNull(resloveInfo.getSourceFieldGetFunctionName()))
+                && (!Objects.isNull(resloveInfo.getSourceFieldGetFunctionDescriptor()))
+                && (resloveInfo.isSourceFieldGetFunctionNameAvailable())
+                && (!Objects.isNull(resloveInfo.getTargetFieldSetFunctionDescriptor()))
+                && (resloveInfo.isTargetFieldSetFunctionAvailable());
+    }
 
     private synchronized void visitCodeRecursion(Class<?> sourceBeanClass,
                                                  Class<?> targetClass,
@@ -353,9 +359,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
             //调用目标类字段对应的源类字段的get 方法
 
             // 字段的get  方法，无参数，字节码指令参数不入栈
-            if ((!Objects.isNull(resloveInfo.getSourceFieldGetFunctionName()))
-                    && (!Objects.isNull(resloveInfo.getSourceFieldGetFunctionDescriptor()))
-                    && (resloveInfo.isSourceFieldGetFunctionNameAvailable())) {
+            if (resloveInfoEffective(resloveInfo)) {
 
 
                 Type filedGenericType = iterField.getGenericType();
@@ -433,6 +437,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                             //源类字段和目标类字段有继承关系时，做浅拷贝模式要先强制转换为父类型然后目标类对象set 方法
                             mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(iterField.getType()));
                         }
+
                         mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, targetClassInternalName, resloveInfo.getTargetFieldSetFunctionName(), resloveInfo.getTargetFieldSetFunctionDescriptor(), false);
 
                         if (TypeTransformAssist.isWrapsOrStringType(resloveInfo.getSourceFieldType()) &&

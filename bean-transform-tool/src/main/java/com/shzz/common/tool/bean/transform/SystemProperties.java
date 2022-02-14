@@ -14,6 +14,7 @@ public class SystemProperties {
     public static final int THRESHOLD_SIZE=50*1024*1024;
     public static final String CLASS_SIZE_THRESHOLD="com.akfd.generalduty.tool.bean.transform.meta.size.threshold";
     public static final String CLASS_OUTPUT_FLAG="class.output.flag";
+    public static final String STRICT_MODE_FLAG = "strict.mode.flag";
     /**
      * 包装类型深拷贝标志，如果源类和目标类对应字段是包装类且类型相同，则直接赋值。实际上还是引用赋值，
      * 但用户一般情况下无法改变所引用的包装类对象值，所以两边对统一包装类对象的引用基本不会出现数据不一致情况
@@ -25,6 +26,7 @@ public class SystemProperties {
         System.setProperty(CLASS_SIZE_THRESHOLD,String.valueOf(THRESHOLD_SIZE));
         System.setProperty(CLASS_OUTPUT_FLAG,"true");
         System.setProperty(WRAPS_TYPE_DEEPY_COPY,"false");
+        System.setProperty(STRICT_MODE_FLAG, "true");
     }
     public static int getClassSizeThreshold(){
         int sizeThreshold=THRESHOLD_SIZE;
@@ -38,6 +40,18 @@ public class SystemProperties {
       return  sizeThreshold;
     }
 
+    public static boolean getStrictModeFlag() {
+        boolean flag = false;
+
+        String config = System.getProperty(STRICT_MODE_FLAG);
+        ;
+        try {
+            flag = Boolean.parseBoolean(config);
+        } catch (NumberFormatException e) {
+            LOG.error("系统配置：{} value {} 无法转换为boolean,使用默认值 false ", STRICT_MODE_FLAG, config);
+        }
+        return flag;
+    }
     public static boolean getClassOutputFlag(){
         boolean flag=false;
 

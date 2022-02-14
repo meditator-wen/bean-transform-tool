@@ -1,12 +1,15 @@
 package com.shzz.common.tool.bean.transform.asm.strategy;
 
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
+import com.shzz.common.tool.bean.transform.SystemProperties;
 import com.shzz.common.tool.bean.transform.Transform;
 import com.shzz.common.tool.bean.transform.asm.LocalVariableInfo;
 import com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate;
 import com.shzz.common.tool.bean.transform.asm.TypeTransformAssist;
 import com.shzz.common.tool.bean.transform.asm.context.AbstractContext;
 import com.shzz.common.tool.bean.transform.asm.context.Context;
+import com.shzz.common.tool.code.BeanTransformException;
+import com.shzz.common.tool.code.CommonCode;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -35,8 +38,8 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     // 数组维数targetArrayDems，一维和多维对应的字节码指令不同,每层新建数组时需要更新维度值，
     ThreadLocal<Integer> targetArrayDems = new ThreadLocal<>();
 
-    ThreadLocal<List<Type>> sourceTypeList_Local=new ThreadLocal<>();
-    ThreadLocal<List<Class>> sourceClassList_Local=new ThreadLocal<>();
+    ThreadLocal<List<Type>> sourceTypeList_Local = new ThreadLocal<>();
+    ThreadLocal<List<Class>> sourceClassList_Local = new ThreadLocal<>();
 
     public ArrayTypeStrategy(AbstractContext context) {
         this.registerContext_local.set(context);
@@ -159,18 +162,19 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
              * 内层转换方法调用，嵌套泛型最内层转换方法与前面不同，不递归调用extensionObjectTransform 方法，新建方法
              *
              */
-            transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix, pattern);
+            //transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix, pattern);
+            transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix);
 
-            if(TypeTransformAssist.isPrimitiveType(targetElemType)){
-                Class primitiveMapType=TypeTransformAssist.typeMap(targetElemType);
+            if (TypeTransformAssist.isPrimitiveType(targetElemType)) {
+                Class primitiveMapType = TypeTransformAssist.typeMap(targetElemType);
 
                 transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(primitiveMapType));
 
-                try {
-                    TypeTransformAssist.baseTypeProcessByteCode(targetElemType,primitiveMapType, transformMethodVisitor, true);
-                } catch (Exception e) {
-                    LOG.error(e.toString());
-                }
+                //   try {
+                TypeTransformAssist.baseTypeProcessByteCode(targetElemType, primitiveMapType, transformMethodVisitor, true);
+//                } catch (Exception e) {
+//                    LOG.error(e.toString());
+//                }
             }
             arrayElementStore(targetElemType, transformMethodVisitor);
             //++index
@@ -197,14 +201,15 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
             transformMethodVisitor.visitVarInsn(Opcodes.ALOAD, targetVar.getIndex());
             transformMethodVisitor.visitVarInsn(Opcodes.ILOAD, arrayIndex.getIndex());
             // 临时对象转换
-            transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix, pattern);
-            if(TypeTransformAssist.isPrimitiveType(targetElemType)){
-                Class primitiveMapType=TypeTransformAssist.typeMap(targetElemType);
+            //transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix, pattern);
+            transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix);
+            if (TypeTransformAssist.isPrimitiveType(targetElemType)) {
+                Class primitiveMapType = TypeTransformAssist.typeMap(targetElemType);
 
                 transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(primitiveMapType));
 
                 try {
-                    TypeTransformAssist.baseTypeProcessByteCode(targetElemType,primitiveMapType, transformMethodVisitor, true);
+                    TypeTransformAssist.baseTypeProcessByteCode(targetElemType, primitiveMapType, transformMethodVisitor, true);
                 } catch (Exception e) {
                     LOG.error(e.toString());
                 }
@@ -231,21 +236,21 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         return true;
     }
 
-    protected boolean iterationGeneByteCode( List<Class> targetClassList,String newMethodPrefix,ClassWriter extensTransformImplClassWriter,MethodVisitor extensTransformMethodVisitor,StrategyMode mode) throws Exception {
+    protected boolean iterationGeneByteCode(List<Class> targetClassList, String newMethodPrefix, ClassWriter extensTransformImplClassWriter, MethodVisitor extensTransformMethodVisitor, StrategyMode mode) throws Exception {
         boolean methodGeneSuccess = false;
         for (int layer = 0; layer < targetClassList.size() - 1; ++layer) {
             Class targetRawType = targetClassList.get(layer);
             Class targetElemType = targetClassList.get(layer + 1);
             Class sourceRawType = null;
             Class sourceElemType = null;
-            if(StrategyMode.COLLECTION_TO_ARRAY_PATTERN==mode){
-                sourceRawType= (Class) ((ParameterizedType) sourceTypeList_Local.get().get(layer)).getRawType();
+            if (StrategyMode.COLLECTION_TO_ARRAY_PATTERN == mode) {
+                sourceRawType = (Class) ((ParameterizedType) sourceTypeList_Local.get().get(layer)).getRawType();
                 if ((sourceTypeList_Local.get().get(layer + 1)) instanceof Class) {
                     sourceElemType = (Class) sourceTypeList_Local.get().get(layer + 1);
                 } else if ((sourceTypeList_Local.get().get(layer + 1)) instanceof ParameterizedType) {
                     sourceElemType = (Class) ((ParameterizedType) sourceTypeList_Local.get().get(layer + 1)).getRawType();
                 }
-            }else if(StrategyMode.ARRAY_TO_ARRAY_PATTERN==mode){
+            } else if (StrategyMode.ARRAY_TO_ARRAY_PATTERN == mode) {
                 sourceRawType = sourceClassList_Local.get().get(layer);
                 sourceElemType = sourceClassList_Local.get().get(layer + 1);
             }
@@ -254,7 +259,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
             if (layer == 0) {
 
                 // 编写方法体字节码
-                methodGeneSuccess =visitArrayTransformCode(extensTransformMethodVisitor, sourceRawType, targetRawType, sourceElemType, targetElemType, newMethodPrefix, layer, mode);
+                methodGeneSuccess = visitArrayTransformCode(extensTransformMethodVisitor, sourceRawType, targetRawType, sourceElemType, targetElemType, newMethodPrefix, layer, mode);
 
             } else {
                 MethodVisitor newCollectionTransformMethod = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PRIVATE, methodName(newMethodPrefix, layer), EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
@@ -271,9 +276,9 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         boolean methodGeneSuccess = false;
         MethodVisitor extensTransformMethodVisitor = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
         this.namePrefix_Local.set(newMethodPrefix);
-        StrategyMode findMode=chooseStrategyMode(sourceBeanType, targetType);
+        StrategyMode findMode = chooseStrategyMode(sourceBeanType, targetType);
         if (Objects.nonNull(findMode)) {
-            if(StrategyMode.ARRAY_TO_ARRAY_PATTERN==findMode){
+            if (StrategyMode.ARRAY_TO_ARRAY_PATTERN == findMode) {
                 // 数组类，ComponentType 解析
                 List<Class> targetClassList = resolveArrayElenentType(this.targetRawType_local.get());
                 List<Class> sourceClassList = resolveArrayElenentType(this.sourceRawType_local.get());
@@ -281,11 +286,11 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
                 if (arrayMatchArray(targetClassList, sourceClassList)) {
                     this.targetElementType_local.set(targetClassList.get(targetClassList.size() - 1));
                     this.sourceElementType_local.set(sourceClassList.get(sourceClassList.size() - 1));
-                    methodGeneSuccess= iterationGeneByteCode(targetClassList, newMethodPrefix, extensTransformImplClassWriter, extensTransformMethodVisitor, findMode);
+                    methodGeneSuccess = iterationGeneByteCode(targetClassList, newMethodPrefix, extensTransformImplClassWriter, extensTransformMethodVisitor, findMode);
 
                 }
 
-            }else if(StrategyMode.COLLECTION_TO_ARRAY_PATTERN==findMode){
+            } else if (StrategyMode.COLLECTION_TO_ARRAY_PATTERN == findMode) {
                 ParameterizedType sourceParameterizedType = (ParameterizedType) sourceBeanType;
                 List<Type> sourceTypeList = resolveCollectionElenentType(sourceParameterizedType);
                 // 数组类，ComponentType 解析
@@ -296,7 +301,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
                     this.targetElementType_local.set(targetClassList.get(targetClassList.size() - 1));
                     this.sourceElementType_local.set((Class) sourceTypeList.get(sourceTypeList.size() - 1));
 
-                    methodGeneSuccess= iterationGeneByteCode(targetClassList, newMethodPrefix, extensTransformImplClassWriter, extensTransformMethodVisitor, findMode);
+                    methodGeneSuccess = iterationGeneByteCode(targetClassList, newMethodPrefix, extensTransformImplClassWriter, extensTransformMethodVisitor, findMode);
 
                 }
             }
@@ -309,17 +314,40 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
-    public static boolean arrayMatchArray(List<Class> targetArrayTypeList, List<Class> sourceArrayTypeList) {
+    public static boolean arrayMatchArray(List<Class> targetArrayTypeList, List<Class> sourceArrayTypeList) throws Exception {
 
         boolean match = true;
 
         if (Objects.isNull(targetArrayTypeList) || Objects.isNull(sourceArrayTypeList)) {
             match = false;
         }
+
+
         if (targetArrayTypeList.size() != sourceArrayTypeList.size()) {
             // 维度不匹配
             match = false;
         }
+
+        Class targetArrayEleClass = targetArrayTypeList.get(targetArrayTypeList.size() - 1);
+        Class sourceArrayEleClass = sourceArrayTypeList.get(sourceArrayTypeList.size() - 1);
+
+        boolean matchConditional1 = (TypeTransformAssist.isBaseType(targetArrayEleClass) && (!TypeTransformAssist.isBaseType(sourceArrayEleClass)));
+        boolean matchConditional2 = (!TypeTransformAssist.isBaseType(targetArrayEleClass) && (TypeTransformAssist.isBaseType(sourceArrayEleClass)));
+
+        if (matchConditional1 || matchConditional2) {
+            if (SystemProperties.getStrictModeFlag()) {
+                // 系统配置 strict.mode.flag 如果是严格模式，不转换，抛出异常
+                throw new BeanTransformException(CommonCode.TYPE_MISMATCH.getErrorCode(),
+                        CommonCode.TYPE_MISMATCH.getErrorOutline(),
+                        "源数组元素类型:" + sourceArrayEleClass.getSimpleName()
+                                + "， 目标数组元素类型：" + targetArrayEleClass.getSimpleName() +
+                                " 无法转换, 如需默认转换，请在代码中设置系统变量strict.mode.flag=false ");
+
+            }
+
+
+        }
+
 
         return match;
 
@@ -361,12 +389,12 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
 
-       return super.strategyMatch(sourceBeanType,targetType);
+        return super.strategyMatch(sourceBeanType, targetType);
 
     }
 
     @Override
-    public void clearThreadLocal(){
+    public void clearThreadLocal() {
         super.clearThreadLocal();
         targetArrayDems.remove();
         sourceTypeList_Local.remove();
