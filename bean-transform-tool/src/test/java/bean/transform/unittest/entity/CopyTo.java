@@ -13,9 +13,9 @@ import java.util.*;
 
 public class CopyTo {
 
-    //    private double douVar;
+//        private double douVar;
 //
-    private char characterValue='v';
+//    private char characterValue='v';
 //
 //    private String roadId = "";
 //    /** 路段长度
@@ -137,16 +137,16 @@ public class CopyTo {
 //     **/
 //    private Inner inner;
 
-//    //  @BeanFieldInfo(sourceFieldName = "innerDoubleList")
-//    Inner[][] innerarray;
-//
-//    public Inner[][] getInnerarray() {
-//        return innerarray;
-//    }
-//
-//    public void setInnerarray(Inner[][] innerarray) {
-//        this.innerarray = innerarray;
-//    }
+    //  @BeanFieldInfo(sourceFieldName = "innerDoubleList")
+    Inner[][] innerarray;
+
+    public Inner[][] getInnerarray() {
+        return innerarray;
+    }
+
+    public void setInnerarray(Inner[][] innerarray) {
+        this.innerarray = innerarray;
+    }
 
 //    private Integer thresholdId =-1;
 //
@@ -158,17 +158,17 @@ public class CopyTo {
 //
 //    @BeanFieldInfo(userExtend = false, sourceFieldName = "nestArray",autoTransform = true)
 //    private List<List<ListElement>>  nestList=new ArrayList<>();
-//
-//    public Map<String, Map<String, Inner>> getTwoLayerMap() {
-//        return twoLayerMap;
-//    }
-//
-//    public void setTwoLayerMap(Map<String, Map<String, Inner>> twoLayerMap) {
-//        this.twoLayerMap = twoLayerMap;
-//    }
-//
-//    private Map<String, Map<String,Inner>> twoLayerMap;
-//
+
+    public Map<String, Map<String, Inner>> getTwoLayerMap() {
+        return twoLayerMap;
+    }
+
+    public void setTwoLayerMap(Map<String, Map<String, Inner>> twoLayerMap) {
+        this.twoLayerMap = twoLayerMap;
+    }
+
+    private Map<String, Map<String, Inner>> twoLayerMap;
+
 //    public Map<String, List<Inner>> getMapContainList() {
 //        return mapContainList;
 //    }

@@ -203,7 +203,7 @@ public class UnitTest {
         CopyFrom from=createCopyFrom();
         int times = 1000000;
 
-        int loop = 5;
+        int loop = 20;
 
 //        CopyTo copyTo8 = new CopyTo();
 //        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
@@ -242,8 +242,8 @@ public class UnitTest {
                 // System.out.println(JSON.toJSONString(compareTo));
             }
             long time2 = System.nanoTime();
-            System.out.println("from=" + JSON.toJSONString(from));
-            System.out.println(" copyTo1=" + JSON.toJSONString(copyTo1));
+            // System.out.println("from=" + JSON.toJSONString(from));
+            // System.out.println(" copyTo1=" + JSON.toJSONString(copyTo1));
             long time3_1 = System.nanoTime();
 
 
@@ -267,13 +267,17 @@ public class UnitTest {
 
 
             long time3 = System.nanoTime();
-            System.out.println("from=" + JSON.toJSONString(from));
-            System.out.println("copyTo2=" + JSON.toJSONString(copyTo2));
+            //  System.out.println("from=" + JSON.toJSONString(from));
+            //  System.out.println("beanTransFormsHandler  copyTo2=" + JSON.toJSONString(copyTo2));
 
+
+            ComplexTypeTransformManual complexTypeTransformManual = new ComplexTypeTransformManual();
             long time4_1 = System.nanoTime();
             for (int K = 0; K < times; ++K) {
 
-                copyTo3 = new CopyTo();
+                copyTo3 = complexTypeTransformManual.beanTransforms(from);
+
+
                 //  org.springframework.beans.BeanUtils.copyProperties(from, copyTo3);
                 //   org.springframework.beans.BeanUtils.copyProperties(from,copyTo3);
 
@@ -281,8 +285,8 @@ public class UnitTest {
             }
 
             long time4 = System.nanoTime();
-
-
+            //  System.out.println("from=" + JSON.toJSONString(from));
+            //   System.out.println("manual  copyTo3=" + JSON.toJSONString(copyTo3));
             for (int K = 0; K < times; ++K) {
 
                 copyTo3 = new CopyTo();
@@ -311,7 +315,7 @@ public class UnitTest {
             System.out.println("MapperStructConvert:" + JSON.toJSONString(copyTo5));
 
 
-            System.out.println(" 转换拷贝bean " + times + "次 总时间（毫秒）, " + ",cglib vs BeanTransFormsHandler vs spring " + "： "
+            System.out.println(" 转换拷贝bean " + times + "次 总时间（毫秒）, " + ",cglib vs BeanTransFormsHandler vs manual " + "： "
                     + (time2 - time1) / 1000000 + "   "
                     + (time3 - time3_1) / 1000000 + "  " +
                     (time4 - time4_1) / 1000000 + "  ");
