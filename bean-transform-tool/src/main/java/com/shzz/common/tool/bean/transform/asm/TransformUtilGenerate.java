@@ -73,7 +73,7 @@ public class TransformUtilGenerate {
     }
 
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
-        return generate(sourceBeanClass, targetClass, false, true, extendsTransformList, null);
+        return generate(sourceBeanClass, targetClass, true, true, extendsTransformList, null);
     }
 
 
@@ -92,16 +92,22 @@ public class TransformUtilGenerate {
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList, java.lang.reflect.Type[] actualGenericType) throws Exception {
         /**
          * @description:
-         * @param sourceBeanClass
-         * @param targetClass
-         * @param isDeepCopy
-         * @param permitBaseTypeInterconvert
-         * @param extendsTransformList
-         * @param actualGenericType
+         * @param sourceBeanClass  源类类型
+         * @param targetClass 转换的目标类类型
+         * @param isDeepCopy  是否深拷贝，默认是true,
+         *                    如果设置为false,如果目标类和源类类型不一致时无法转换，如果一致则引用类型直接赋值，
+         * @param permitBaseTypeInterconvert 是否支持不同的原始类型或者包装类型互相转换，
+         *                                   比如 double 到 byte  或者Integer 到 short
+         * @param extendsTransformList  用户自定义的转换类对象的集合
+         *                              如果用户在对应目标类的字段中通过工具包中的注解BeanFieldInfo设置了 extensionObjectTransformImplClass 属性，表示该字段的转换使用用户自定义实现类来完成。用户创建实现类的对象通过extendsTransformList 参数传入，工具框架内部调用对应方法进行转换
+         * @param actualGenericType  该参数预留，可传入null.
+         *                           如果要转换方法体内部定义的局部变量（非匿名内部类方式定义）
+         *                           且变量类型是参数化类型、泛型数组、通配泛型时，内部泛型实参可通过该参数传入
          * @return: com.shzz.common.tool.bean.transform.asm.BeanTransFormsHandler
          * @auther: wen wang
          * @date: 2021/12/8 13:59
          */
+
 
         UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
         return universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
