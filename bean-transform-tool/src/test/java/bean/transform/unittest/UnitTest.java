@@ -196,7 +196,7 @@ public class UnitTest {
 
 
         try {
-          //  beanTransFormsHandler =TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
+            beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
         } catch (Exception e) {
             e.printStackTrace();
         }

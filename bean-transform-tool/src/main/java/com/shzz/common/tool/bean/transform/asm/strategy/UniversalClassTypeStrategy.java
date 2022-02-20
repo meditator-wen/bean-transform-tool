@@ -300,7 +300,7 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
                 String geneTargetFieldTypeField = field.getName() + TransformUtilGenerate.TARGET_FIELD_CLASS_FIELD_SUFFIX;
                 if (resloveInfo.isUserExtend() && (!(Objects.isNull(implClass) || implClass.isEmpty()))) {
 
-                    if ((Objects.isNull(extendsTransformList)) && (extendsTransformList.isEmpty())) {
+                    if ((Objects.isNull(extendsTransformList)) || (extendsTransformList.isEmpty())) {
                         throw new BeanTransformException(CommonCode.EXTENDS_TRANSFORM_ERROR.getErrorCode(), CommonCode.EXTENDS_TRANSFORM_ERROR.getErrorOutline(), "缺少字段 " + field.getName() + "所要求的 " + implClass + " 转换类对象");
                     }
 

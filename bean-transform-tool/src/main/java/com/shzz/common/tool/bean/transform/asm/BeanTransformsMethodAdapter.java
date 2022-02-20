@@ -83,11 +83,11 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
     private Map<Integer, Label> nextFieldJumpLabel = new ConcurrentHashMap<>(64);
 
     public BeanTransformsMethodAdapter(MethodVisitor mv,
-                                          Class<?> sourceBeanClass,
-                                          Class<?> targetClass,
-                                          boolean isDeepCopy,
-                                          boolean permitWrapsTypeInterconvert,
-                                          String generateClassname
+                                       Class<?> sourceBeanClass,
+                                       Class<?> targetClass,
+                                       boolean isDeepCopy,
+                                       boolean permitWrapsTypeInterconvert,
+                                       String generateClassname
     ) {
         super(ASM9, mv);
         this.sourceBeanClass = sourceBeanClass;
@@ -172,16 +172,16 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
             mv.visitVarInsn(Opcodes.ALOAD, findSourceObjectIndex(recursions, tempSourceObjectVarNum));
             mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceBeanClass));
 
-            Class targetClassMap=null;
-            if(TypeTransformAssist.isPrimitiveType(targetClass)){
+            Class targetClassMap = null;
+            if (TypeTransformAssist.isPrimitiveType(targetClass)) {
                 // 接口方法返回Object,如果是原始类型，无法直接ARETURN 指令返回，需要转成包装类。
-                targetClassMap= TypeTransformAssist.typeMap(targetClass);
+                targetClassMap = TypeTransformAssist.typeMap(targetClass);
 
-            }else{
-                targetClassMap= targetClass;
+            } else {
+                targetClassMap = targetClass;
             }
             try {
-                TypeTransformAssist.baseTypeProcessByteCode(targetClassMap,sourceBeanClass, mv, isDeepCopy);
+                TypeTransformAssist.baseTypeProcessByteCode(targetClassMap, sourceBeanClass, mv, isDeepCopy);
             } catch (Exception e) {
                 ErrorInfoStack.getExceptionStackInfo(e);
             }
@@ -371,13 +371,11 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                         ((filedGenericType instanceof Class) && (((Class) filedGenericType).isArray()));
 
 
-                if (resloveInfo.isUserExtend()||flag) {
+                if (resloveInfo.isUserExtend() || flag) {
                     mv.visitLabel(fieldBranchEntranceLabel[fieldOffset]);
                     LocalVariableInfo tempSourceObjectVarInfo = newTempVar(sourceClassInternalName, resloveInfo, startVarOffSetRecursion++, tempSourceObjectVarNum, recursions);
                     mv.visitVarInsn(Opcodes.ALOAD, localVariableMap.get(recursionFunctionVarNameAtStart).getIndex());
                     // 使用自定义拓展类转换
-
-
                     mv.visitVarInsn(Opcodes.ALOAD, SELF_OBJECT_VAR_OFFSET);
                     // 从缓存字段中加载转换类对象。(需要在创建转换类时预先写入该字段值)
                     mv.visitFieldInsn(Opcodes.GETFIELD, generateClassInternalName, iterField.getName() + EXTEND_IMPL_FIELD_NAME_SUFFIX, EXTENSION_TRANSFORM_INTERFACE_DESC);
@@ -404,9 +402,9 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                         mv.visitLabel(fieldBranchEntranceLabel[fieldOffset]);
                         Label jumpIfNull = new Label();
                         if (TypeTransformAssist.isWrapsOrStringType(resloveInfo.getSourceFieldType()) &&
-                                (SystemProperties.getWrapsTypeDeepyCopyFlag()||(iterField.getType() != resloveInfo.getSourceFieldType()))) {
+                                (SystemProperties.getWrapsTypeDeepyCopyFlag() || (iterField.getType() != resloveInfo.getSourceFieldType()))) {
 
-                            // 2022-01-29 新增，为了提高效率，sourceObject参数 先转成对应类对象存在新变量中，每次加载转换后的变量，避免多次转换
+                            //   2022-01-29 新增，为了提高效率，sourceObject参数 先转成对应类对象存在新变量中，每次加载转换后的变量，避免多次转换
                             mv.visitVarInsn(Opcodes.ALOAD, castsourceBeanVariableInfo.getIndex());
                             mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, sourceClassInternalName, resloveInfo.getSourceFieldGetFunctionName(), resloveInfo.getSourceFieldGetFunctionDescriptor(), false);
                             mv.visitJumpInsn(Opcodes.IFNULL, jumpIfNull);
@@ -438,7 +436,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                         mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, targetClassInternalName, resloveInfo.getTargetFieldSetFunctionName(), resloveInfo.getTargetFieldSetFunctionDescriptor(), false);
 
                         if (TypeTransformAssist.isWrapsOrStringType(resloveInfo.getSourceFieldType()) &&
-                                (SystemProperties.getWrapsTypeDeepyCopyFlag()||(iterField.getType() != resloveInfo.getSourceFieldType()))) {
+                                (SystemProperties.getWrapsTypeDeepyCopyFlag() || (iterField.getType() != resloveInfo.getSourceFieldType()))) {
 
                             mv.visitLabel(jumpIfNull);
                             if (fieldOffset < fieldBranchs - 1) {
@@ -473,7 +471,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                             Class fieldType = (Class) filedGenericType;
 
                             if ((fieldType == Date.class) && (resloveInfo.getSourceFieldType() == Date.class)) {
-                               // Date 类型直接调用 getTime()方法转换，不解析Date 类型字段依次赋值
+                                // Date 类型直接调用 getTime()方法转换，不解析Date 类型字段依次赋值
                                 dateTypeFlag = true;
                                 mv.visitVarInsn(Opcodes.ALOAD, tempSourceObjectVarInfo.getIndex());
                                 mv.visitJumpInsn(Opcodes.IFNULL, dataFieldjumpIfNull);
@@ -497,7 +495,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                                 mv.visitVarInsn(Opcodes.ALOAD, SELF_OBJECT_VAR_OFFSET);
                                 mv.visitFieldInsn(Opcodes.GETFIELD, generateClassInternalName, iterField.getName() + TARGET_FIELD_CLASS_FIELD_SUFFIX, FIELD_TYPE_DESC);
                                 mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, BEAN_TRANSFORM_NAME, BEAN_TRANSFORM_METHOD_NAME, BEAN_TRANSFORM_METHOD_DESC, false);
-                               // mv.visitMethodInsn(Opcodes.INVOKESPECIAL,BEAN_TRANSFORM_NAME, PUBLIC_BEAN_TRANSFORM_METHOD_NAME, GENERIC_TRANSFORM_METHOD_DESC, false);
+                                // mv.visitMethodInsn(Opcodes.INVOKESPECIAL,BEAN_TRANSFORM_NAME, PUBLIC_BEAN_TRANSFORM_METHOD_NAME, GENERIC_TRANSFORM_METHOD_DESC, false);
                             } else {
                                 LOG.warn("target class {} field: {} {}，autoTransform={}, 不满足自动转换条件,不予转换，可设置autoTransform=true 或者配置自定义转换类", targetClass.getSimpleName(), iterField.getType().getSimpleName(), iterField.getName(), resloveInfo.isAutoTransform());
                                 mv.visitVarInsn(Opcodes.ALOAD, localVariableMap.get(recursionFunctionVarNameAtStart).getIndex());
