@@ -360,10 +360,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
             // 字段的get  方法，无参数，字节码指令参数不入栈
             if (resloveInfoEffective(resloveInfo)) {
-
-
                 Type filedGenericType = iterField.getGenericType();
-
                 String generateClassInternalName = generateClassname.replace('.', '/');
 
                 // 数组类对象，参数化泛型、类型变量、泛型数组、通配泛型
@@ -583,14 +580,9 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
         // 方法内局部变量定义位置。别名 命名规则 "localVar_"+recursions+"_"+varOffSet，内层嵌套的代码块需要访问上层已定义的变量
         // beanTransforms 四个参数变量信息加入 map 缓存，按照命名规则，初次进入方法recursions=0，startVarOffSetRecursion 从0-3 依次编号
         String beanTransFormsHandlerinternalName = generateClassname.replace('.', '/');
-        LocalVariableInfo thisVariableInfo = new VariableDefine()
-                .index(0)
-                .name("this")
-                .alias(LOCAL_VAR_PREFIX + 0 + "_" + 0)
-                .start(startOfMethodBeanTransformsLable)
-                .end(endOfMethodBeanTransformsLable)
-                .signature(null)
-                .descriptor("L" + beanTransFormsHandlerinternalName + ";")
+        LocalVariableInfo thisVariableInfo = new VariableDefine().index(0).name("this")
+                .alias(LOCAL_VAR_PREFIX + 0 + "_" + 0).start(startOfMethodBeanTransformsLable).end(endOfMethodBeanTransformsLable)
+                .signature(null).descriptor("L" + beanTransFormsHandlerinternalName + ";")
                 .define();
         localVariableMap.put(thisVariableInfo.getAlias(), thisVariableInfo);
 
@@ -599,7 +591,8 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
         sourceBeanClassVariableInfo.setAlias(LOCAL_VAR_PREFIX + 0 + "_" + 1);
         sourceBeanClassVariableInfo.setName("sourceBeanClass");
         sourceBeanClassVariableInfo.setDescriptor("Ljava/lang/Class;");
-        sourceBeanClassVariableInfo.setSignature("Ljava/lang/Object;"); //签名保持和描述符一致
+        //签名保持和描述符一致
+        sourceBeanClassVariableInfo.setSignature("Ljava/lang/Object;");
         sourceBeanClassVariableInfo.setStart(startOfMethodBeanTransformsLable);
         sourceBeanClassVariableInfo.setEnd(endOfMethodBeanTransformsLable);
         sourceBeanClassVariableInfo.setIndex(1);
@@ -610,7 +603,9 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
         sourceBeanObjectVariableInfo.setAlias(LOCAL_VAR_PREFIX + 0 + "_" + 2);
         sourceBeanObjectVariableInfo.setName("sourceBeanObject");
         sourceBeanObjectVariableInfo.setDescriptor("Ljava/lang/Object;");
-        sourceBeanObjectVariableInfo.setSignature(null); //签名保持和描述符一致
+
+        //签名保持和描述符一致
+        sourceBeanObjectVariableInfo.setSignature(null);
         sourceBeanObjectVariableInfo.setStart(startOfMethodBeanTransformsLable);
         sourceBeanObjectVariableInfo.setEnd(endOfMethodBeanTransformsLable);
         sourceBeanObjectVariableInfo.setIndex(2);
@@ -620,6 +615,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
         targetClassVariableInfo.setAlias(LOCAL_VAR_PREFIX + 0 + "_" + 3);
         targetClassVariableInfo.setName("targetClass");
         targetClassVariableInfo.setDescriptor("Ljava/lang/Class;");
+
         //签名保持和描述符一致
         targetClassVariableInfo.setSignature("Ljava/lang/Object;");
         targetClassVariableInfo.setStart(startOfMethodBeanTransformsLable);
@@ -635,7 +631,6 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
             LOG.error(e.toString());
             return;
         }
-
 
         /**
          * 递归函数处理目标类字段转换，字段类型为自定义类或者有拓展接口实现转换的内部递归调用该函数

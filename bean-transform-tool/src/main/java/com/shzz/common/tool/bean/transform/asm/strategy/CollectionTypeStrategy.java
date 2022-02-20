@@ -394,7 +394,15 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             this.sourceRawType_local.set((Class) sourceParameterizedType.getRawType());
             if (Collection.class.isAssignableFrom(this.targetRawType_local.get())
                     && Collection.class.isAssignableFrom(this.sourceRawType_local.get())) {
-                findStrategy = StrategyMode.COLLECTION_TO_COLLECTION_PATTERN;
+
+                try {
+                    resolveCollectionElenentType(targetParameterizedType);
+                    findStrategy = StrategyMode.COLLECTION_TO_COLLECTION_PATTERN;
+                } catch (BeanTransformException e) {
+                    e.printStackTrace();
+                }
+
+                // findStrategy = StrategyMode.COLLECTION_TO_COLLECTION_PATTERN;
             }
         } else if ((targetType instanceof ParameterizedType) && (sourceBeanType instanceof Class)) {
             ParameterizedType targetParameterizedType = (ParameterizedType) targetType;
@@ -403,7 +411,14 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             this.sourceRawType_local.set(sourceClass);
             if (Collection.class.isAssignableFrom(this.targetRawType_local.get())
                     && sourceClass.isArray()) {
-                findStrategy = StrategyMode.ARRAY_TO_COLLECTION_PATTERN;
+
+                try {
+                    resolveCollectionElenentType(targetParameterizedType);
+                    findStrategy = StrategyMode.ARRAY_TO_COLLECTION_PATTERN;
+                } catch (BeanTransformException e) {
+                    e.printStackTrace();
+                }
+                // findStrategy = StrategyMode.ARRAY_TO_COLLECTION_PATTERN;
             }
         }
         return findStrategy;

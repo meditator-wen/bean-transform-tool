@@ -39,7 +39,7 @@ public class ComplexTypeTransformManual {
 
                     targetVar[index] = targetVar1;
                 }
-                localVar_1_0.setInnerarray(targetVar);
+                // localVar_1_0.setInnerarray(targetVar);
 
             }
 
@@ -78,7 +78,7 @@ public class ComplexTypeTransformManual {
                     targetVar.put(tempKey, targetVar1);
                 }
 
-                localVar_1_0.setTwoLayerMap(targetVar);
+                //  localVar_1_0.setTwoLayerMap(targetVar);
             }
 
 

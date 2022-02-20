@@ -62,6 +62,20 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
     protected ThreadLocal<MethodVisitor> extensTransformMethodVisitor_Local = new ThreadLocal<>();
 
+    protected void setSequence(ThreadLocal<Integer> sequence_Local, Type sourceType, Type targetType) throws Exception {
+//        if(strategyMatch(sourceType, targetType)){
+//
+//
+//        }
+
+        if (Objects.nonNull(sequence_Local.get())) {
+
+            sequence_Local.set(sequence_Local.get() + 1);
+        } else {
+            sequence_Local.set(Integer.valueOf(1));
+        }
+    }
+
 
     protected Map<String, LocalVariableInfo> defineLocalVar(Label startOfMethodBeanTransformsLable, Label endOfMethodBeanTransformsLable, Class rawType, Class elemType, StrategyMode pattern, String ownerClassInternalName) {
 
@@ -239,16 +253,16 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
             // 最内层元素是 泛型变量类型、泛型数组，通配泛型，自动化深拷贝模式暂不予处理，反回空栈，后续考虑拓展
             if (!(type instanceof Class)) {
 
-                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素非Class 类型：" + type.getTypeName());
+                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素非Class 类型：" + type.getTypeName() + "， 可自定义实现转换类");
             } else if ((type == Object.class)) {
-                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素Object类型");
+                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素Object类型" + "， 可自定义实现转换类");
 
             } else if (Map.class.isAssignableFrom(((Class) type))) {
-                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素Object类型");
+                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素Object类型" + "， 可自定义实现转换类");
 
                 // todo 其他类型后面完善
             } else if ((((Class) type).isArray())) {
-                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素是数组类型类型:" + type.getTypeName());
+                throw new BeanTransformException(CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorCode(), CommonCode.GENERIC_TYPE_UNSUPPORT.getErrorOutline(), "集合类型最内层元素是数组类型类型:" + type.getTypeName() + "， 可自定义实现转换类");
 
             }
 
@@ -278,17 +292,6 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
         } else {
 
-            if (Objects.nonNull(targetElementType_local.get()) &&
-                    Objects.nonNull(sourceElementType_local.get())) {
-
-                if (TypeTransformAssist.isBaseType(targetElementType_local.get()) &&
-                        TypeTransformAssist.isBaseType(sourceElementType_local.get())) {
-
-
-                }
-
-
-            }
 
             String sourceElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.SOURCE_FIELD_CLASS_FIELD_SUFFIX;
             String targetElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.TARGET_FIELD_CLASS_FIELD_SUFFIX;

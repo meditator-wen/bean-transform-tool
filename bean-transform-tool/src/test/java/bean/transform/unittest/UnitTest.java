@@ -139,6 +139,10 @@ public class UnitTest {
         innerArray[1]=inners;
         from.setInnerarray(innerArray);
         from.setInnerDoubleList(innerDoubleList);
+
+        List<Inner[][]> listContainArray = new ArrayList<>();
+        listContainArray.add(innerArray);
+        from.setListContainArray(listContainArray);
         double d = 8.9;
         from.setDouVar(d);
 
@@ -159,6 +163,15 @@ public class UnitTest {
         twoLayerMap.put("layer1",twoLayerInnerMap);
         from.setTwoLayerMap(twoLayerMap);
 
+
+        List<Map<String, Inner>> listContainMap = new ArrayList<>();
+        List<Map<String, Map<String, Inner>>> listContaintwoLayerMap = new ArrayList<>();
+        listContaintwoLayerMap.add(twoLayerMap);
+        from.setListContainTwoLayerMap(listContaintwoLayerMap);
+
+        listContainMap.add(twoLayerInnerMap);
+
+        from.setListContainMap(listContainMap);
 
         Inner mapContainListInnerElement = new Inner();
 
@@ -201,9 +214,9 @@ public class UnitTest {
 
 
         CopyFrom from=createCopyFrom();
-        int times = 1000000;
+        int times = 1;
 
-        int loop = 20;
+        int loop = 1;
 
 //        CopyTo copyTo8 = new CopyTo();
 //        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
@@ -267,8 +280,8 @@ public class UnitTest {
 
 
             long time3 = System.nanoTime();
-            //  System.out.println("from=" + JSON.toJSONString(from));
-            //  System.out.println("beanTransFormsHandler  copyTo2=" + JSON.toJSONString(copyTo2));
+            System.out.println("from=" + JSON.toJSONString(from));
+            System.out.println("beanTransFormsHandler  copyTo2=" + JSON.toJSONString(copyTo2));
 
 
             ComplexTypeTransformManual complexTypeTransformManual = new ComplexTypeTransformManual();

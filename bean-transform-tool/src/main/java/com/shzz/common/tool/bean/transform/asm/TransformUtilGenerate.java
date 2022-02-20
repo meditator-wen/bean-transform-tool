@@ -66,7 +66,7 @@ public class TransformUtilGenerate {
     //    private final Map<String, Map<String, ExtensionObjectTransform>> extensionObjectTransformMap = new ConcurrentHashMap<>();
 //    private final Map<String, Map<String, BeanTransFormsHandler>> beanTransFormsHandlerMap = new ConcurrentHashMap<>();
 //    private final Map<String, Map<String, Class>> fieldClassMap = new ConcurrentHashMap<>();
-    public static final Map<StrategyMode, Class<? extends ComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
+    // public static final Map<StrategyMode, Class<? extends ComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
 
     private TransformUtilGenerate() {
 

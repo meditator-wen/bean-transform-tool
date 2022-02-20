@@ -69,7 +69,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     private String internalName;
 
     // Map 类型转换类命名编号，如果有多层嵌套Map或者多个Map类型 字段,编号依次增加
-    private static volatile ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
+    private static ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
 
 
     public MapTypeStrategy(AbstractContext context) {
@@ -77,17 +77,9 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
         // 如果同一线程再次创建MapTypeStrategy 序号累加
        // LOG.info("new MapTypeStrategy source field={}, target field={}",context.getSourceField().getName(),context.getTargetField().getName());
         try {
-            if(strategyMatch(context.getSourceField().getGenericType(), context.getTargetField().getGenericType())){
 
-                if (Objects.nonNull(sequence_Local.get())) {
-                    Integer preVlaue = sequence_Local.get();
+            setSequence(sequence_Local, context.getSourceField().getGenericType(), context.getTargetField().getGenericType());
 
-                    sequence_Local.set(preVlaue + 1);
-                } else {
-                    sequence_Local.set(Integer.valueOf(1));
-                }
-               // LOG.info("strategyMatch MapTypeStrategy,sequence_Local.get()={}. source field={}, target field={}",sequence_Local.get(),context.getSourceField().getName(),context.getTargetField().getName());
-            }
 
         } catch (Exception e) {
             LOG.error(e.toString());
@@ -444,7 +436,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
         return false;
     }
 
-    private String writeField(ClassWriter classWriter, Transform transform, String transformFieldName) {
+    protected static String writeField(ClassWriter classWriter, Transform transform, String transformFieldName) {
 
         String transformFieldTypeDesc = "";
         if (transform instanceof BeanTransFormsHandler) {
@@ -535,20 +527,34 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
         Map<String, ExtensionObjectTransform> innerExtensionObjectTransformMap = new HashMap<>(4);
 
         innerExtensionObjectTransformMap.put(mapTransformFieldName(), extensionObjectTransform);
+        clearThreadLocal();
         return innerExtensionObjectTransformMap;
     }
 
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
+        boolean match = false;
+
         if ((sourceBeanType instanceof ParameterizedType) && (targetType instanceof ParameterizedType)) {
             Class sourceBeanRawClass = (Class) ((ParameterizedType) sourceBeanType).getRawType();
             Class targetRawClass = (Class) ((ParameterizedType) targetType).getRawType();
             if (Map.class.isAssignableFrom(sourceBeanRawClass) && Map.class.isAssignableFrom(targetRawClass)) {
-                return true;
+                match = true;
             }
 
         }
-        return false;
+
+        if (!match) {
+
+            // 每次构造方法创建对象sequence会累加1，如果最终不匹配对应策略则回到原值
+
+            if (Objects.nonNull(sequence_Local.get())) {
+
+                sequence_Local.set(sequence_Local.get() - 1);
+            }
+
+        }
+        return match;
     }
 
     @Override

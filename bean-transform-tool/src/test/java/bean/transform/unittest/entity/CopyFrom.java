@@ -147,6 +147,34 @@ public class CopyFrom {
 
     List<List<Inner>> innerDoubleList;
 
+    private List<Map<String, Inner>> listContainMap;
+
+    private List<Map<String, Map<String, Inner>>> listContainTwoLayerMap;
+    private List<Inner[][]> listContainArray;
+
+    public List<Map<String, Map<String, Inner>>> getListContainTwoLayerMap() {
+        return listContainTwoLayerMap;
+    }
+
+    public void setListContainTwoLayerMap(List<Map<String, Map<String, Inner>>> listContainTwoLayerMap) {
+        this.listContainTwoLayerMap = listContainTwoLayerMap;
+    }
+
+    public List<Inner[][]> getListContainArray() {
+        return listContainArray;
+    }
+
+    public void setListContainArray(List<Inner[][]> listContainArray) {
+        this.listContainArray = listContainArray;
+    }
+
+    public List<Map<String, Inner>> getListContainMap() {
+        return listContainMap;
+    }
+
+    public void setListContainMap(List<Map<String, Inner>> listContainMap) {
+        this.listContainMap = listContainMap;
+    }
 
     public Map<String, Map<String, Inner>> getTwoLayerMap() {
         return twoLayerMap;

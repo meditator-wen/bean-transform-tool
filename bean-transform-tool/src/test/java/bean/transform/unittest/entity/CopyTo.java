@@ -138,23 +138,23 @@ public class CopyTo {
 //    private Inner inner;
 
     //  @BeanFieldInfo(sourceFieldName = "innerDoubleList")
-    Inner[][] innerarray;
-
-    public Inner[][] getInnerarray() {
-        return innerarray;
-    }
-
-    public void setInnerarray(Inner[][] innerarray) {
-        this.innerarray = innerarray;
-    }
+//    Inner[][] innerarray;
+//
+//    public Inner[][] getInnerarray() {
+//        return innerarray;
+//    }
+//
+//    public void setInnerarray(Inner[][] innerarray) {
+//        this.innerarray = innerarray;
+//    }
 
 //    private Integer thresholdId =-1;
 //
 //    @BeanFieldInfo(sourceFieldName = "dateField",autoTransform = true)
 //    private Date dateFiled ;
 
-//    @BeanFieldInfo(userExtend = false,extensionObjectTransformImplClass = "com.akfd.methodhandle.compare.ListTransforms")
-//    private List<ListElement>  listElementList=new ArrayList<>();
+    @BeanFieldInfo(userExtend = false, extensionObjectTransformImplClass = "com.akfd.methodhandle.compare.ListTransforms")
+    private List<ListElement> listElementList = new ArrayList<>();
 //
 //    @BeanFieldInfo(userExtend = false, sourceFieldName = "nestArray",autoTransform = true)
 //    private List<List<ListElement>>  nestList=new ArrayList<>();
@@ -168,6 +168,38 @@ public class CopyTo {
     }
 
     private Map<String, Map<String, Inner>> twoLayerMap;
+
+    public List<Map<String, Map<String, Inner>>> getListContainTwoLayerMap() {
+        return listContainTwoLayerMap;
+    }
+
+    public void setListContainTwoLayerMap(List<Map<String, Map<String, Inner>>> listContainTwoLayerMap) {
+        this.listContainTwoLayerMap = listContainTwoLayerMap;
+    }
+
+    private List<Map<String, Map<String, Inner>>> listContainTwoLayerMap;
+    private List<Inner[][]> listContainArray;
+
+    public List<Inner[][]> getListContainArray() {
+        return listContainArray;
+    }
+
+    public void setListContainArray(List<Inner[][]> listContainArray) {
+        this.listContainArray = listContainArray;
+    }
+
+
+    public List<Map<String, Inner>> getListContainMap() {
+        return listContainMap;
+    }
+
+    public void setListContainMap(List<Map<String, Inner>> listContainMap) {
+        this.listContainMap = listContainMap;
+    }
+
+    private List<Map<String, Inner>> listContainMap;
+
+
 
 //    public Map<String, List<Inner>> getMapContainList() {
 //        return mapContainList;
@@ -202,16 +234,16 @@ public class CopyTo {
 //    @BeanFieldInfo(sourceFieldName = "threeNestStringList")
 //    private Double[][][] doubleThreeDems;
 //
-//    public Set<List<List<Integer>>> getThreeNestList() {
-//        return threeNestList;
-//    }
-//
-//    public void setThreeNestList(Set<List<List<Integer>>> threeNestList) {
-//        this.threeNestList = threeNestList;
-//    }
-//
-//    @BeanFieldInfo(userExtend = false,extensionObjectTransformImplClass = "com.akfd.methodhandle.compare.ListTransforms")
-//    private Set<List<List<Integer>>> threeNestList;
+public Set<List<List<Integer>>> getThreeNestList() {
+    return threeNestList;
+}
+
+    public void setThreeNestList(Set<List<List<Integer>>> threeNestList) {
+        this.threeNestList = threeNestList;
+    }
+
+    // @BeanFieldInfo(userExtend = false,extensionObjectTransformImplClass = "com.akfd.methodhandle.compare.ListTransforms")
+    private Set<List<List<Integer>>> threeNestList;
 //
 //    public List<List<ListElement>> getNestList() {
 //        return nestList;
@@ -221,13 +253,13 @@ public class CopyTo {
 //        this.nestList = nestList;
 //    }
 //
-//    public List<ListElement> getListElementList() {
-//        return listElementList;
-//    }
-//
-//    public void setListElementList(List<ListElement> listElementList) {
-//        this.listElementList = listElementList;
-//    }
+public List<ListElement> getListElementList() {
+    return listElementList;
+}
+
+    public void setListElementList(List<ListElement> listElementList) {
+        this.listElementList = listElementList;
+    }
 //
 //    /** 与行车方向关系
 //     *

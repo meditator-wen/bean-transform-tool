@@ -1,10 +1,6 @@
 package com.shzz.common.tool.bean.transform.asm.context;
 
-import com.shzz.common.tool.bean.transform.BeanTransform;
-import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
 import com.shzz.common.tool.bean.transform.Transform;
-import com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate;
-import com.shzz.common.tool.bean.transform.asm.TypeTransformAssist;
 import com.shzz.common.tool.bean.transform.asm.strategy.*;
 import com.shzz.common.tool.bean.transform.asm.strategy.ArrayTypeStrategy;
 import com.shzz.common.tool.bean.transform.asm.strategy.MapTypeStrategy;
@@ -60,6 +56,7 @@ public class TransformTypeContext extends AbstractContext {
          *  开发者拓展场景时，自行继承 {@link ComplexTypeStrategy},并将策略类手动添加到typeStrategyHashMap 中.
          *
          */
+        typeStrategyHashMap.put(5, CollectionSupplementStrategy.class);
         typeStrategyHashMap.put(4, UniversalClassTypeStrategy.class);
         typeStrategyHashMap.put(3, ArrayTypeStrategy.class);
         typeStrategyHashMap.put(2, CollectionTypeStrategy.class);
