@@ -43,7 +43,7 @@ public class UnitTest {
         from.setPoi(null);
         from.setLaneWidth(3.5);
         from.setRoadData("32.555,106.789");
-        from.setRoadId("in road");
+        from.setRoadId("301");
         from.setRoadDirection(2);
         from.setRoadLength((float) 450);
         from.setRoadName("road A");

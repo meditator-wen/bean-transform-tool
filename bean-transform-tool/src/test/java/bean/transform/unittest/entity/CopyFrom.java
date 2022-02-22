@@ -205,6 +205,16 @@ public class CopyFrom {
 
     private Date dateField=new Date() ;
 
+    public String getCommonCode() {
+        return commonCode;
+    }
+
+    public void setCommonCode(String commonCode) {
+        this.commonCode = commonCode;
+    }
+
+    private String commonCode = "0xff06";
+
 
     public List<ListElement> getListElementList() {
         return listElementList;

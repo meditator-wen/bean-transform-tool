@@ -124,7 +124,7 @@ public class TypeTransformAssist {
             } else if (sourceClass == double.class) {
                 mv.visitInsn(Opcodes.D2I);
             } else if (sourceClass == String.class) {
-                if (!stringToNumber(long.class, mv)) {
+                if (!stringToNumber(int.class, mv)) {
                     // String到 数值型类型无法转换，设置默认值
                     mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0常量 int
                     mv.visitInsn(Opcodes.ICONST_0);
@@ -157,8 +157,8 @@ public class TypeTransformAssist {
                  * 所以，源类型如果返回的字段是以上类型均无需先转为int ,直接以i2f 转换后目标类 float 变量
                  */
                 mv.visitInsn(Opcodes.I2F);
-            } else if (String.class == sourceClass) {
-                if (!stringToNumber(long.class, mv)) {
+            } else if (String.class == targetClass) {
+                if (!stringToNumber(float.class, mv)) {
                     // String到 数值型类型无法转换，设置默认值
                     //把已经入栈的String 变量出栈，重新入栈0 常量 float
 
