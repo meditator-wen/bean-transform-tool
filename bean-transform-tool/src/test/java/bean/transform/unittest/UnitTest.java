@@ -122,6 +122,9 @@ public class UnitTest {
         Inner[] inners=new Inner[1];
         Inner innerElement = new Inner();
 
+        char rr = 9;
+        Object ob = 9;
+
         innerElement.setGreenRatio(20);
         innerElement.setPhaseId("1");
         innerElement.setPhaseName("phase2");

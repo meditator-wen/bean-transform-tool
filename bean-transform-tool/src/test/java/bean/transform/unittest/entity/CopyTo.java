@@ -212,17 +212,17 @@ public class CopyTo {
 //
 //    private Map<String, List<Inner>> mapContainList;
 //
-//    public int[][][] getIntThreeDems() {
-//        return intThreeDems;
-//    }
-//
-//    public void setIntThreeDems(int[][][] intThreeDems) {
-//        this.intThreeDems = intThreeDems;
-//    }
-//
-//    @BeanFieldInfo(sourceFieldName = "threeNestList")
-//    private int[][][] intThreeDems;
-//
+    public char[][][] getIntThreeDems() {
+        return intThreeDems;
+    }
+
+    public void setIntThreeDems(char[][][] intThreeDems) {
+        this.intThreeDems = intThreeDems;
+    }
+
+    @BeanFieldInfo(sourceFieldName = "threeNestStringList")
+    private char[][][] intThreeDems;
+
 //
 //    public void setDoubleThreeDems(Double[][][] doubleThreeDems) {
 //        this.doubleThreeDems = doubleThreeDems;

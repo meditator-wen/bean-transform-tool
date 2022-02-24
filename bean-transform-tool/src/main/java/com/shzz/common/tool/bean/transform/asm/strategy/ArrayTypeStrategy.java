@@ -165,17 +165,14 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
             //transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix, pattern);
             transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix);
 
-            if (TypeTransformAssist.isPrimitiveType(targetElemType)) {
-                Class primitiveMapType = TypeTransformAssist.typeMap(targetElemType);
-
-                transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(primitiveMapType));
-
-                //   try {
-                TypeTransformAssist.baseTypeProcessByteCode(targetElemType, primitiveMapType, transformMethodVisitor, true);
-//                } catch (Exception e) {
-//                    LOG.error(e.toString());
-//                }
-            }
+//            if (TypeTransformAssist.isPrimitiveType(targetElemType)) {
+//                Class primitiveMapType = TypeTransformAssist.typeMap(targetElemType);
+//
+//                transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(primitiveMapType));
+//
+//                TypeTransformAssist.baseTypeProcessByteCode(targetElemType, primitiveMapType, transformMethodVisitor, true);
+//
+//            }
             arrayElementStore(targetElemType, transformMethodVisitor);
             //++index
             transformMethodVisitor.visitIincInsn(arrayIndex.getIndex(), 1);
@@ -203,17 +200,17 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
             // 临时对象转换
             //transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix, pattern);
             transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix);
-            if (TypeTransformAssist.isPrimitiveType(targetElemType)) {
-                Class primitiveMapType = TypeTransformAssist.typeMap(targetElemType);
-
-                transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(primitiveMapType));
-
-                try {
-                    TypeTransformAssist.baseTypeProcessByteCode(targetElemType, primitiveMapType, transformMethodVisitor, true);
-                } catch (Exception e) {
-                    LOG.error(e.toString());
-                }
-            }
+//            if (TypeTransformAssist.isPrimitiveType(targetElemType)) {
+//                Class primitiveMapType = TypeTransformAssist.typeMap(targetElemType);
+//
+//                transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(primitiveMapType));
+//
+//                try {
+//                    TypeTransformAssist.baseTypeProcessByteCode(targetElemType, primitiveMapType, transformMethodVisitor, true);
+//                } catch (Exception e) {
+//                    LOG.error(e.toString());
+//                }
+//            }
             arrayElementStore(targetElemType, transformMethodVisitor);
             //++index
             transformMethodVisitor.visitIincInsn(arrayIndex.getIndex(), 1);

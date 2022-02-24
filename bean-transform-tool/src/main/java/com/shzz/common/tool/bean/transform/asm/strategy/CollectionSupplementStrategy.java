@@ -204,7 +204,9 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
 
 
             mv.visitVarInsn(Opcodes.ALOAD, tempElement.getIndex());
-            mv.visitInsn(Opcodes.ICONST_1); // boolean true 常量入栈
+
+            // boolean true 常量入栈
+            mv.visitInsn(Opcodes.ICONST_1);
             mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, EXTENSION_TRANSFORM_INTERFACE_NAME, EXTENSION_TRANSFORM_METHOD_NAME, EXTENSION_TRANSFORM_METHOD_DESC, true);
 
         }

@@ -45,6 +45,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     public static final String ITERATOR_VARIABLE_NAME = "iterator";
     public static final String ARRAY_LENGTH_VARIABLE_NAME = "arrayLength";
     public static final String ARRAY_INDEX_VARIABLE_NAME = "index";
+    public static final String TRANSFORM_BASETYPE_VAR = "transformBaseTypeVar";
 
     protected ThreadLocal<AbstractContext> registerContext_local = new ThreadLocal<>();
 
@@ -126,8 +127,23 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
                     .start(new Label()).end(endOfMethodBeanTransformsLable).index(++varNum)
                     .define();
             localVariableInfoMap.put(ARRAY_INDEX_VARIABLE_NAME, indexVariableInfo);
+
+
         }
 
+        if (Objects.nonNull(sourceElementType_local.get()) && Objects.nonNull(targetElementType_local.get())) {
+            if (TypeTransformAssist.isBaseType(sourceElementType_local.get()) &&
+                    TypeTransformAssist.isBaseType(targetElementType_local.get())) {
+                LocalVariableInfo transformBaseTypeVar = new VariableDefine().alias(TRANSFORM_BASETYPE_VAR)
+                        .name(TRANSFORM_BASETYPE_VAR)
+                        .descriptor(org.objectweb.asm.Type.getDescriptor(targetElementType_local.get()))
+                        .signature(org.objectweb.asm.Type.getDescriptor(targetElementType_local.get()))
+                        .index(++varNum)
+                        .start(new Label())
+                        .end(endOfMethodBeanTransformsLable)
+                        .define();
+            }
+        }
         return localVariableInfoMap;
 
     }
@@ -277,6 +293,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
         // 调用虚方法，转换集合迭代元素，this 参数入栈
         LocalVariableInfo thisVar = defineLocalVar.get("this");
         LocalVariableInfo tempElement = defineLocalVar.get(TEMP_ELEMENT_VARIABLE_NAME);
+        LocalVariableInfo transformBaseTypeVar = defineLocalVar.get(TRANSFORM_BASETYPE_VAR);
 
         String ownerClassInternalName = getOwnerClassInternalName();
 
@@ -292,19 +309,57 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
         } else {
 
+            if (Objects.nonNull(sourceElementType_local.get()) && Objects.nonNull(targetElementType_local.get())) {
+                if (TypeTransformAssist.isBaseType(sourceElementType_local.get()) &&
+                        TypeTransformAssist.isBaseType(targetElementType_local.get())) {
 
-            String sourceElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.SOURCE_FIELD_CLASS_FIELD_SUFFIX;
-            String targetElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.TARGET_FIELD_CLASS_FIELD_SUFFIX;
-            String elementTransformFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.EXTEND_IMPL_FIELD_NAME_SUFFIX;
-            //  com.shzz.common.tool.bean.transform.ExtensionObjectTransform 实现类，调用对应字段及方法实现转换
-            mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
-            mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, elementTransformFieldName, BeanTransformsMethodAdapter.BEAN_TRANSFORM_DESC);
-            mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
-            mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, sourceElementTypeFieldName, BeanTransformsMethodAdapter.FIELD_TYPE_DESC);
-            mv.visitVarInsn(Opcodes.ALOAD, tempElement.getIndex());
-            mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
-            mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, targetElementTypeFieldName, BeanTransformsMethodAdapter.FIELD_TYPE_DESC);
-            mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, BeanTransformsMethodAdapter.BEAN_TRANSFORM_NAME, BeanTransformsMethodAdapter.BEAN_TRANSFORM_METHOD_NAME, BeanTransformsMethodAdapter.BEAN_TRANSFORM_METHOD_DESC, false);
+
+                    mv.visitInsn(ACONST_NULL);
+                    mv.visitVarInsn(ASTORE, transformBaseTypeVar.getIndex());
+                    mv.visitLabel(transformBaseTypeVar.getStart());
+                    // 基础类型直接转换，不需要调用转换类对象的方法实现转换
+                    Label jumpIfNull = new Label();
+                    if (TypeTransformAssist.isWrapsOrStringType(sourceElementType_local.get()) &&
+                            (sourceElementType_local.get() != targetElementType_local.get())) {
+
+                        mv.visitVarInsn(Opcodes.ALOAD, tempElement.getIndex());
+                        mv.visitJumpInsn(Opcodes.IFNULL, jumpIfNull);
+
+                    }
+
+                    try {
+                        TypeTransformAssist.baseTypeProcessByteCode(targetElementType_local.get(), sourceElementType_local.get(), mv, true);
+
+                        typeStoreByteCode(targetElementType_local.get(), mv, transformBaseTypeVar.getIndex());
+
+                    } catch (Exception e) {
+                        LOG.error(e.toString());
+                    }
+
+                    if (TypeTransformAssist.isWrapsOrStringType(sourceElementType_local.get()) &&
+                            (sourceElementType_local.get() != targetElementType_local.get())) {
+
+                        mv.visitLabel(jumpIfNull);
+
+                    }
+
+                }
+
+            } else {
+                String sourceElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.SOURCE_FIELD_CLASS_FIELD_SUFFIX;
+                String targetElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.TARGET_FIELD_CLASS_FIELD_SUFFIX;
+                String elementTransformFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.EXTEND_IMPL_FIELD_NAME_SUFFIX;
+                //  com.shzz.common.tool.bean.transform.ExtensionObjectTransform 实现类，调用对应字段及方法实现转换
+                mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
+                mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, elementTransformFieldName, BeanTransformsMethodAdapter.BEAN_TRANSFORM_DESC);
+                mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
+                mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, sourceElementTypeFieldName, BeanTransformsMethodAdapter.FIELD_TYPE_DESC);
+                mv.visitVarInsn(Opcodes.ALOAD, tempElement.getIndex());
+                mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
+                mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, targetElementTypeFieldName, BeanTransformsMethodAdapter.FIELD_TYPE_DESC);
+                mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, BeanTransformsMethodAdapter.BEAN_TRANSFORM_NAME, BeanTransformsMethodAdapter.BEAN_TRANSFORM_METHOD_NAME, BeanTransformsMethodAdapter.BEAN_TRANSFORM_METHOD_DESC, false);
+            }
+
         }
 
     }
@@ -537,7 +592,8 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
                 null, null);
         byte[] classBytes = extensTransformImplClassWriter.toByteArray();
         Class extendClassImpl = TransformUtilGenerate.loadASMGenerateClass(classBytes, generateClassname);
-        Constructor<?> constructor = extendClassImpl.getDeclaredConstructor();//默认构造方法；
+        //默认构造方法；
+        Constructor<?> constructor = extendClassImpl.getDeclaredConstructor();
         // 通过ClassWriter 生成的类已指定实现接口 com.shzz.common.tool.bean.transform.ExtensionObjectTransform，可强转
         ExtensionObjectTransform autoCreateExtensionObjectTransform = (ExtensionObjectTransform) constructor.newInstance();
         // 三个字段赋值
@@ -588,7 +644,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     public static int getClassVersion() {
         /**
          * @Description: 根据用户环境获取类字节码主版本号
-         * @Author: wangwen
+         * @Author: wen wang
          * @Date: 2022/1/22 15:08
          * @return: int
          **/
