@@ -131,19 +131,19 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
         }
 
-        if (Objects.nonNull(sourceElementType_local.get()) && Objects.nonNull(targetElementType_local.get())) {
-            if (TypeTransformAssist.isBaseType(sourceElementType_local.get()) &&
-                    TypeTransformAssist.isBaseType(targetElementType_local.get())) {
-                LocalVariableInfo transformBaseTypeVar = new VariableDefine().alias(TRANSFORM_BASETYPE_VAR)
-                        .name(TRANSFORM_BASETYPE_VAR)
-                        .descriptor(org.objectweb.asm.Type.getDescriptor(targetElementType_local.get()))
-                        .signature(org.objectweb.asm.Type.getDescriptor(targetElementType_local.get()))
-                        .index(++varNum)
-                        .start(new Label())
-                        .end(endOfMethodBeanTransformsLable)
-                        .define();
-            }
+        if (Objects.nonNull(targetElementType_local.get()) && Objects.nonNull(sourceElementType_local.get())) {
+            LocalVariableInfo transformBaseTypeVar = new VariableDefine().alias(TRANSFORM_BASETYPE_VAR)
+                    .name(TRANSFORM_BASETYPE_VAR)
+                    .descriptor(org.objectweb.asm.Type.getDescriptor(targetElementType_local.get()))
+                    .signature(org.objectweb.asm.Type.getDescriptor(targetElementType_local.get()))
+                    .index(++varNum)
+                    .start(new Label())
+                    .end(endOfMethodBeanTransformsLable)
+                    .define();
+            localVariableInfoMap.put(TRANSFORM_BASETYPE_VAR, transformBaseTypeVar);
         }
+
+
         return localVariableInfoMap;
 
     }
@@ -289,10 +289,11 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
     }
 
-    protected void transformByteCode(Map<String, LocalVariableInfo> defineLocalVar, int layer, Class sourceElemType, MethodVisitor mv, String newMethodPrefix) {
+    protected void transformByteCode(Map<String, LocalVariableInfo> defineLocalVar, int layer, Class sourceElemType, MethodVisitor mv, String newMethodPrefix) throws Exception {
         // 调用虚方法，转换集合迭代元素，this 参数入栈
         LocalVariableInfo thisVar = defineLocalVar.get("this");
         LocalVariableInfo tempElement = defineLocalVar.get(TEMP_ELEMENT_VARIABLE_NAME);
+
         LocalVariableInfo transformBaseTypeVar = defineLocalVar.get(TRANSFORM_BASETYPE_VAR);
 
         String ownerClassInternalName = getOwnerClassInternalName();
@@ -310,12 +311,14 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
         } else {
 
             if (Objects.nonNull(sourceElementType_local.get()) && Objects.nonNull(targetElementType_local.get())) {
+
                 if (TypeTransformAssist.isBaseType(sourceElementType_local.get()) &&
                         TypeTransformAssist.isBaseType(targetElementType_local.get())) {
 
 
-                    mv.visitInsn(ACONST_NULL);
-                    mv.visitVarInsn(ASTORE, transformBaseTypeVar.getIndex());
+                    constTypeLoad(targetElementType_local.get(), mv, transformBaseTypeVar.getIndex());
+                    typeStoreByteCode(targetElementType_local.get(), mv, transformBaseTypeVar.getIndex());
+
                     mv.visitLabel(transformBaseTypeVar.getStart());
                     // 基础类型直接转换，不需要调用转换类对象的方法实现转换
                     Label jumpIfNull = new Label();
@@ -328,8 +331,11 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
                     }
 
                     try {
-                        TypeTransformAssist.baseTypeProcessByteCode(targetElementType_local.get(), sourceElementType_local.get(), mv, true);
+                        mv.visitVarInsn(Opcodes.ALOAD, tempElement.getIndex());
+                        if ((sourceElementType_local.get() != targetElementType_local.get())) {
+                            TypeTransformAssist.baseTypeProcessByteCode(targetElementType_local.get(), sourceElementType_local.get(), mv, true);
 
+                        }
                         typeStoreByteCode(targetElementType_local.get(), mv, transformBaseTypeVar.getIndex());
 
                     } catch (Exception e) {
@@ -343,21 +349,26 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
                     }
 
+                } else {
+                    String sourceElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.SOURCE_FIELD_CLASS_FIELD_SUFFIX;
+                    String targetElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.TARGET_FIELD_CLASS_FIELD_SUFFIX;
+                    String elementTransformFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.EXTEND_IMPL_FIELD_NAME_SUFFIX;
+                    //  com.shzz.common.tool.bean.transform.ExtensionObjectTransform 实现类，调用对应字段及方法实现转换
+                    mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
+                    mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, elementTransformFieldName, BeanTransformsMethodAdapter.BEAN_TRANSFORM_DESC);
+                    mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
+                    mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, sourceElementTypeFieldName, BeanTransformsMethodAdapter.FIELD_TYPE_DESC);
+                    mv.visitVarInsn(Opcodes.ALOAD, tempElement.getIndex());
+                    mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
+                    mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, targetElementTypeFieldName, BeanTransformsMethodAdapter.FIELD_TYPE_DESC);
+                    mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, BeanTransformsMethodAdapter.BEAN_TRANSFORM_NAME, BeanTransformsMethodAdapter.BEAN_TRANSFORM_METHOD_NAME, BeanTransformsMethodAdapter.BEAN_TRANSFORM_METHOD_DESC, false);
+                    typeStoreByteCode(targetElementType_local.get(), mv, transformBaseTypeVar.getIndex());
                 }
 
             } else {
-                String sourceElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.SOURCE_FIELD_CLASS_FIELD_SUFFIX;
-                String targetElementTypeFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.TARGET_FIELD_CLASS_FIELD_SUFFIX;
-                String elementTransformFieldName = newMethodPrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.EXTEND_IMPL_FIELD_NAME_SUFFIX;
-                //  com.shzz.common.tool.bean.transform.ExtensionObjectTransform 实现类，调用对应字段及方法实现转换
-                mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
-                mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, elementTransformFieldName, BeanTransformsMethodAdapter.BEAN_TRANSFORM_DESC);
-                mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
-                mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, sourceElementTypeFieldName, BeanTransformsMethodAdapter.FIELD_TYPE_DESC);
-                mv.visitVarInsn(Opcodes.ALOAD, tempElement.getIndex());
-                mv.visitVarInsn(Opcodes.ALOAD, BeanTransformsMethodAdapter.SELF_OBJECT_VAR_OFFSET);
-                mv.visitFieldInsn(Opcodes.GETFIELD, ownerClassInternalName, targetElementTypeFieldName, BeanTransformsMethodAdapter.FIELD_TYPE_DESC);
-                mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, BeanTransformsMethodAdapter.BEAN_TRANSFORM_NAME, BeanTransformsMethodAdapter.BEAN_TRANSFORM_METHOD_NAME, BeanTransformsMethodAdapter.BEAN_TRANSFORM_METHOD_DESC, false);
+                throw new BeanTransformException(CommonCode.ELEMENT_TYPE_NULL_EXCEPTION.getErrorCode(),
+                        CommonCode.ELEMENT_TYPE_NULL_EXCEPTION.getErrorOutline(),
+                        "无法解析 " + newMethodPrefix + " 最内层元素类型");
             }
 
         }
@@ -406,6 +417,38 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
         return methodPrefix + "Layer" + layer;
     }
 
+    protected boolean constTypeLoad(Class elemType, MethodVisitor mv, int varIndex) {
+        if (Objects.isNull(elemType)) {
+            return false;
+        }
+
+        if (TypeTransformAssist.istiny(elemType)) {
+
+            if (short.class == elemType) {
+                mv.visitIntInsn(SIPUSH, 0);
+
+            } else if (byte.class == elemType) {
+                mv.visitIntInsn(BIPUSH, 0);
+            } else {
+                mv.visitInsn(ICONST_0);
+            }
+//            mv.visitVarInsn(ISTORE,varIndex);
+
+        } else if (long.class == elemType) {
+            mv.visitInsn(LCONST_0);
+//            mv.visitVarInsn(LSTORE,varIndex);
+        } else if (float.class == elemType) {
+            mv.visitInsn(FCONST_0);
+//            mv.visitVarInsn(FSTORE,varIndex);
+        } else if (double.class == elemType) {
+            mv.visitInsn(DCONST_0);
+//            mv.visitVarInsn(DSTORE,varIndex);
+        } else if (TypeTransformAssist.referenceType(elemType)) {
+            mv.visitInsn(ACONST_NULL);
+//            mv.visitVarInsn(ASTORE,varIndex);
+        }
+        return true;
+    }
 
     protected boolean arrayElementLoad(Class elemType, MethodVisitor mv) {
         if (Objects.isNull(elemType)) {
@@ -529,6 +572,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
         String targetElementTypeFieldName = fieldNamePrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.TARGET_FIELD_CLASS_FIELD_SUFFIX;
         String elementTransformFieldName = fieldNamePrefix + ELEMENT_TRANSFORM_MEDIAN + TransformUtilGenerate.EXTEND_IMPL_FIELD_NAME_SUFFIX;
 
+
         FieldVisitor sourceFieldVisitor = extensTransformImplClassWriter.visitField(ACC_PRIVATE,
                 sourceElementTypeFieldName,
                 BeanTransformsMethodAdapter.FIELD_TYPE_DESC,
@@ -582,30 +626,37 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
             // 执行过geneInstruction 方法后targetElementType  sourceElementType 写入ThreadLocal缓存中
             throw new BeanTransformException("0x00fa", "复杂类型对应的内部元素类型解析失败", "sourceBeanType: " + sourceBeanType.getTypeName() + "  " + sourceBeanType.getClass().getSimpleName() + "  targetType: " + targetType.getTypeName() + "  " + targetType.getClass().getSimpleName());
         }
-        // 集合类内部元素
-        UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
+        // 集合类内部元素转换对象
+        BeanTransFormsHandler elementTransForms = null;
+        if (!(TypeTransformAssist.isBaseType(sourceElementType_local.get()) &&
+                TypeTransformAssist.isBaseType(targetElementType_local.get()))) {
+            UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
+            elementTransForms = (BeanTransFormsHandler) universalClassTypeStrategy.generate(this.sourceElementType_local.get(),
+                    this.targetElementType_local.get(),
+                    true,
+                    true,
+                    null, null);
+        }
 
-        BeanTransFormsHandler elementTransForms = (BeanTransFormsHandler) universalClassTypeStrategy.generate(this.sourceElementType_local.get(),
-                this.targetElementType_local.get(),
-                true,
-                true,
-                null, null);
         byte[] classBytes = extensTransformImplClassWriter.toByteArray();
         Class extendClassImpl = TransformUtilGenerate.loadASMGenerateClass(classBytes, generateClassname);
         //默认构造方法；
         Constructor<?> constructor = extendClassImpl.getDeclaredConstructor();
         // 通过ClassWriter 生成的类已指定实现接口 com.shzz.common.tool.bean.transform.ExtensionObjectTransform，可强转
         ExtensionObjectTransform autoCreateExtensionObjectTransform = (ExtensionObjectTransform) constructor.newInstance();
-        // 三个字段赋值
-        Field extendClassField1 = extendClassImpl.getDeclaredField(sourceElementTypeFieldName);
-        extendClassField1.setAccessible(true);
-        extendClassField1.set(autoCreateExtensionObjectTransform, this.sourceElementType_local.get());
-        Field extendClassField2 = extendClassImpl.getDeclaredField(targetElementTypeFieldName);
-        extendClassField2.setAccessible(true);
-        extendClassField2.set(autoCreateExtensionObjectTransform, this.targetElementType_local.get());
-        Field extendClassField3 = extendClassImpl.getDeclaredField(elementTransformFieldName);
-        extendClassField3.setAccessible(true);
-        extendClassField3.set(autoCreateExtensionObjectTransform, elementTransForms);
+
+        if (Objects.nonNull(elementTransForms)) {
+            // 三个字段赋值
+            Field extendClassField1 = extendClassImpl.getDeclaredField(sourceElementTypeFieldName);
+            extendClassField1.setAccessible(true);
+            extendClassField1.set(autoCreateExtensionObjectTransform, this.sourceElementType_local.get());
+            Field extendClassField2 = extendClassImpl.getDeclaredField(targetElementTypeFieldName);
+            extendClassField2.setAccessible(true);
+            extendClassField2.set(autoCreateExtensionObjectTransform, this.targetElementType_local.get());
+            Field extendClassField3 = extendClassImpl.getDeclaredField(elementTransformFieldName);
+            extendClassField3.setAccessible(true);
+            extendClassField3.set(autoCreateExtensionObjectTransform, elementTransForms);
+        }
 
         Map<String, ExtensionObjectTransform> innerExtensionObjectTransformMap = new HashMap<>(4);
 
@@ -674,9 +725,6 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
         }
         return classVersion;
     }
-
-
-
 
 
 }

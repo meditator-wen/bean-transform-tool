@@ -141,13 +141,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
     }
 
-    private boolean resloveInfoEffective(ResloveInfo resloveInfo) {
-        return (!Objects.isNull(resloveInfo.getSourceFieldGetFunctionName()))
-                && (!Objects.isNull(resloveInfo.getSourceFieldGetFunctionDescriptor()))
-                && (resloveInfo.isSourceFieldGetFunctionNameAvailable())
-                && (!Objects.isNull(resloveInfo.getTargetFieldSetFunctionDescriptor()))
-                && (resloveInfo.isTargetFieldSetFunctionAvailable());
-    }
+
 
     private synchronized void visitCodeRecursion(Class<?> sourceBeanClass,
                                                  Class<?> targetClass,
@@ -169,27 +163,24 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
             return;
         } else if (TypeTransformAssist.isBaseType(targetClass) && TypeTransformAssist.isBaseType(sourceBeanClass)) {
 
-//            mv.visitVarInsn(Opcodes.ALOAD, findSourceObjectIndex(recursions, tempSourceObjectVarNum));
-//            mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceBeanClass));
-//
-//            Class targetClassMap = null;
-//            if (TypeTransformAssist.isPrimitiveType(targetClass)) {
-//                // 接口方法返回Object,如果是原始类型，无法直接ARETURN 指令返回，需要转成包装类。
-//                targetClassMap = TypeTransformAssist.typeMap(targetClass);
-//
-//            } else {
-//                targetClassMap = targetClass;
-//            }
-//            try {
-//               // TypeTransformAssist.baseTypeProcessByteCode(targetClassMap, sourceBeanClass, mv, isDeepCopy);
-//                TypeTransformAssist.baseTypeProcessByteCode(targetClass, sourceBeanClass, mv, isDeepCopy);
-//            } catch (Exception e) {
-//                ErrorInfoStack.getExceptionStackInfo(e);
-//            }
-//
-//            mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(Object.class));
-//
-            mv.visitInsn(Opcodes.ACONST_NULL);
+            mv.visitVarInsn(Opcodes.ALOAD, findSourceObjectIndex(recursions, tempSourceObjectVarNum));
+            mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceBeanClass));
+
+            Class targetClassMap = null;
+            if (TypeTransformAssist.isPrimitiveType(targetClass)) {
+                // 接口方法返回Object,如果是原始类型，无法直接ARETURN 指令返回，需要转成包装类。
+                targetClassMap = TypeTransformAssist.typeMap(targetClass);
+
+            } else {
+                targetClassMap = targetClass;
+            }
+            try {
+                TypeTransformAssist.baseTypeProcessByteCode(targetClassMap, sourceBeanClass, mv, isDeepCopy);
+
+            } catch (Exception e) {
+                ErrorInfoStack.getExceptionStackInfo(e);
+            }
+
             return;
 
         } else if (TypeTransformAssist.isBaseType(targetClass) && (!TypeTransformAssist.isBaseType(sourceBeanClass))) {
@@ -321,7 +312,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
         for (Field iterField : effectiveFieldList) {
 
             ResloveInfo resloveInfo = TypeTransformAssist.reslove(iterField, targetClass, sourceBeanClass);
-            if (Objects.isNull(resloveInfo)) {
+            if (!TypeTransformAssist.resloveInfoCheck(resloveInfo)) {
                 continue;
             }
 
@@ -363,7 +354,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
             //调用目标类字段对应的源类字段的get 方法
 
             // 字段的get  方法，无参数，字节码指令参数不入栈
-            if (resloveInfoEffective(resloveInfo)) {
+            if (TypeTransformAssist.resloveInfoCheck(resloveInfo)) {
                 Type filedGenericType = iterField.getGenericType();
                 String generateClassInternalName = generateClassname.replace('.', '/');
 

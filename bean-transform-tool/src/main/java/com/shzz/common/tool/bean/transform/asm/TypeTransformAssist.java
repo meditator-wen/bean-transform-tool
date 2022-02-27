@@ -8,6 +8,7 @@ import com.shzz.common.tool.code.CommonCode;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,8 +71,16 @@ public class TypeTransformAssist {
             // 执行包装方法  valueOf 返回值入栈
 
             // valueOf(String s)   方法描述信息
+
             String methodDescriptor = org.objectweb.asm.Type.getMethodDescriptor(org.objectweb.asm.Type.getType(warpType), org.objectweb.asm.Type.getType(String.class));
 
+            if (Character.class == warpType) {
+                //Character 只有 vauleOf(char ch) 方法，先转成char,对应的方法描述符也要调整，
+                // 不然会报错： Type integer (current frame, stack[0]) is not assignable to 'java/lang/String'
+                methodDescriptor = org.objectweb.asm.Type.getMethodDescriptor(org.objectweb.asm.Type.getType(warpType), org.objectweb.asm.Type.getType(char.class));
+
+                wrapsOrStringToPrimitive(char.class, String.class, mv);
+            }
             mv.visitMethodInsn(Opcodes.INVOKESTATIC,
                     numberWrapTypeInternalName,
                     "valueOf",
@@ -103,7 +112,6 @@ public class TypeTransformAssist {
     }
 
 
-
     protected static void primitiveToPrimitive(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         // 处理原始类型之间强转 ,注意，调用该方法前源类对象的字段值要求已经入栈
         if ((!isPrimitiveType(sourceClass)) || (!isPrimitiveType(targetClass))) {
@@ -123,12 +131,27 @@ public class TypeTransformAssist {
                 mv.visitInsn(Opcodes.F2I);
             } else if (sourceClass == double.class) {
                 mv.visitInsn(Opcodes.D2I);
-            } else if (sourceClass == String.class) {
+            } else if ((sourceClass == String.class) && (targetClass != char.class)) {
+
                 if (!stringToNumber(int.class, mv)) {
                     // String到 数值型类型无法转换，设置默认值
-                    mv.visitInsn(Opcodes.POP); //把已经入栈的String 变量出栈，重新入栈0常量 int
+                    // 把已经入栈的String 变量出栈，重新入栈0常量 int
+                    mv.visitInsn(Opcodes.POP);
                     mv.visitInsn(Opcodes.ICONST_0);
                 }
+
+
+            } else if ((sourceClass == String.class) && (targetClass == char.class)) {
+                //调用 方法 public char charAt(int index)
+
+                mv.visitInsn(Opcodes.ICONST_0);
+                // 执行转换方法调用指令
+
+                mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL,
+                        Type.getInternalName(String.class), "charAt",
+                        Type.getMethodDescriptor(Type.getType(char.class), Type.getType(int.class)),
+                        false);
+
 
             }
 
@@ -137,13 +160,16 @@ public class TypeTransformAssist {
              *   boolean 类型变量在 虚拟机中以int 型表示，无需转换
              *   char byte short 需要在 上一步基础上继续转换
              */
-            if (char.class == targetClass) {
-                mv.visitInsn(Opcodes.I2C);
-            } else if (byte.class == targetClass) {
-                mv.visitInsn(Opcodes.I2B);
-            } else if (short.class == targetClass) {
-                mv.visitInsn(Opcodes.I2S);
+            if (sourceClass != String.class) {
+                if ((char.class == targetClass)) {
+                    mv.visitInsn(Opcodes.I2C);
+                } else if (byte.class == targetClass) {
+                    mv.visitInsn(Opcodes.I2B);
+                } else if (short.class == targetClass) {
+                    mv.visitInsn(Opcodes.I2S);
+                }
             }
+
 
         } else if (targetClass == float.class) {
             if (sourceClass == long.class) {
@@ -225,6 +251,7 @@ public class TypeTransformAssist {
                 methodDescriptor = org.objectweb.asm.Type.getMethodDescriptor(returnType, org.objectweb.asm.Type.getType(sourceClass));
             }
             // 执行转换方法调用指令
+
             mv.visitMethodInsn(Opcodes.INVOKESTATIC, targetClassInternalName, "valueOf", methodDescriptor, false);
 
         }
@@ -259,6 +286,8 @@ public class TypeTransformAssist {
         } else if (key == String.class) {
             return String.class;
         } else if (key == char.class) {
+            return Character.class;
+        } else if (key == Character.class) {
             return char.class;
         }
         return null;
@@ -298,13 +327,36 @@ public class TypeTransformAssist {
                         ),
                         false);
             } else {
+
                 TypeValueMethod typeValueMethod = TypeValueMethod.getTypeValueMethod(targetClass);
                 // 先执行源类包装类字段拆箱方法转换成基础类型的值
-                mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL,
-                        org.objectweb.asm.Type.getInternalName(sourceClass),
-                        typeValueMethod.getMethodName(),
-                        typeValueMethod.getMethodDescriptor(),
-                        false);
+
+                if (targetClass != char.class) {
+                    if ((sourceClass != Character.class)) {
+                        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL,
+                                org.objectweb.asm.Type.getInternalName(sourceClass),
+                                typeValueMethod.getMethodName(),
+                                typeValueMethod.getMethodDescriptor(),
+                                false);
+                    } else {
+                        wrapsOrStringToPrimitive(char.class, Character.class, mv);
+                        primitiveToPrimitive(targetClass, char.class, mv);
+                    }
+                } else {
+                    if ((sourceClass == Character.class)) {
+                        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL,
+                                org.objectweb.asm.Type.getInternalName(sourceClass),
+                                typeValueMethod.getMethodName(),
+                                typeValueMethod.getMethodDescriptor(),
+                                false);
+                    } else {
+                        wrapsOrStringToPrimitive(typeMap(sourceClass), sourceClass, mv);
+                        primitiveToPrimitive(targetClass, typeMap(sourceClass), mv);
+                    }
+                }
+
+
+
             }
 
         } else {
@@ -348,13 +400,13 @@ public class TypeTransformAssist {
          *  public static Float valueOf(float b)
          *  public static Double valueOf(double b)
          *  public static Boolean valueOf(boolean b)
-         *  static Double valueOf(double b)
-         *  char 型转为String类型
+         *  public static Double valueOf(double b)
+         *  public static Character valueOf(char ch)
+         *
          */
         // 如果是String 类型，在上一步 primitiveToPrimitive(typeMap(targetClass), sourceClass, mv); 已做转换
         if (String.class != targetClass) {
             String methodDescriptor = org.objectweb.asm.Type.getMethodDescriptor(org.objectweb.asm.Type.getType(targetClass), org.objectweb.asm.Type.getType(typeMap(targetClass)));
-
 
             // 执行包装方法  valueOf 返回值入栈
             mv.visitMethodInsn(Opcodes.INVOKESTATIC,
@@ -382,7 +434,7 @@ public class TypeTransformAssist {
             throw new BeanTransformException(CommonCode.TYPE_UNSUPPORT.getErrorCode(), CommonCode.TYPE_UNSUPPORT.getErrorOutline(), "wrapsOrStringToWrapsOrString 方法只处理包装类或者String类之间的相互转换，实际类型 " + targetClass.getSimpleName() + "," + sourceClass.getSimpleName());
 
         }
-        if ((targetClass == sourceClass)&&(!SystemProperties.getWrapsTypeDeepyCopyFlag())) {
+        if ((targetClass == sourceClass) && (!SystemProperties.getWrapsTypeDeepyCopyFlag())) {
 
             return;
         }
@@ -444,6 +496,7 @@ public class TypeTransformAssist {
 
     public static enum TypeValueMethod {
 
+        CHARVALUE_METHOD("charValue", char.class),
         BYTEVALUE_METHOD("byteValue", byte.class),
         SHORTVALUE_METHOD("shortValue", short.class),
         INTVALUE_METHOD("intValue", int.class),
@@ -487,6 +540,8 @@ public class TypeTransformAssist {
                 return FLOATVALUE_METHOD;
             } else if (double.class == returnPrimitiveType) {
                 return DOUBLEVALUE_METHOD;
+            } else if (char.class == returnPrimitiveType) {
+                return CHARVALUE_METHOD;
             } else {
                 return null;
             }
@@ -506,6 +561,7 @@ public class TypeTransformAssist {
                 || type.isAssignableFrom(Float.class)
                 || type.isAssignableFrom(Boolean.class)
                 || type.isAssignableFrom(Short.class)
+                || type.isAssignableFrom(Character.class)
                 || type.isAssignableFrom(Byte.class);
 
         return flag;
@@ -619,7 +675,7 @@ public class TypeTransformAssist {
          */
         if (Map.class.isAssignableFrom(targetClass)
                 || Collection.class.isAssignableFrom(targetClass)
-                || (targetClass==Object.class)) {
+                || (targetClass == Object.class)) {
 
 
             throw new BeanTransformException(CommonCode.TYPE_UNSUPPORT.getErrorCode(), CommonCode.TYPE_UNSUPPORT.getErrorOutline(),
@@ -627,12 +683,11 @@ public class TypeTransformAssist {
                             "请继承ExtensionObjectTransform 自定义实现，具体操作请参见 beanTransforms 方法说明 ");
 
 
-
         }
 
-        if ( Map.class.isAssignableFrom(sourceBeanClass)
+        if (Map.class.isAssignableFrom(sourceBeanClass)
                 || Collection.class.isAssignableFrom(sourceBeanClass)
-                ||  (targetClass==Object.class)) {
+                || (targetClass == Object.class)) {
 
             throw new BeanTransformException(CommonCode.TYPE_UNSUPPORT.getErrorCode(), CommonCode.TYPE_UNSUPPORT.getErrorOutline(),
                     "顶层源类（即，字段的owner 类）是数组类，Map、 Collection 子类、Object类,不予处理，如果是内层字段类型" +
@@ -640,6 +695,39 @@ public class TypeTransformAssist {
 
 
         }
+    }
+
+    public static boolean resloveInfoCheck(ResloveInfo resloveInfo) {
+        boolean check = true;
+        check = check && resloveInfo.isSourceFieldGetFunctionNameAvailable() && resloveInfo.isTargetFieldSetFunctionAvailable();
+        if (Objects.isNull(resloveInfo)) {
+            check = false;
+            LOG.error("resloveInfo is null ");
+        }
+
+
+        if (Objects.isNull(resloveInfo.getSourceFieldName()) || Objects.isNull(resloveInfo.getTargetFieldName())) {
+            check = false;
+            LOG.error("sourceFieldName is null or targetFieldName is null");
+        }
+
+
+        if (Objects.isNull(resloveInfo.getSourceField()) || Objects.isNull(resloveInfo.getSourceFieldType())) {
+            check = false;
+            LOG.error("{} Source Field is null or Source Field type is null", resloveInfo.getSourceFieldName());
+        }
+
+        if (Objects.isNull(resloveInfo.getTargetFieldSetFunctionDescriptor())) {
+            check = false;
+            LOG.error("{} TargetField  SetFunction Descriptor is null ", resloveInfo.getTargetFieldName());
+        }
+
+        if (Objects.isNull(resloveInfo.getSourceFieldGetFunctionDescriptor())) {
+            check = false;
+            LOG.error("{} SourceField  getFunction Descriptor is null ", resloveInfo.getSourceFieldName());
+        }
+
+        return check;
     }
 
     public static ResloveInfo reslove(Field field, Class<?> targetClass, Class<?> sourceClass) {
@@ -653,12 +741,12 @@ public class TypeTransformAssist {
 
             // 自定义转换类解析
             String extensionObjectTransformImplClass = beanFieldInfo.extensionObjectTransformImplClass();
-            boolean userExtend=beanFieldInfo.userExtend();
+            boolean userExtend = beanFieldInfo.userExtend();
             resloveInfo.setUserExtend(userExtend);
-            boolean autoTransform=beanFieldInfo.autoTransform();
+            boolean autoTransform = beanFieldInfo.autoTransform();
             resloveInfo.setAutoTransform(autoTransform);
-            if (userExtend&&(!Objects.isNull(extensionObjectTransformImplClass))
-            &&(!extensionObjectTransformImplClass.isEmpty())) {
+            if (userExtend && (!Objects.isNull(extensionObjectTransformImplClass))
+                    && (!extensionObjectTransformImplClass.isEmpty())) {
                 resloveInfo.setExtensionObjectTransformImplClass(extensionObjectTransformImplClass);
             }
 

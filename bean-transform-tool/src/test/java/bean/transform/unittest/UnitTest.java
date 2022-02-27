@@ -80,7 +80,7 @@ public class UnitTest {
         from.setListElementList(listElementListSource);
         List<List<ListElement>> nest = new ArrayList<>();
         nest.add(listElementListSource);
-        // from.setNestList(nest);
+        from.setNestList(nest);
 
         ListElement listElementArrEle = new ListElement();
         listElementArrEle.setListElementField1("filed1_for_array");
@@ -102,15 +102,28 @@ public class UnitTest {
         from.setThreeNestList(threeNestList);
 
 
+        List<List<List<Character>>> threeNestCharacterList = new ArrayList<>();
+        List<List<Character>> llCharacterList = new ArrayList<>();
+        List<Character> lCharacterList = new ArrayList<>();
+        lCharacterList.add(Character.valueOf('2'));
+        llCharacterList.add(lCharacterList);
+        threeNestCharacterList.add(llCharacterList);
+        from.setThreeNestCharacterList(threeNestCharacterList);
+
+        byte byteValue = (Double.valueOf(520.000)).byteValue();
+
+        System.out.println("Double to byteValue=" + byteValue);
+        System.out.println("Double to byteValue=" + JSON.toJSONString(byteValue));
+
         List<List<List<String>>> threeNestStringList = new ArrayList<>();
         List<List<String>> llStrings = new ArrayList<>();
         List<String> lStrings = new ArrayList<>();
         List<String> lStrings2 = new ArrayList<>();
-        lStrings.add("2022.022");
-        lStrings.add("2022.023");
-        lStrings.add("2022.024");
+        lStrings.add("20.3");
+        lStrings.add("213");
+        lStrings.add("214");
 
-        lStrings2.add("2023.023");
+        lStrings2.add("125.9");
         llStrings.add(lStrings);
         llStrings.add(lStrings2);
         threeNestStringList.add(llStrings);
@@ -195,11 +208,12 @@ public class UnitTest {
         return from;
     }
 
+
     public UnitTest() {
 
 
         try {
-            beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
+            //  beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -212,8 +226,6 @@ public class UnitTest {
     public void test() throws Exception {
 
 
-        System.out.println();
-        System.out.println();
 
 
         CopyFrom from=createCopyFrom();
@@ -285,6 +297,7 @@ public class UnitTest {
             long time3 = System.nanoTime();
             System.out.println("from=" + JSON.toJSONString(from));
             System.out.println("beanTransFormsHandler  copyTo2=" + JSON.toJSONString(copyTo2));
+            // System.out.println("copyTo2.getIntThreeDems()[0][0][0]=="+copyTo2.getIntThreeDems()[0][0][0]);
 
 
             ComplexTypeTransformManual complexTypeTransformManual = new ComplexTypeTransformManual();

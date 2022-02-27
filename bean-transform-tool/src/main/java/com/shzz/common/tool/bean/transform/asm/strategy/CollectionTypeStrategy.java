@@ -179,7 +179,7 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
         extensTransformMethodVisitor.visitVarInsn(Opcodes.ASTORE, tempElement.getIndex());
         extensTransformMethodVisitor.visitLabel(tempElement.getStart());
 
-
+        LocalVariableInfo transformBaseTypeVar = defineLocalVar.get(TRANSFORM_BASETYPE_VAR);
         if (pattern == StrategyMode.COLLECTION_TO_COLLECTION_PATTERN) {
             LocalVariableInfo iteratorVar = defineLocalVar.get(ITERATOR_VARIABLE_NAME);
             Label whileJump = new Label();
@@ -212,6 +212,10 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             // transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix, pattern);
             transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix);
 
+            if (sourceElemType == this.sourceElementType_local.get()) {
+                // note 最内层元素的转换结果存储于transformBaseTypeVar 变量，需先load 加载
+                typeLoadByteCode(targetElementType_local.get(), extensTransformMethodVisitor, transformBaseTypeVar.getIndex());
+            }
             // 调用add 方法,相关参数已经入栈
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Collection.class), "add", "(Ljava/lang/Object;)Z", true);
             extensTransformMethodVisitor.visitInsn(Opcodes.POP);
@@ -243,8 +247,13 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             extensTransformMethodVisitor.visitVarInsn(Opcodes.ALOAD, targetVar.getIndex());
 
             // 临时对象转换
-            // transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix, pattern);
+
             transformByteCode(defineLocalVar, layer, sourceElemType, extensTransformMethodVisitor, newMethodPrefix);
+            if (sourceElemType == this.sourceElementType_local.get()) {
+                // note 最内层元素的转换结果存储于transformBaseTypeVar 变量，需先load 加载
+                typeLoadByteCode(targetElementType_local.get(), extensTransformMethodVisitor, transformBaseTypeVar.getIndex());
+            }
+
             // 调用目标对象(集合)add 方法，转换后对象加入集合
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Collection.class), "add", "(Ljava/lang/Object;)Z", true);
             extensTransformMethodVisitor.visitInsn(Opcodes.POP);

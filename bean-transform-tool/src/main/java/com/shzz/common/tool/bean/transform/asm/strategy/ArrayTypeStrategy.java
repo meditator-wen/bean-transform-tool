@@ -131,7 +131,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         LocalVariableInfo arrayIndex = localVar.get(ARRAY_INDEX_VARIABLE_NAME);
         transformMethodVisitor.visitVarInsn(Opcodes.ISTORE, arrayIndex.getIndex());
 
-
+        LocalVariableInfo transformBaseTypeVar = localVar.get(TRANSFORM_BASETYPE_VAR);
         LocalVariableInfo tempElement = localVar.get(TEMP_ELEMENT_VARIABLE_NAME);
         if (pattern == StrategyMode.COLLECTION_TO_ARRAY_PATTERN) {
             LocalVariableInfo iteratorVar = localVar.get(ITERATOR_VARIABLE_NAME);
@@ -162,17 +162,14 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
              * 内层转换方法调用，嵌套泛型最内层转换方法与前面不同，不递归调用extensionObjectTransform 方法，新建方法
              *
              */
-            //transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix, pattern);
+
             transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix);
 
-//            if (TypeTransformAssist.isPrimitiveType(targetElemType)) {
-//                Class primitiveMapType = TypeTransformAssist.typeMap(targetElemType);
-//
-//                transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(primitiveMapType));
-//
-//                TypeTransformAssist.baseTypeProcessByteCode(targetElemType, primitiveMapType, transformMethodVisitor, true);
-//
-//            }
+            if (targetElemType == targetElementType_local.get()) {
+                // note 最内层元素的转换结果存储于transformBaseTypeVar 变量，需先load 加载
+                typeLoadByteCode(targetElemType, transformMethodVisitor, transformBaseTypeVar.getIndex());
+            }
+            // 其他层转换数据已经在栈顶，直接使用
             arrayElementStore(targetElemType, transformMethodVisitor);
             //++index
             transformMethodVisitor.visitIincInsn(arrayIndex.getIndex(), 1);
@@ -198,19 +195,12 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
             transformMethodVisitor.visitVarInsn(Opcodes.ALOAD, targetVar.getIndex());
             transformMethodVisitor.visitVarInsn(Opcodes.ILOAD, arrayIndex.getIndex());
             // 临时对象转换
-            //transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix, pattern);
             transformByteCode(localVar, layer, sourceElemType, transformMethodVisitor, newMethodPrefix);
-//            if (TypeTransformAssist.isPrimitiveType(targetElemType)) {
-//                Class primitiveMapType = TypeTransformAssist.typeMap(targetElemType);
-//
-//                transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(primitiveMapType));
-//
-//                try {
-//                    TypeTransformAssist.baseTypeProcessByteCode(targetElemType, primitiveMapType, transformMethodVisitor, true);
-//                } catch (Exception e) {
-//                    LOG.error(e.toString());
-//                }
-//            }
+
+            if (targetElemType == targetElementType_local.get()) {
+                // note 最内层元素的转换结果存储于transformBaseTypeVar 变量，需先load 加载
+                typeLoadByteCode(targetElemType, transformMethodVisitor, transformBaseTypeVar.getIndex());
+            }
             arrayElementStore(targetElemType, transformMethodVisitor);
             //++index
             transformMethodVisitor.visitIincInsn(arrayIndex.getIndex(), 1);
@@ -226,10 +216,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         visitLocalVarivale(localVar, transformMethodVisitor);
         // 方法末位位置打标签
         transformMethodVisitor.visitMaxs(1, 1);
-
         transformMethodVisitor.visitEnd();
-
-
         return true;
     }
 

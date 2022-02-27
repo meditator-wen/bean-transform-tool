@@ -291,7 +291,7 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
 
                 ResloveInfo resloveInfo = TypeTransformAssist.reslove(field, targetClass, sourceBeanClass);
 
-                if (Objects.isNull(resloveInfo)) {
+                if (!TypeTransformAssist.resloveInfoCheck(resloveInfo)) {
                     continue;
                 }
                 String implClass = resloveInfo.getExtensionObjectTransformImplClass();

@@ -35,7 +35,7 @@ public abstract class BeanTransFormsHandler implements BeanTransform {
     public  <S,T> T beanTransform(Class<S> sourceBeanClass,S sourceBeanObject, Class<T> targetClass) throws Exception{
         /**
          * @Description: 参见接口方法说明
-         * @Author: wangwen
+         * @Author: wen wang
          * @Date: 2022/2/9 21:58
          * @param sourceBeanClass: 
          * @param sourceBeanObject: 

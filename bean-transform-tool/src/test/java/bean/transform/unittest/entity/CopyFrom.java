@@ -250,6 +250,16 @@ public class CopyFrom {
 
     private List<List<List<Double>>>  threeNestList=new ArrayList<>();
 
+    public List<List<List<Character>>> getThreeNestCharacterList() {
+        return threeNestCharacterList;
+    }
+
+    public void setThreeNestCharacterList(List<List<List<Character>>> threeNestCharacterList) {
+        this.threeNestCharacterList = threeNestCharacterList;
+    }
+
+    private List<List<List<Character>>> threeNestCharacterList = new ArrayList<>();
+
     public List<List<List<String>>> getThreeNestStringList() {
         return threeNestStringList;
     }

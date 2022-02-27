@@ -7,7 +7,7 @@ package com.shzz.common.tool.code;
  * @Created by wen wang
  */
 public enum CommonCode {
-
+    ELEMENT_TYPE_NULL_EXCEPTION("0xff07", "集合或者数组最内层元素类型为null", "集合或者数组最内层元素类型无法解析"),
     CLASS_NAME_NULL_EXCEPTION("0xff06", "类名为空", "请传入正确类名"),
     GENERIC_TYPE_UNSUPPORT("0xff05", "泛型实参类型不符合要求", "泛型实参类型不符合要求"),
     EXTENDS_TRANSFORM_ERROR("0xff04", "extendsTransformList参数不符合要求", "extendsTransformList参数为空或缺少指定的转换类对象"),
