@@ -24,7 +24,7 @@ public class CopyFrom {
      *
      **/
 
-    private float roadLength = -1f;
+    private Float roadLength = -1f;
     /** 路段方向（枚举）
      *
      **/
@@ -481,11 +481,11 @@ public class CopyFrom {
         this.inner = inner;
     }
 
-    public float getRoadLength() {
+    public Float getRoadLength() {
         return roadLength;
     }
 
-    public void setRoadLength(float roadLength) {
+    public void setRoadLength(Float roadLength) {
         this.roadLength = roadLength;
     }
 

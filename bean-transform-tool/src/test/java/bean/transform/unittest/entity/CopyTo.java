@@ -269,7 +269,7 @@ public class CopyTo {
 
     private Integer carDirection = -1;
 
-    //  @BeanFieldInfo(userExtend = true, sourceFieldName = "commonCode",extensionObjectTransformImplClass = "bean.transform.CommonCodeEnumTransform")
+    @BeanFieldInfo(userExtend = true, sourceFieldName = "commonCode", extensionObjectTransformImplClass = "bean.transform.CommonCodeEnumTransform")
     private CommonCode commonCodeEnum;
 
 
