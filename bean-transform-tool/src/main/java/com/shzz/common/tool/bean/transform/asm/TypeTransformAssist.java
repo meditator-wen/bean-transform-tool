@@ -699,12 +699,12 @@ public class TypeTransformAssist {
 
     public static boolean resloveInfoCheck(ResloveInfo resloveInfo) {
         boolean check = true;
-        check = check && resloveInfo.isSourceFieldGetFunctionNameAvailable() && resloveInfo.isTargetFieldSetFunctionAvailable();
         if (Objects.isNull(resloveInfo)) {
-            check = false;
-            LOG.error("resloveInfo is null ");
-        }
 
+            LOG.error("resloveInfo is null ");
+            return false;
+        }
+        check = check && resloveInfo.isSourceFieldGetFunctionNameAvailable() && resloveInfo.isTargetFieldSetFunctionAvailable();
 
         if (Objects.isNull(resloveInfo.getSourceFieldName()) || Objects.isNull(resloveInfo.getTargetFieldName())) {
             check = false;

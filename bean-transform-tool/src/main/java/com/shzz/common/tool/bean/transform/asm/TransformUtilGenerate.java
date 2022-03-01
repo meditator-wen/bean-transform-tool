@@ -149,8 +149,6 @@ public class TransformUtilGenerate {
                 if(!classFile.getParentFile().exists()){
 
                     classFile.getParentFile().mkdirs();
-                } else {
-
                 }
                // classFile.createNewFile();
                 fos = new FileOutputStream(classFile);
