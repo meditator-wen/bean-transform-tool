@@ -5,11 +5,12 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
+
 /**
- * @Classname AbstractContext
- * @Description TODO
- * @Date 2022/1/17 12:10
- * @Created by wen wang
+ * 抽象背景下
+ *
+ * @author wen wang
+ * @date 2022/1/17 12:10
  */
 public abstract class AbstractContext implements Context {
     protected String identify;

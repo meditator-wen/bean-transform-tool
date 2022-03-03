@@ -29,11 +29,12 @@ import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.*;
 import static org.objectweb.asm.Opcodes.*;
 import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 
+
 /**
- * @Classname AbstractComplexTypeStrategy
- * @Description TODO
- * @Date 2021/12/25 23:22
- * @Created by wen wang
+ * 抽象复杂类型策略
+ *
+ * @author wen wang
+ * @date 2021/12/25 23:22
  */
 public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy {
 
@@ -63,6 +64,13 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
     protected ThreadLocal<MethodVisitor> extensTransformMethodVisitor_Local = new ThreadLocal<>();
 
+
+    /**
+     * @param sequence_Local 当地序列
+     * @param sourceType     源类型
+     * @param targetType     目标类型
+     * @throws Exception 异常
+     */
     protected void setSequence(ThreadLocal<Integer> sequence_Local, Type sourceType, Type targetType) throws Exception {
 //        if(strategyMatch(sourceType, targetType)){
 //

@@ -1,10 +1,11 @@
 package com.shzz.common.tool.code;
 
+
 /**
- * @Classname CommonCode
- * @Description errorChainDetail
- * @Date 2022/2/12 21:30
- * @Created by wen wang
+ * 通用代码
+ *
+ * @author wen  wang
+ * @date 2022/2/12 21:30
  */
 public enum CommonCode {
     ELEMENT_TYPE_NULL_EXCEPTION("0xff07", "集合或者数组最内层元素类型为null", "集合或者数组最内层元素类型无法解析"),

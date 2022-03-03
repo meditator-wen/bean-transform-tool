@@ -231,7 +231,7 @@ public class UnitTest {
         CopyFrom from=createCopyFrom();
         int times = 1;
 
-        int loop = 1;
+        int loop = 10;
 
 //        CopyTo copyTo8 = new CopyTo();
 //        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
@@ -243,9 +243,6 @@ public class UnitTest {
 
 
         System.out.println(" cglib  BeanTransFormsHandler  springBeanUtils   Copier 转换拷贝bean 对比测试");
-
-
-        beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true,null);
 
 
 
@@ -260,6 +257,11 @@ public class UnitTest {
 
 
         for (int lo = 0; lo < loop; ++lo) {
+
+
+            BeanTransform beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
+
+
             long time1 = System.nanoTime();
 
             for (int j = 0; j < times; ++j) {

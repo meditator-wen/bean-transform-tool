@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.security.MessageDigest;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -62,6 +63,7 @@ public class TransformUtilGenerate {
             Type.getType(Class.class)
     );
 
+    private static ConcurrentHashMap<String, BeanTransform> cacheTransform = new ConcurrentHashMap<>(32);
 
     //    private final Map<String, Map<String, ExtensionObjectTransform>> extensionObjectTransformMap = new ConcurrentHashMap<>();
 //    private final Map<String, Map<String, BeanTransFormsHandler>> beanTransFormsHandlerMap = new ConcurrentHashMap<>();
@@ -108,9 +110,60 @@ public class TransformUtilGenerate {
          * @date: 2021/12/8 13:59
          */
 
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(extractInfo(sourceBeanClass));
+        stringBuilder.append(extractInfo(targetClass));
+        stringBuilder.append(isDeepCopy);
+        stringBuilder.append(permitBaseTypeInterconvert);
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+        String hash = toHex(messageDigest.digest(stringBuilder.toString().getBytes()));
 
-        UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
-        return universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
+        BeanTransform beanTransform = null;
+        if (cacheTransform.containsKey(hash)) {
+            beanTransform = cacheTransform.get(hash);
+        } else {
+            UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
+            try {
+                beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
+            } catch (ClassNotFoundException classNotFound) {
+                cacheTransform.clear();
+                CustomeClassLoader.clear();
+                throw classNotFound;
+            } catch (Exception e) {
+                throw e;
+            }
+            cacheTransform.put(hash, beanTransform);
+        }
+
+        return beanTransform;
+    }
+
+    private static String toHex(byte[] digest) {
+        String digestHexString = "";
+        for (byte byteInfo : digest) {
+            int v = byteInfo & 0xFF;
+            if (v < 16) {
+                digestHexString += "0";
+            }
+
+            digestHexString += Integer.toHexString(v).toUpperCase() + " ";
+
+
+        }
+        return digestHexString;
+    }
+
+    private static StringBuilder extractInfo(Class classz) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(classz.getName());
+        Field[] fields = classz.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            stringBuilder.append(field.getType().getTypeName());
+            stringBuilder.append(field.getName());
+        }
+
+        return stringBuilder;
 
     }
 

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SystemProperties {
     private static final Logger LOG = LoggerFactory.getLogger("CustomeClassLoader");
-    public static final int THRESHOLD_SIZE=50*1024*1024;
+    public static final int THRESHOLD_SIZE = 1 * 1024 * 1024;
     public static final String CLASS_SIZE_THRESHOLD="com.akfd.generalduty.tool.bean.transform.meta.size.threshold";
     public static final String CLASS_OUTPUT_FLAG="class.output.flag";
     public static final String STRICT_MODE_FLAG = "strict.mode.flag";

@@ -75,8 +75,8 @@ public class CustomeClassLoader extends ClassLoader {
             }
         }else{
 
-            LOG.error("通过 com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate 创建的类所占用内存空间 {},超过阈值 {} 字节", staticSize() / (1024 * 1024), SystemProperties.CLASS_SIZE_THRESHOLD);
-            throw new ClassNotFoundException("通过TransformUtilGenerate 创建的类所占用总内存空间超过阈值 " + SystemProperties.CLASS_SIZE_THRESHOLD + "字节，新建类无法创建, 可修改系统配置 " + SystemProperties.CLASS_SIZE_THRESHOLD + " 值 (单位 byte)");
+            LOG.error("通过 com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate 创建的类所占用内存空间 {} byte,超过阈值 {} byte", staticSize(), SystemProperties.THRESHOLD_SIZE);
+            throw new ClassNotFoundException("通过TransformUtilGenerate 创建的类所占用总内存空间=" + staticSize() + "byte，超过阈值 " + SystemProperties.THRESHOLD_SIZE + "字节，新建类无法创建, 可修改系统配置 " + SystemProperties.CLASS_SIZE_THRESHOLD + " 值 (单位 byte)");
         }
 
 
