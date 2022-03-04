@@ -1,39 +1,24 @@
 package com.shzz.common.tool.bean.transform.asm;
-
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
-import com.googlecode.concurrentlinkedhashmap.EvictionListener;
 import com.googlecode.concurrentlinkedhashmap.Weighers;
-import com.shzz.common.tool.bean.BeanFieldInfo;
 import com.shzz.common.tool.bean.transform.*;
-import com.shzz.common.tool.bean.transform.asm.context.Context;
 import com.shzz.common.tool.bean.transform.asm.strategy.*;
-import com.shzz.common.tool.bean.transform.asm.context.TransformTypeContext;
 import com.shzz.common.tool.code.BeanTransformException;
-import com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode;
 import com.shzz.common.tool.code.CommonCode;
 import org.objectweb.asm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.security.MessageDigest;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-import static com.shzz.common.tool.bean.transform.asm.BeanTransformsMethodAdapter.*;
-import static com.shzz.common.tool.bean.transform.asm.strategy.CollectionTypeStrategy.ELEMENT_TRANSFORM_MEDIAN;
-import static org.objectweb.asm.Opcodes.*;
 
 
 /**
  * TransformUtilGenerate 是工具框架的主要功能类，也是用户层接口类
- * 调用
  *
  * @author wen wang
  * @version 1.0.0
@@ -67,9 +52,7 @@ public class TransformUtilGenerate {
             Type.getType(Class.class)
     );
 
-    // private static ConcurrentHashMap<String, BeanTransform> cacheTransform = new ConcurrentHashMap<>(32);
-
-
+    // google map，	http://code.google.com/p/concurrentlinkedhashmap，基于LRU 算法清除数据
     private static ConcurrentLinkedHashMap<String, BeanTransform> cacheTransformLRU = new ConcurrentLinkedHashMap.Builder<String, BeanTransform>()
             .maximumWeightedCapacity(CAPACITY)
             .weigher(Weighers.singleton())
