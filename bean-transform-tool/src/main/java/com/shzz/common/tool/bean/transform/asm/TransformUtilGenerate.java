@@ -1,10 +1,10 @@
 package com.shzz.common.tool.bean.transform.asm;
 
+import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
+import com.googlecode.concurrentlinkedhashmap.EvictionListener;
+import com.googlecode.concurrentlinkedhashmap.Weighers;
 import com.shzz.common.tool.bean.BeanFieldInfo;
-import com.shzz.common.tool.bean.transform.BeanTransform;
-import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
-import com.shzz.common.tool.bean.transform.SystemProperties;
-import com.shzz.common.tool.bean.transform.Transform;
+import com.shzz.common.tool.bean.transform.*;
 import com.shzz.common.tool.bean.transform.asm.context.Context;
 import com.shzz.common.tool.bean.transform.asm.strategy.*;
 import com.shzz.common.tool.bean.transform.asm.context.TransformTypeContext;
@@ -30,11 +30,14 @@ import static com.shzz.common.tool.bean.transform.asm.BeanTransformsMethodAdapte
 import static com.shzz.common.tool.bean.transform.asm.strategy.CollectionTypeStrategy.ELEMENT_TRANSFORM_MEDIAN;
 import static org.objectweb.asm.Opcodes.*;
 
+
 /**
- * @Classname TransformUtilGenerate
- * @Description TODO
- * @Date 2021/11/7 20:44
- * @Created by wen wang
+ * TransformUtilGenerate 是工具框架的主要功能类，也是用户层接口类
+ * 调用
+ *
+ * @author wen wang
+ * @version 1.0.0
+ * @date 2021/11/7 20:44
  */
 public class TransformUtilGenerate {
 
@@ -50,6 +53,7 @@ public class TransformUtilGenerate {
     public static final String EXTEND_IMPL_FIELD_NAME_SUFFIX = "_convert";
     public static final String TARGET_FIELD_CLASS_FIELD_SUFFIX = "_targetType";
     public static final String SOURCE_FIELD_CLASS_FIELD_SUFFIX = "_sourceType";
+    public static final int CAPACITY = 16;
     public static final String EXTEND_TRANSFORM_METHOD_DESC = Type.getMethodDescriptor(
             Type.getType(Object.class),
             Type.getType(Object.class),
@@ -63,52 +67,98 @@ public class TransformUtilGenerate {
             Type.getType(Class.class)
     );
 
-    private static ConcurrentHashMap<String, BeanTransform> cacheTransform = new ConcurrentHashMap<>(32);
+    // private static ConcurrentHashMap<String, BeanTransform> cacheTransform = new ConcurrentHashMap<>(32);
 
-    //    private final Map<String, Map<String, ExtensionObjectTransform>> extensionObjectTransformMap = new ConcurrentHashMap<>();
-//    private final Map<String, Map<String, BeanTransFormsHandler>> beanTransFormsHandlerMap = new ConcurrentHashMap<>();
-//    private final Map<String, Map<String, Class>> fieldClassMap = new ConcurrentHashMap<>();
-    // public static final Map<StrategyMode, Class<? extends ComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
+
+    private static ConcurrentLinkedHashMap<String, BeanTransform> cacheTransformLRU = new ConcurrentLinkedHashMap.Builder<String, BeanTransform>()
+            .maximumWeightedCapacity(CAPACITY)
+            .weigher(Weighers.singleton())
+            .listener(new EvictionListenerImpl<>("cacheTransformLRU"))
+            .build();
+
 
     private TransformUtilGenerate() {
 
     }
 
+    /**
+     * 静态generate方法1，重载方法，根据输入参数生成转换类对象
+     *
+     * @param sourceBeanClass      源bean类
+     * @param targetClass          目标类
+     * @param extendsTransformList 扩展转换列表
+     * @return {@link BeanTransform}
+     * @throws Exception 异常
+     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, true, true, extendsTransformList, null);
     }
 
 
+    /**
+     * 静态generate方法2，重载方法，根据输入参数生成转换类对象
+     *
+     * @param sourceBeanClass 源bean类
+     * @param targetClass     目标类
+     * @param isDeepCopy      深拷贝
+     * @return {@link BeanTransform}
+     * @throws Exception 异常
+     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, true, null, null);
     }
 
+    /**
+     * 静态generate方法3，重载方法，根据输入参数生成转换类对象
+     *
+     * @param sourceBeanClass      源bean类
+     * @param targetClass          目标类
+     * @param isDeepCopy           深拷贝
+     * @param extendsTransformList 扩展转换列表
+     * @return {@link BeanTransform}
+     * @throws Exception 异常
+     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, true, extendsTransformList, null);
     }
 
+    /**
+     * 静态generate方法4，重载方法，根据输入参数生成转换类对象
+     *
+     * @param sourceBeanClass            源bean类
+     * @param targetClass                目标类
+     * @param isDeepCopy                 深拷贝
+     * @param permitBaseTypeInterconvert 允许基类型互转
+     * @param extendsTransformList       扩展转换列表
+     * @return {@link BeanTransform}
+     * @throws Exception 异常
+     */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, null);
     }
 
+
+    /**
+     * 静态generate方法5，重载方法，以上所有重载方法内部均调用该方法。根据输入参数生成转换类对象
+     * 参数 {@code boolean isDeepCopy} 如果设置为false,如果目标类和源类类型不一致时无法转换，如果一致则引用类型直接赋值.
+     * 参数 {@code java.lang.reflect.Type[] actualGenericType}， 如果要转换方法体内部定义的局部变量（非匿名内部类方式定义）
+     * 且变量类型是参数化类型、泛型数组、通配泛型时，内部泛型实参可通过该参数传入
+     * 参数 {@code List<ExtensionObjectTransform> extendsTransformList}， 如果用户在对应目标类的字段中通过工具包中的注解BeanFieldInfo设置了 extensionObjectTransformImplClass 属性，表示该字段的转换使用用户自定义实现类来完成。
+     * 用户创建实现类的对象通过extendsTransformList 参数传入，工具框架内部调用对应方法进行转换
+     *
+     * @param sourceBeanClass            源类类型
+     * @param targetClass                转换的目标类类型
+     * @param isDeepCopy                 是否深拷贝，默认是true
+     * @param permitBaseTypeInterconvert 是否支持不同的原始类型或者包装类型互相转换，比如 double 到 byte  或者Integer 到 short
+     * @param extendsTransformList       用户自定义的转换类对象的集合
+     * @param actualGenericType          实际泛型类型，该参数预留，可传入null.
+     * @return {@link BeanTransform}     字节码生成的转换类对象
+     * @throws Exception Bean 转换异常
+     */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList, java.lang.reflect.Type[] actualGenericType) throws Exception {
-        /**
-         * @description:
-         * @param sourceBeanClass  源类类型
-         * @param targetClass 转换的目标类类型
-         * @param isDeepCopy  是否深拷贝，默认是true,
-         *                    如果设置为false,如果目标类和源类类型不一致时无法转换，如果一致则引用类型直接赋值，
-         * @param permitBaseTypeInterconvert 是否支持不同的原始类型或者包装类型互相转换，
-         *                                   比如 double 到 byte  或者Integer 到 short
-         * @param extendsTransformList  用户自定义的转换类对象的集合
-         *                              如果用户在对应目标类的字段中通过工具包中的注解BeanFieldInfo设置了 extensionObjectTransformImplClass 属性，表示该字段的转换使用用户自定义实现类来完成。用户创建实现类的对象通过extendsTransformList 参数传入，工具框架内部调用对应方法进行转换
-         * @param actualGenericType  该参数预留，可传入null.
-         *                           如果要转换方法体内部定义的局部变量（非匿名内部类方式定义）
-         *                           且变量类型是参数化类型、泛型数组、通配泛型时，内部泛型实参可通过该参数传入
-         * @return: com.shzz.common.tool.bean.transform.asm.BeanTransFormsHandler
-         * @auther: wen wang
-         * @date: 2021/12/8 13:59
-         */
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(extractInfo(sourceBeanClass));
@@ -117,22 +167,16 @@ public class TransformUtilGenerate {
         stringBuilder.append(permitBaseTypeInterconvert);
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
         String hash = toHex(messageDigest.digest(stringBuilder.toString().getBytes()));
-
+        hash += (sourceBeanClass.getName() + "-" + targetClass.getName());
         BeanTransform beanTransform = null;
-        if (cacheTransform.containsKey(hash)) {
-            beanTransform = cacheTransform.get(hash);
+        if (cacheTransformLRU.containsKey(hash)) {
+            beanTransform = cacheTransformLRU.get(hash);
         } else {
             UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
-            try {
-                beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
-            } catch (ClassNotFoundException classNotFound) {
-                cacheTransform.clear();
-                CustomeClassLoader.clear();
-                throw classNotFound;
-            } catch (Exception e) {
-                throw e;
-            }
-            cacheTransform.put(hash, beanTransform);
+
+            beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
+
+            cacheTransformLRU.put(hash, beanTransform);
         }
 
         return beanTransform;
@@ -181,7 +225,7 @@ public class TransformUtilGenerate {
         //将二进制流写到本地磁盘上
         FileOutputStream fos = null;
         int lastIndex = generateClassname.lastIndexOf(".");
-        String packageTopath=generateClassname.substring(0,lastIndex).replace(".",File.separator);
+        String packageTopath = generateClassname.substring(0, lastIndex).replace(".", File.separator);
         String className = generateClassname.substring(lastIndex + 1);
         //String fullPath=TransformUtilGenerate.class.getResource("/")+File.separator+packageTopath+File.separator+className + ".class";
         String fullPath = System.getProperty("user.dir") + File.separator + "generate" + File.separator + packageTopath + File.separator + className + ".class";
@@ -190,20 +234,15 @@ public class TransformUtilGenerate {
 
         Class geneImplClass = null;
         try {
-
-             // 创建类元信息
-
-            CustomeClassLoader.putClassByte(generateClassname, bytes);
-            geneImplClass = customeClassLoader.loadClass(generateClassname);
+            // 创建类元信息
+            geneImplClass = customeClassLoader.udfLoadClass(generateClassname, bytes);
             File classFile = new File(fullPath);
             // 写到本地文件
             if (SystemProperties.getClassOutputFlag()) {
 
-                if(!classFile.getParentFile().exists()){
-
+                if (!classFile.getParentFile().exists()) {
                     classFile.getParentFile().mkdirs();
                 }
-               // classFile.createNewFile();
                 fos = new FileOutputStream(classFile);
                 fos.write(bytes);
                 fos.close();
@@ -212,8 +251,8 @@ public class TransformUtilGenerate {
 
         } catch (IOException e) {
             LOG.error(e.toString());
-        }finally {
-            if(Objects.nonNull(fos)){
+        } finally {
+            if (Objects.nonNull(fos)) {
                 fos.close();
             }
         }
