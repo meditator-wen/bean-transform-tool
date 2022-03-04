@@ -77,6 +77,9 @@ public class TransformUtilGenerate {
             .build();
 
 
+    /**
+     * 不可创建实例
+     */
     private TransformUtilGenerate() {
 
     }

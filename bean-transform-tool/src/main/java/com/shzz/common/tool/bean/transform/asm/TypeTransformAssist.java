@@ -18,11 +18,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
+
 /**
- * @Classname ResloverMetaInfo
- * @Description TODO
- * @Date 2021/11/7 20:39
- * @Created by wen wang
+ * 类型转换辅助功能类
+ *
+ * @author wen wang
+ * @date 2021/11/7 20:39
  */
 public class TypeTransformAssist {
 

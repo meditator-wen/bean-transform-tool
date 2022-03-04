@@ -256,11 +256,6 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
             throw new Exception("generate方法 传入的targetClass 类型参数为空");
         }
 
-        if (CustomeClassLoader.exceedThreshold()) {
-            int threshold = SystemProperties.getClassSizeThreshold();
-            throw new Exception("缓存类字节码空间超出阈值，" + threshold + " byte");
-        }
-
         // Map 或者Collection 子类不在 UniversalClassTypeStrategy 处理范围
         TypeTransformAssist.checkClass(targetClass, sourceBeanClass);
 

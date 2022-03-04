@@ -23,7 +23,7 @@ public class CustomeClassLoader extends ClassLoader {
     }
 
     private static final Logger LOG = LoggerFactory.getLogger("CustomeClassLoader");
-    
+
 
     public Class<?> udfLoadClass(String name, byte[] bytes) throws ClassNotFoundException {
         Class<?> cla = null;
