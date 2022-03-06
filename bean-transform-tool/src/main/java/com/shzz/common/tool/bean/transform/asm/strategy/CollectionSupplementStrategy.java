@@ -42,7 +42,7 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
     private AbstractContext context;
 
 
-    private static volatile ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
+    public static volatile ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
 
 
     private ThreadLocal<Type> targetCollectionType_Local = new ThreadLocal<>();
@@ -298,6 +298,7 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
         Map<String, ExtensionObjectTransform> innerExtensionObjectTransformMap = new HashMap<>(4);
 
         innerExtensionObjectTransformMap.put(collectionTransformFieldName(), extensionTransform);
+        clearThreadLocal();
         return innerExtensionObjectTransformMap;
 
     }
@@ -314,7 +315,6 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
     @Override
     public void clearThreadLocal() {
         super.clearThreadLocal();
-        sequence_Local.remove();
         targetCollectionType_Local.remove();
         targetActualType_Local.remove();
         sourceCollectionType_Local.remove();

@@ -146,24 +146,27 @@ public class TransformUtilGenerate {
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList, java.lang.reflect.Type[] actualGenericType) throws Exception {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(extractInfo(sourceBeanClass));
-        stringBuilder.append(extractInfo(targetClass));
-        stringBuilder.append(isDeepCopy);
-        stringBuilder.append(permitBaseTypeInterconvert);
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-        String hash = toHex(messageDigest.digest(stringBuilder.toString().getBytes()));
-        hash += (sourceBeanClass.getName() + "-" + targetClass.getName());
-        BeanTransform beanTransform = null;
-        if (cacheTransformLRU.containsKey(hash)) {
-            beanTransform = cacheTransformLRU.get(hash);
-        } else {
-            UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
+//        StringBuilder stringBuilder = new StringBuilder();
+//        stringBuilder.append(extractInfo(sourceBeanClass));
+//        stringBuilder.append(extractInfo(targetClass));
+//        stringBuilder.append(isDeepCopy);
+//        stringBuilder.append(permitBaseTypeInterconvert);
+//        MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+//        String hash = toHex(messageDigest.digest(stringBuilder.toString().getBytes()));
+//        hash += (sourceBeanClass.getName() + "-" + targetClass.getName());
+//        BeanTransform beanTransform = null;
+//        if (cacheTransformLRU.containsKey(hash)) {
+//            beanTransform = cacheTransformLRU.get(hash);
+//        } else {
+//            UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
+//
+//            beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
+//
+//            cacheTransformLRU.put(hash, beanTransform);
+//        }
+        UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
 
-            beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
-
-            cacheTransformLRU.put(hash, beanTransform);
-        }
+        BeanTransform beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
 
         return beanTransform;
     }
@@ -195,6 +198,11 @@ public class TransformUtilGenerate {
 
         return stringBuilder;
 
+    }
+
+    private static void afterGenerate() {
+        MapTypeStrategy.sequence_Local.remove();
+        CollectionSupplementStrategy.sequence_Local.remove();
     }
 
     public static String classSimpleNameReconstruct(Class rawType) {

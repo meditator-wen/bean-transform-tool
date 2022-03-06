@@ -69,7 +69,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     private String internalName;
 
     // Map 类型转换类命名编号，如果有多层嵌套Map或者多个Map类型 字段,编号依次增加
-    private static ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
+    public static ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
 
 
     public MapTypeStrategy(AbstractContext context) {
@@ -560,8 +560,6 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     @Override
     public void clearThreadLocal(){
         super.clearThreadLocal();
-        sequence_Local.remove();
-
 
     }
 }
