@@ -118,7 +118,7 @@ public class TransformTypeContext extends AbstractContext {
 
             ComplexTypeStrategy complexTypeStrategy = constructor.newInstance(this);
             if (complexTypeStrategy.strategyMatch(sourceBeanType, targetType)) {
-                LOG.info("sourceBeanType：{} is {}，targetType：{} is {}，匹配策略 {}", sourceBeanType.getTypeName(), sourceBeanType.getClass().getSimpleName(), targetType.getTypeName(), targetType.getClass().getSimpleName(), complexTypeStrategy.getClass().getSimpleName());
+                //  LOG.info("sourceBeanType：{} is {}，targetType：{} is {}，匹配策略 {}", sourceBeanType.getTypeName(), sourceBeanType.getClass().getSimpleName(), targetType.getTypeName(), targetType.getClass().getSimpleName(), complexTypeStrategy.getClass().getSimpleName());
                 return complexTypeStrategy.geneTransform(sourceBeanType, targetType, geneClassName(), fieldNamePrefix);
             }
         }

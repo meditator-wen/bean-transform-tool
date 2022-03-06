@@ -1,7 +1,7 @@
 # JMH version: 1.33
 # VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
 # VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
-# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=64392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61782:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
 # Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
 # Warmup: 5 iterations, 1 s each
 # Measurement: 50 iterations, 5 s each
@@ -13,77 +13,77 @@
 # Run progress: 0.00% complete, ETA 00:21:15
 # Fork: 1 of 1
 # Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/E:/apache-maven-3.6.2-bin/localRepository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
 WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-4597056.316 ops/s
-# Warmup Iteration   2: 6180891.344 ops/s
-# Warmup Iteration   3: 5420817.375 ops/s
-# Warmup Iteration   4: 6554245.364 ops/s
-# Warmup Iteration   5: 6429302.735 ops/s
-Iteration   1: 6526059.620 ops/s
-Iteration   2: 6563403.670 ops/s
-Iteration   3: 6332373.364 ops/s
-Iteration   4: 6417502.104 ops/s
-Iteration   5: 6021434.142 ops/s
-Iteration   6: 6341031.033 ops/s
-Iteration   7: 6316009.845 ops/s
-Iteration   8: 6371225.204 ops/s
-Iteration   9: 6411018.521 ops/s
-Iteration  10: 6433460.211 ops/s
-Iteration  11: 6496400.689 ops/s
-Iteration  12: 6168444.530 ops/s
-Iteration  13: 6331818.780 ops/s
-Iteration  14: 5945651.450 ops/s
-Iteration  15: 6401696.178 ops/s
-Iteration  16: 6301548.124 ops/s
-Iteration  17: 6057367.654 ops/s
-Iteration  18: 6332838.601 ops/s
-Iteration  19: 6353055.528 ops/s
-Iteration  20: 6374327.703 ops/s
-Iteration  21: 6198298.890 ops/s
-Iteration  22: 6273066.186 ops/s
-Iteration  23: 6293470.244 ops/s
-Iteration  24: 5309775.284 ops/s
-Iteration  25: 6595245.659 ops/s
-Iteration  26: 6864327.931 ops/s
-Iteration  27: 6705089.836 ops/s
-Iteration  28: 6780123.354 ops/s
-Iteration  29: 6305491.854 ops/s
-Iteration  30: 6699150.950 ops/s
-Iteration  31: 6726203.191 ops/s
-Iteration  32: 6820329.903 ops/s
-Iteration  33: 6636680.320 ops/s
-Iteration  34: 6813667.934 ops/s
-Iteration  35: 6691482.271 ops/s
-Iteration  36: 6587346.740 ops/s
-Iteration  37: 6072130.348 ops/s
-Iteration  38: 6383512.860 ops/s
-Iteration  39: 6504258.049 ops/s
-Iteration  40: 6469757.852 ops/s
-Iteration  41: 5869287.027 ops/s
-Iteration  42: 6326802.899 ops/s
-Iteration  43: 6291803.874 ops/s
-Iteration  44: 6321191.813 ops/s
-Iteration  45: 6331508.408 ops/s
-Iteration  46: 6282674.436 ops/s
-Iteration  47: 6299522.631 ops/s
-Iteration  48: 6203313.980 ops/s
-Iteration  49: 6266419.366 ops/s
-Iteration  50: 6310824.333 ops/s
+5062152.676 ops/s
+# Warmup Iteration   2: 7127652.835 ops/s
+# Warmup Iteration   3: 7207448.536 ops/s
+# Warmup Iteration   4: 7333975.199 ops/s
+# Warmup Iteration   5: 7292449.644 ops/s
+Iteration   1: 7255300.699 ops/s
+Iteration   2: 7269718.066 ops/s
+Iteration   3: 7181060.050 ops/s
+Iteration   4: 7217715.079 ops/s
+Iteration   5: 7252730.068 ops/s
+Iteration   6: 7269830.222 ops/s
+Iteration   7: 7101815.017 ops/s
+Iteration   8: 7130416.624 ops/s
+Iteration   9: 6729650.632 ops/s
+Iteration  10: 7187676.881 ops/s
+Iteration  11: 7197832.461 ops/s
+Iteration  12: 7191463.271 ops/s
+Iteration  13: 7227717.203 ops/s
+Iteration  14: 7273938.508 ops/s
+Iteration  15: 7253213.977 ops/s
+Iteration  16: 7185732.889 ops/s
+Iteration  17: 7281681.248 ops/s
+Iteration  18: 7216068.595 ops/s
+Iteration  19: 7248912.530 ops/s
+Iteration  20: 7243388.986 ops/s
+Iteration  21: 6697692.383 ops/s
+Iteration  22: 7290311.974 ops/s
+Iteration  23: 7247934.417 ops/s
+Iteration  24: 7292627.693 ops/s
+Iteration  25: 7250260.704 ops/s
+Iteration  26: 7162672.028 ops/s
+Iteration  27: 7270227.963 ops/s
+Iteration  28: 7277355.159 ops/s
+Iteration  29: 7269588.202 ops/s
+Iteration  30: 7312655.592 ops/s
+Iteration  31: 7310106.826 ops/s
+Iteration  32: 7308852.258 ops/s
+Iteration  33: 6591874.466 ops/s
+Iteration  34: 7213903.254 ops/s
+Iteration  35: 7186894.498 ops/s
+Iteration  36: 7220008.411 ops/s
+Iteration  37: 6548813.585 ops/s
+Iteration  38: 7099100.495 ops/s
+Iteration  39: 7237288.734 ops/s
+Iteration  40: 7269159.457 ops/s
+Iteration  41: 7258754.089 ops/s
+Iteration  42: 7289953.560 ops/s
+Iteration  43: 7251855.321 ops/s
+Iteration  44: 7263935.478 ops/s
+Iteration  45: 6719968.174 ops/s
+Iteration  46: 7211998.918 ops/s
+Iteration  47: 7244211.093 ops/s
+Iteration  48: 7155597.324 ops/s
+Iteration  49: 6720007.362 ops/s
+Iteration  50: 6901965.064 ops/s
 
 
 Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual":
-  6374588.507 ±(99.9%) 133766.011 ops/s [Average]
-  (min, avg, max) = (5309775.284, 6374588.507, 6864327.931), stdev = 270213.961
-  CI (99.9%): [6240822.496, 6508354.519] (assumes normal distribution)
+  7159828.750 ±(99.9%) 97549.112 ops/s [Average]
+  (min, avg, max) = (6548813.585, 7159828.750, 7312655.592), stdev = 197054.032
+  CI (99.9%): [7062279.638, 7257377.862] (assumes normal distribution)
 
 
 # JMH version: 1.33
 # VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
 # VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
-# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=64392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61782:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
 # Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
 # Warmup: 5 iterations, 1 s each
 # Measurement: 50 iterations, 5 s each
@@ -92,80 +92,80 @@ Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanManual":
 # Benchmark mode: Throughput, ops/time
 # Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler
 
-# Run progress: 20.00% complete, ETA 00:17:08
+# Run progress: 20.00% complete, ETA 00:17:09
 # Fork: 1 of 1
 # Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/E:/apache-maven-3.6.2-bin/localRepository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
 WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-5073995.127 ops/s
-# Warmup Iteration   2: 5709366.380 ops/s
-# Warmup Iteration   3: 6307464.433 ops/s
-# Warmup Iteration   4: 6379668.158 ops/s
-# Warmup Iteration   5: 6374193.023 ops/s
-Iteration   1: 6098582.878 ops/s
-Iteration   2: 5877465.480 ops/s
-Iteration   3: 6155862.023 ops/s
-Iteration   4: 6204972.086 ops/s
-Iteration   5: 6174167.754 ops/s
-Iteration   6: 6160158.447 ops/s
-Iteration   7: 6120861.935 ops/s
-Iteration   8: 6021021.812 ops/s
-Iteration   9: 5915489.607 ops/s
-Iteration  10: 5899659.380 ops/s
-Iteration  11: 6054032.852 ops/s
-Iteration  12: 5966216.852 ops/s
-Iteration  13: 5862660.562 ops/s
-Iteration  14: 5713128.720 ops/s
-Iteration  15: 6001602.921 ops/s
-Iteration  16: 6022754.991 ops/s
-Iteration  17: 6127837.091 ops/s
-Iteration  18: 6082432.009 ops/s
-Iteration  19: 6032088.874 ops/s
-Iteration  20: 6158547.077 ops/s
-Iteration  21: 6027933.214 ops/s
-Iteration  22: 6182414.640 ops/s
-Iteration  23: 6184924.953 ops/s
-Iteration  24: 6203690.833 ops/s
-Iteration  25: 5979471.088 ops/s
-Iteration  26: 5901889.027 ops/s
-Iteration  27: 6228779.960 ops/s
-Iteration  28: 6185586.660 ops/s
-Iteration  29: 6152675.586 ops/s
-Iteration  30: 6140034.874 ops/s
-Iteration  31: 6165989.576 ops/s
-Iteration  32: 6190105.588 ops/s
-Iteration  33: 5747398.251 ops/s
-Iteration  34: 5758871.514 ops/s
-Iteration  35: 6011440.669 ops/s
-Iteration  36: 5738720.605 ops/s
-Iteration  37: 5798434.937 ops/s
-Iteration  38: 5242307.346 ops/s
-Iteration  39: 5906082.368 ops/s
-Iteration  40: 5902195.457 ops/s
-Iteration  41: 6034999.585 ops/s
-Iteration  42: 5706708.708 ops/s
-Iteration  43: 5912236.017 ops/s
-Iteration  44: 5973917.740 ops/s
-Iteration  45: 5853654.255 ops/s
-Iteration  46: 5841182.989 ops/s
-Iteration  47: 5715211.212 ops/s
-Iteration  48: 5851596.051 ops/s
-Iteration  49: 5720226.276 ops/s
-Iteration  50: 5586707.488 ops/s
+4038715.493 ops/s
+# Warmup Iteration   2: 4504180.569 ops/s
+# Warmup Iteration   3: 5442055.806 ops/s
+# Warmup Iteration   4: 6075246.358 ops/s
+# Warmup Iteration   5: 6847432.276 ops/s
+Iteration   1: 6135038.181 ops/s
+Iteration   2: 6399391.567 ops/s
+Iteration   3: 6563312.504 ops/s
+Iteration   4: 6398806.016 ops/s
+Iteration   5: 6267344.282 ops/s
+Iteration   6: 6937536.116 ops/s
+Iteration   7: 6988272.579 ops/s
+Iteration   8: 7039682.786 ops/s
+Iteration   9: 6881569.806 ops/s
+Iteration  10: 7008791.417 ops/s
+Iteration  11: 6930505.724 ops/s
+Iteration  12: 6989297.956 ops/s
+Iteration  13: 7018642.828 ops/s
+Iteration  14: 7009791.449 ops/s
+Iteration  15: 7032264.498 ops/s
+Iteration  16: 6509862.470 ops/s
+Iteration  17: 6174968.257 ops/s
+Iteration  18: 7007603.543 ops/s
+Iteration  19: 7032746.558 ops/s
+Iteration  20: 7010404.898 ops/s
+Iteration  21: 7053888.264 ops/s
+Iteration  22: 7032424.711 ops/s
+Iteration  23: 7002572.362 ops/s
+Iteration  24: 7032326.162 ops/s
+Iteration  25: 7033666.189 ops/s
+Iteration  26: 6954086.883 ops/s
+Iteration  27: 6697183.114 ops/s
+Iteration  28: 6999155.943 ops/s
+Iteration  29: 6558432.507 ops/s
+Iteration  30: 7005285.653 ops/s
+Iteration  31: 7016970.104 ops/s
+Iteration  32: 7041690.991 ops/s
+Iteration  33: 7014845.689 ops/s
+Iteration  34: 7017168.948 ops/s
+Iteration  35: 7011720.566 ops/s
+Iteration  36: 6967905.246 ops/s
+Iteration  37: 7030897.464 ops/s
+Iteration  38: 7012731.569 ops/s
+Iteration  39: 7104391.429 ops/s
+Iteration  40: 7040379.923 ops/s
+Iteration  41: 6260381.025 ops/s
+Iteration  42: 7075056.655 ops/s
+Iteration  43: 7044510.993 ops/s
+Iteration  44: 7089525.660 ops/s
+Iteration  45: 7029195.134 ops/s
+Iteration  46: 6978571.420 ops/s
+Iteration  47: 7028005.883 ops/s
+Iteration  48: 7065894.044 ops/s
+Iteration  49: 7029249.805 ops/s
+Iteration  50: 7029205.703 ops/s
 
 
 Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler":
-  5969898.616 ±(99.9%) 97995.781 ops/s [Average]
-  (min, avg, max) = (5242307.346, 5969898.616, 6228779.960), stdev = 197956.326
-  CI (99.9%): [5871902.835, 6067894.398] (assumes normal distribution)
+  6891863.069 ±(99.9%) 131251.947 ops/s [Average]
+  (min, avg, max) = (6135038.181, 6891863.069, 7104391.429), stdev = 265135.427
+  CI (99.9%): [6760611.122, 7023115.017] (assumes normal distribution)
 
 
 # JMH version: 1.33
 # VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
 # VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
-# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=64392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61782:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
 # Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
 # Warmup: 5 iterations, 1 s each
 # Measurement: 50 iterations, 5 s each
@@ -174,80 +174,80 @@ Result "bean.transform.unittest.jmhtest.Jmh.benchMarkBeanTransformsHandler":
 # Benchmark mode: Throughput, ops/time
 # Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct
 
-# Run progress: 40.00% complete, ETA 00:12:50
+# Run progress: 40.00% complete, ETA 00:12:51
 # Fork: 1 of 1
 # Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/E:/apache-maven-3.6.2-bin/localRepository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
 WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-3146433.770 ops/s
-# Warmup Iteration   2: 4029578.897 ops/s
-# Warmup Iteration   3: 4147744.914 ops/s
-# Warmup Iteration   4: 4536369.915 ops/s
-# Warmup Iteration   5: 4382968.941 ops/s
-Iteration   1: 4477349.318 ops/s
-Iteration   2: 4345132.550 ops/s
-Iteration   3: 4431460.244 ops/s
-Iteration   4: 4530187.887 ops/s
-Iteration   5: 4403109.129 ops/s
-Iteration   6: 4419757.880 ops/s
-Iteration   7: 4424037.306 ops/s
-Iteration   8: 4464162.243 ops/s
-Iteration   9: 4528729.281 ops/s
-Iteration  10: 4012707.607 ops/s
-Iteration  11: 4346561.907 ops/s
-Iteration  12: 4326668.933 ops/s
-Iteration  13: 4313253.832 ops/s
-Iteration  14: 4358188.839 ops/s
-Iteration  15: 4430721.358 ops/s
-Iteration  16: 4479495.780 ops/s
-Iteration  17: 4444525.188 ops/s
-Iteration  18: 4494213.874 ops/s
-Iteration  19: 4544846.619 ops/s
-Iteration  20: 4427193.897 ops/s
-Iteration  21: 4569785.885 ops/s
-Iteration  22: 4144297.155 ops/s
-Iteration  23: 4396084.073 ops/s
-Iteration  24: 4413426.902 ops/s
-Iteration  25: 4451400.220 ops/s
-Iteration  26: 4300404.319 ops/s
-Iteration  27: 4447611.560 ops/s
-Iteration  28: 4666946.962 ops/s
-Iteration  29: 4581134.538 ops/s
-Iteration  30: 4621673.053 ops/s
-Iteration  31: 4638868.728 ops/s
-Iteration  32: 4647596.788 ops/s
-Iteration  33: 4669605.528 ops/s
-Iteration  34: 4281984.690 ops/s
-Iteration  35: 4635010.804 ops/s
-Iteration  36: 4669688.813 ops/s
-Iteration  37: 4697284.287 ops/s
-Iteration  38: 4627702.281 ops/s
-Iteration  39: 4667815.922 ops/s
-Iteration  40: 4661356.008 ops/s
-Iteration  41: 4507926.108 ops/s
-Iteration  42: 4697600.448 ops/s
-Iteration  43: 4652764.805 ops/s
-Iteration  44: 4683283.031 ops/s
-Iteration  45: 4674242.507 ops/s
-Iteration  46: 4259270.399 ops/s
-Iteration  47: 4657301.901 ops/s
-Iteration  48: 4651989.134 ops/s
-Iteration  49: 4719471.429 ops/s
-Iteration  50: 4626033.910 ops/s
+4164360.055 ops/s
+# Warmup Iteration   2: 5160050.932 ops/s
+# Warmup Iteration   3: 5397283.704 ops/s
+# Warmup Iteration   4: 5322874.246 ops/s
+# Warmup Iteration   5: 5396195.862 ops/s
+Iteration   1: 5338259.598 ops/s
+Iteration   2: 4915139.150 ops/s
+Iteration   3: 5336872.964 ops/s
+Iteration   4: 5382359.280 ops/s
+Iteration   5: 5346621.556 ops/s
+Iteration   6: 5404238.548 ops/s
+Iteration   7: 5392030.160 ops/s
+Iteration   8: 5382175.363 ops/s
+Iteration   9: 5370684.914 ops/s
+Iteration  10: 5425527.013 ops/s
+Iteration  11: 5108135.013 ops/s
+Iteration  12: 5208499.511 ops/s
+Iteration  13: 5365831.801 ops/s
+Iteration  14: 4921298.027 ops/s
+Iteration  15: 5394765.948 ops/s
+Iteration  16: 5338904.348 ops/s
+Iteration  17: 4072041.844 ops/s
+Iteration  18: 4898675.532 ops/s
+Iteration  19: 5035757.488 ops/s
+Iteration  20: 4876756.451 ops/s
+Iteration  21: 5276273.538 ops/s
+Iteration  22: 5235021.106 ops/s
+Iteration  23: 5331382.662 ops/s
+Iteration  24: 5402267.339 ops/s
+Iteration  25: 5018542.258 ops/s
+Iteration  26: 4951646.970 ops/s
+Iteration  27: 5370784.178 ops/s
+Iteration  28: 5371300.222 ops/s
+Iteration  29: 5397347.132 ops/s
+Iteration  30: 5386358.987 ops/s
+Iteration  31: 5382267.870 ops/s
+Iteration  32: 5323369.504 ops/s
+Iteration  33: 5342065.957 ops/s
+Iteration  34: 5369018.702 ops/s
+Iteration  35: 5320516.601 ops/s
+Iteration  36: 5358478.461 ops/s
+Iteration  37: 5328384.094 ops/s
+Iteration  38: 4955433.264 ops/s
+Iteration  39: 5359214.872 ops/s
+Iteration  40: 5368843.247 ops/s
+Iteration  41: 5413571.467 ops/s
+Iteration  42: 5411069.407 ops/s
+Iteration  43: 5223004.482 ops/s
+Iteration  44: 5372656.899 ops/s
+Iteration  45: 5284475.240 ops/s
+Iteration  46: 5381766.347 ops/s
+Iteration  47: 5359449.248 ops/s
+Iteration  48: 5414883.562 ops/s
+Iteration  49: 5355065.057 ops/s
+Iteration  50: 4925176.973 ops/s
 
 
 Result "bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct":
-  4502437.317 ±(99.9%) 78404.336 ops/s [Average]
-  (min, avg, max) = (4012707.607, 4502437.317, 4719471.429), stdev = 158380.637
-  CI (99.9%): [4424032.982, 4580841.653] (assumes normal distribution)
+  5250084.203 ±(99.9%) 118260.604 ops/s [Average]
+  (min, avg, max) = (4072041.844, 5250084.203, 5425527.013), stdev = 238892.271
+  CI (99.9%): [5131823.599, 5368344.807] (assumes normal distribution)
 
 
 # JMH version: 1.33
 # VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
 # VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
-# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=64392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61782:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
 # Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
 # Warmup: 5 iterations, 1 s each
 # Measurement: 50 iterations, 5 s each
@@ -256,80 +256,80 @@ Result "bean.transform.unittest.jmhtest.Jmh.benchMarkMapStruct":
 # Benchmark mode: Throughput, ops/time
 # Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkSelmaMapper
 
-# Run progress: 60.00% complete, ETA 00:08:33
+# Run progress: 60.00% complete, ETA 00:08:34
 # Fork: 1 of 1
 # Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/E:/apache-maven-3.6.2-bin/localRepository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
 WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-4564928.042 ops/s
-# Warmup Iteration   2: 5766724.570 ops/s
-# Warmup Iteration   3: 6301674.811 ops/s
-# Warmup Iteration   4: 6382184.792 ops/s
-# Warmup Iteration   5: 6345468.490 ops/s
-Iteration   1: 6326835.282 ops/s
-Iteration   2: 6253309.806 ops/s
-Iteration   3: 6356497.788 ops/s
-Iteration   4: 6305813.527 ops/s
-Iteration   5: 6208033.039 ops/s
-Iteration   6: 6317914.584 ops/s
-Iteration   7: 5847497.450 ops/s
-Iteration   8: 6313019.812 ops/s
-Iteration   9: 6221249.790 ops/s
-Iteration  10: 6348330.076 ops/s
-Iteration  11: 6330757.736 ops/s
-Iteration  12: 6295784.836 ops/s
-Iteration  13: 6296460.337 ops/s
-Iteration  14: 6282151.916 ops/s
-Iteration  15: 6332011.623 ops/s
-Iteration  16: 6289057.768 ops/s
-Iteration  17: 6294706.594 ops/s
-Iteration  18: 6292256.155 ops/s
-Iteration  19: 5740291.567 ops/s
-Iteration  20: 6330444.550 ops/s
-Iteration  21: 6326272.213 ops/s
-Iteration  22: 6334343.393 ops/s
-Iteration  23: 6323911.796 ops/s
-Iteration  24: 6289479.413 ops/s
-Iteration  25: 6265555.862 ops/s
-Iteration  26: 6023139.504 ops/s
-Iteration  27: 6223291.556 ops/s
-Iteration  28: 6258897.828 ops/s
-Iteration  29: 6332395.059 ops/s
-Iteration  30: 6357077.761 ops/s
-Iteration  31: 5939566.731 ops/s
-Iteration  32: 6273155.733 ops/s
-Iteration  33: 6280936.578 ops/s
-Iteration  34: 6385420.093 ops/s
-Iteration  35: 6304296.026 ops/s
-Iteration  36: 6306638.579 ops/s
-Iteration  37: 6355485.037 ops/s
-Iteration  38: 6182708.631 ops/s
-Iteration  39: 6195294.007 ops/s
-Iteration  40: 6116082.776 ops/s
-Iteration  41: 6317142.704 ops/s
-Iteration  42: 6337672.037 ops/s
-Iteration  43: 5919712.286 ops/s
-Iteration  44: 6200316.356 ops/s
-Iteration  45: 6309500.131 ops/s
-Iteration  46: 6339193.462 ops/s
-Iteration  47: 6319710.075 ops/s
-Iteration  48: 6289010.092 ops/s
-Iteration  49: 6334258.036 ops/s
-Iteration  50: 6303727.406 ops/s
+5339233.168 ops/s
+# Warmup Iteration   2: 6968367.780 ops/s
+# Warmup Iteration   3: 7173123.592 ops/s
+# Warmup Iteration   4: 7167364.167 ops/s
+# Warmup Iteration   5: 7091547.127 ops/s
+Iteration   1: 7183969.627 ops/s
+Iteration   2: 7187582.431 ops/s
+Iteration   3: 7171598.816 ops/s
+Iteration   4: 7079594.465 ops/s
+Iteration   5: 7130952.205 ops/s
+Iteration   6: 7077172.324 ops/s
+Iteration   7: 7142450.323 ops/s
+Iteration   8: 7111284.138 ops/s
+Iteration   9: 7145222.736 ops/s
+Iteration  10: 6344688.630 ops/s
+Iteration  11: 6656156.993 ops/s
+Iteration  12: 6792921.838 ops/s
+Iteration  13: 6848509.102 ops/s
+Iteration  14: 6796669.894 ops/s
+Iteration  15: 6865182.724 ops/s
+Iteration  16: 6819473.133 ops/s
+Iteration  17: 6849182.736 ops/s
+Iteration  18: 6841195.069 ops/s
+Iteration  19: 6867855.904 ops/s
+Iteration  20: 6862857.594 ops/s
+Iteration  21: 6849418.647 ops/s
+Iteration  22: 6487389.426 ops/s
+Iteration  23: 6534337.433 ops/s
+Iteration  24: 6757601.974 ops/s
+Iteration  25: 6732087.613 ops/s
+Iteration  26: 6775400.430 ops/s
+Iteration  27: 6762382.395 ops/s
+Iteration  28: 6726595.976 ops/s
+Iteration  29: 6750559.627 ops/s
+Iteration  30: 6770910.438 ops/s
+Iteration  31: 6742138.887 ops/s
+Iteration  32: 6741256.265 ops/s
+Iteration  33: 6679561.949 ops/s
+Iteration  34: 6251898.146 ops/s
+Iteration  35: 6495458.436 ops/s
+Iteration  36: 6789725.538 ops/s
+Iteration  37: 6783040.896 ops/s
+Iteration  38: 6724198.590 ops/s
+Iteration  39: 6786075.563 ops/s
+Iteration  40: 6720927.345 ops/s
+Iteration  41: 6747236.126 ops/s
+Iteration  42: 6744524.913 ops/s
+Iteration  43: 6755624.438 ops/s
+Iteration  44: 6705519.762 ops/s
+Iteration  45: 6812661.797 ops/s
+Iteration  46: 6309794.562 ops/s
+Iteration  47: 6617793.906 ops/s
+Iteration  48: 6752863.360 ops/s
+Iteration  49: 6753070.109 ops/s
+Iteration  50: 6589967.011 ops/s
 
 
 Result "bean.transform.unittest.jmhtest.Jmh.benchMarkSelmaMapper":
-  6254532.308 ±(99.9%) 66850.638 ops/s [Average]
-  (min, avg, max) = (5740291.567, 6254532.308, 6385420.093), stdev = 135041.597
-  CI (99.9%): [6187681.669, 6321382.946] (assumes normal distribution)
+  6788490.845 ±(99.9%) 105572.909 ops/s [Average]
+  (min, avg, max) = (6251898.146, 6788490.845, 7187582.431), stdev = 213262.498
+  CI (99.9%): [6682917.936, 6894063.754] (assumes normal distribution)
 
 
 # JMH version: 1.33
 # VM version: JDK 13.0.1, Java HotSpot(TM) 64-Bit Server VM, 13.0.1+9
 # VM invoker: E:\Program Files\Java\jdk-13.0.1\bin\java.exe
-# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=64392:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
+# VM options: -javaagent:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\lib\idea_rt.jar=61782:D:\PROGRAM FILES\JetBrains\IntelliJ IDEA 2019.2.4\bin -Dfile.encoding=UTF-8
 # Blackhole mode: full + dont-inline hint (default, use -Djmh.blackhole.autoDetect=true to auto-detect)
 # Warmup: 5 iterations, 1 s each
 # Measurement: 50 iterations, 5 s each
@@ -338,77 +338,77 @@ Result "bean.transform.unittest.jmhtest.Jmh.benchMarkSelmaMapper":
 # Benchmark mode: Throughput, ops/time
 # Benchmark: bean.transform.unittest.jmhtest.Jmh.benchMarkSpringBeanUtils
 
-# Run progress: 80.00% complete, ETA 00:04:16
+# Run progress: 80.00% complete, ETA 00:04:17
 # Fork: 1 of 1
 # Warmup Iteration   1: WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/C:/Users/Administrator/.m2/repository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Illegal reflective access by net.sf.cglib.core.ReflectUtils$1 (file:/E:/apache-maven-3.6.2-bin/localRepository/cglib/cglib/3.3.0/cglib-3.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
 WARNING: Please consider reporting this to the maintainers of net.sf.cglib.core.ReflectUtils$1
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-252467.224 ops/s
-# Warmup Iteration   2: 424610.672 ops/s
-# Warmup Iteration   3: 446087.480 ops/s
-# Warmup Iteration   4: 464798.673 ops/s
-# Warmup Iteration   5: 459869.294 ops/s
-Iteration   1: 458102.531 ops/s
-Iteration   2: 451322.322 ops/s
-Iteration   3: 469573.869 ops/s
-Iteration   4: 400141.750 ops/s
-Iteration   5: 455663.907 ops/s
-Iteration   6: 459836.140 ops/s
-Iteration   7: 456814.666 ops/s
-Iteration   8: 439004.173 ops/s
-Iteration   9: 429497.254 ops/s
-Iteration  10: 445206.355 ops/s
-Iteration  11: 427108.898 ops/s
-Iteration  12: 450963.804 ops/s
-Iteration  13: 440229.524 ops/s
-Iteration  14: 426563.428 ops/s
-Iteration  15: 445946.971 ops/s
-Iteration  16: 429623.671 ops/s
-Iteration  17: 452587.531 ops/s
-Iteration  18: 442807.344 ops/s
-Iteration  19: 437019.105 ops/s
-Iteration  20: 455190.742 ops/s
-Iteration  21: 457401.450 ops/s
-Iteration  22: 439433.069 ops/s
-Iteration  23: 426157.238 ops/s
-Iteration  24: 425325.436 ops/s
-Iteration  25: 454432.313 ops/s
-Iteration  26: 445006.716 ops/s
-Iteration  27: 455453.787 ops/s
-Iteration  28: 392498.815 ops/s
-Iteration  29: 455692.299 ops/s
-Iteration  30: 451106.951 ops/s
-Iteration  31: 445331.881 ops/s
-Iteration  32: 446005.594 ops/s
-Iteration  33: 444825.568 ops/s
-Iteration  34: 445440.917 ops/s
-Iteration  35: 452365.344 ops/s
-Iteration  36: 446273.451 ops/s
-Iteration  37: 454780.912 ops/s
-Iteration  38: 443067.847 ops/s
-Iteration  39: 433985.738 ops/s
-Iteration  40: 419454.216 ops/s
-Iteration  41: 449138.125 ops/s
-Iteration  42: 459274.731 ops/s
-Iteration  43: 455948.493 ops/s
-Iteration  44: 424000.678 ops/s
-Iteration  45: 431660.201 ops/s
-Iteration  46: 438165.981 ops/s
-Iteration  47: 416636.461 ops/s
-Iteration  48: 443668.262 ops/s
-Iteration  49: 442039.758 ops/s
-Iteration  50: 451726.218 ops/s
+290886.225 ops/s
+# Warmup Iteration   2: 444062.485 ops/s
+# Warmup Iteration   3: 483038.053 ops/s
+# Warmup Iteration   4: 318413.402 ops/s
+# Warmup Iteration   5: 455055.004 ops/s
+Iteration   1: 436548.863 ops/s
+Iteration   2: 467030.955 ops/s
+Iteration   3: 431795.342 ops/s
+Iteration   4: 461128.388 ops/s
+Iteration   5: 460432.305 ops/s
+Iteration   6: 442666.251 ops/s
+Iteration   7: 389049.068 ops/s
+Iteration   8: 443440.248 ops/s
+Iteration   9: 467529.889 ops/s
+Iteration  10: 460192.739 ops/s
+Iteration  11: 470610.022 ops/s
+Iteration  12: 476270.153 ops/s
+Iteration  13: 461276.881 ops/s
+Iteration  14: 449654.198 ops/s
+Iteration  15: 412403.167 ops/s
+Iteration  16: 427218.297 ops/s
+Iteration  17: 444238.213 ops/s
+Iteration  18: 434308.598 ops/s
+Iteration  19: 419447.153 ops/s
+Iteration  20: 409029.480 ops/s
+Iteration  21: 466800.355 ops/s
+Iteration  22: 433179.297 ops/s
+Iteration  23: 441435.454 ops/s
+Iteration  24: 479705.519 ops/s
+Iteration  25: 472737.988 ops/s
+Iteration  26: 453080.768 ops/s
+Iteration  27: 416476.235 ops/s
+Iteration  28: 430755.234 ops/s
+Iteration  29: 467783.544 ops/s
+Iteration  30: 443983.563 ops/s
+Iteration  31: 444952.347 ops/s
+Iteration  32: 459102.982 ops/s
+Iteration  33: 445048.568 ops/s
+Iteration  34: 464061.173 ops/s
+Iteration  35: 441894.265 ops/s
+Iteration  36: 466099.722 ops/s
+Iteration  37: 414093.138 ops/s
+Iteration  38: 391975.380 ops/s
+Iteration  39: 406696.571 ops/s
+Iteration  40: 423802.291 ops/s
+Iteration  41: 420571.666 ops/s
+Iteration  42: 429968.945 ops/s
+Iteration  43: 409047.295 ops/s
+Iteration  44: 436631.881 ops/s
+Iteration  45: 426736.670 ops/s
+Iteration  46: 433413.617 ops/s
+Iteration  47: 442397.043 ops/s
+Iteration  48: 395123.805 ops/s
+Iteration  49: 435497.447 ops/s
+Iteration  50: 448941.160 ops/s
 
 
 Result "bean.transform.unittest.jmhtest.Jmh.benchMarkSpringBeanUtils":
-  442390.049 ±(99.9%) 7501.901 ops/s [Average]
-  (min, avg, max) = (392498.815, 442390.049, 469573.869), stdev = 15154.211
-  CI (99.9%): [434888.148, 449891.950] (assumes normal distribution)
+  440125.283 ±(99.9%) 11278.856 ops/s [Average]
+  (min, avg, max) = (389049.068, 440125.283, 479705.519), stdev = 22783.847
+  CI (99.9%): [428846.427, 451404.138] (assumes normal distribution)
 
 
-# Run complete. Total time: 00:21:22
+# Run complete. Total time: 00:21:24
 
 REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
 why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
@@ -417,8 +417,8 @@ the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from th
 Do not assume the numbers tell you what you want them to tell.
 
 Benchmark                            Mode  Cnt        Score        Error  Units
-Jmh.benchMarkBeanManual             thrpt   50  6374588.507 ± 133766.011  ops/s
-Jmh.benchMarkBeanTransformsHandler  thrpt   50  5969898.616 ±  97995.781  ops/s
-Jmh.benchMarkMapStruct              thrpt   50  4502437.317 ±  78404.336  ops/s
-Jmh.benchMarkSelmaMapper            thrpt   50  6254532.308 ±  66850.638  ops/s
-Jmh.benchMarkSpringBeanUtils        thrpt   50   442390.049 ±   7501.901  ops/s
+Jmh.benchMarkBeanManual             thrpt   50  7159828.750 ±  97549.112  ops/s
+Jmh.benchMarkBeanTransformsHandler  thrpt   50  6891863.069 ± 131251.947  ops/s
+Jmh.benchMarkMapStruct              thrpt   50  5250084.203 ± 118260.604  ops/s
+Jmh.benchMarkSelmaMapper            thrpt   50  6788490.845 ± 105572.909  ops/s
+Jmh.benchMarkSpringBeanUtils        thrpt   50   440125.283 ±  11278.856  ops/s

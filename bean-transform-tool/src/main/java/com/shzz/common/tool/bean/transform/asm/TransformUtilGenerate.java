@@ -1,6 +1,5 @@
 package com.shzz.common.tool.bean.transform.asm;
-import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
-import com.googlecode.concurrentlinkedhashmap.Weighers;
+
 import com.shzz.common.tool.bean.transform.*;
 import com.shzz.common.tool.bean.transform.asm.strategy.*;
 import com.shzz.common.tool.code.BeanTransformException;
@@ -53,11 +52,11 @@ public class TransformUtilGenerate {
     );
 
     // google map，	http://code.google.com/p/concurrentlinkedhashmap，基于LRU 算法清除数据
-    private static ConcurrentLinkedHashMap<String, BeanTransform> cacheTransformLRU = new ConcurrentLinkedHashMap.Builder<String, BeanTransform>()
-            .maximumWeightedCapacity(CAPACITY)
-            .weigher(Weighers.singleton())
-            .listener(new EvictionListenerImpl<>("cacheTransformLRU"))
-            .build();
+//    private static ConcurrentLinkedHashMap<String, BeanTransform> cacheTransformLRU = new ConcurrentLinkedHashMap.Builder<String, BeanTransform>()
+//            .maximumWeightedCapacity(CAPACITY)
+//            .weigher(Weighers.singleton())
+//            .listener(new EvictionListenerImpl<>("cacheTransformLRU"))
+//            .build();
 
 
     /**
@@ -165,12 +164,12 @@ public class TransformUtilGenerate {
 //            cacheTransformLRU.put(hash, beanTransform);
 //        }
         UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
-
         BeanTransform beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
-
+        afterGenerate();
         return beanTransform;
     }
 
+    @Deprecated
     private static String toHex(byte[] digest) {
         String digestHexString = "";
         for (byte byteInfo : digest) {
@@ -186,6 +185,7 @@ public class TransformUtilGenerate {
         return digestHexString;
     }
 
+    @Deprecated
     private static StringBuilder extractInfo(Class classz) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(classz.getName());
@@ -240,7 +240,7 @@ public class TransformUtilGenerate {
                 fos = new FileOutputStream(classFile);
                 fos.write(bytes);
                 fos.close();
-                LOG.info("Generate classes:{} store into specific path : {} ", generateClassname, classFile.getParentFile().getPath());
+                // LOG.info("Generate classes:{} store into specific path : {} ", generateClassname, classFile.getParentFile().getPath());
             }
 
         } catch (IOException e) {

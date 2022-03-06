@@ -135,6 +135,7 @@ public class UnitTest {
         Inner[] inners=new Inner[1];
         Inner innerElement = new Inner();
 
+
         char rr = 9;
         Object ob = 9;
 
@@ -148,6 +149,12 @@ public class UnitTest {
         innerList.add(innerElement);
         innerList.add(innerElement);
         innerDoubleList.add(innerList);
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add("key is Inner Object,share with innerArray[0]");
+        Map<Inner, List<String>> mapKeyNotPrimitive = new HashMap<>();
+        mapKeyNotPrimitive.put(innerElement, stringList);
+        from.setMapKeyNotPrimitive(mapKeyNotPrimitive);
 
         inners[0]=innerElement;
 
@@ -231,18 +238,13 @@ public class UnitTest {
         CopyFrom from=createCopyFrom();
         int times = 1;
 
-        int loop = 10;
+        int loop = 10000000;
 
 //        CopyTo copyTo8 = new CopyTo();
 //        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
 
 
-
-        System.out.println(org.objectweb.asm.Type.getInternalName(char.class));
-
-
-
-        System.out.println(" cglib  BeanTransFormsHandler  springBeanUtils   Copier 转换拷贝bean 对比测试");
+        //   System.out.println(" cglib  BeanTransFormsHandler  springBeanUtils   Copier 转换拷贝bean 对比测试");
 
 
 
@@ -258,6 +260,7 @@ public class UnitTest {
 
         for (int lo = 0; lo < loop; ++lo) {
 
+            Thread.sleep(100);
 
             BeanTransform beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
 
@@ -284,21 +287,21 @@ public class UnitTest {
                         from,
                         CopyTo.class);
 
-                //  from.getInnerDoubleList().get(0).get(1).setPhaseName("修改phase");
+                from.getInnerDoubleList().get(0).get(1).setPhaseName("修改phase");
 
-                // System.out.println("修改 from ="+JSON.toJSONString(from));
-                // System.out.println("修改 copyTo2 ="+JSON.toJSONString(copyTo2));
-
-                //  System.out.println("from="+JSON.toJSONString(from));
-                // System.out.println("copyTo2="+JSON.toJSONString(copyTo2));
+//                 System.out.println("修改 from ="+JSON.toJSONString(from));
+//                 System.out.println("修改 copyTo2 ="+JSON.toJSONString(copyTo2));
+//
+//                  System.out.println("from="+JSON.toJSONString(from));
+//                 System.out.println("copyTo2="+JSON.toJSONString(copyTo2));
 
 
             }
 
 
             long time3 = System.nanoTime();
-            System.out.println("from=" + JSON.toJSONString(from));
-            System.out.println("beanTransFormsHandler  copyTo2=" + JSON.toJSONString(copyTo2));
+            //   System.out.println("from=" + JSON.toJSONString(from));
+            //   System.out.println("beanTransFormsHandler  copyTo2=" + JSON.toJSONString(copyTo2));
             // System.out.println("copyTo2.getIntThreeDems()[0][0][0]=="+copyTo2.getIntThreeDems()[0][0][0]);
 
 
@@ -306,7 +309,7 @@ public class UnitTest {
             long time4_1 = System.nanoTime();
             for (int K = 0; K < times; ++K) {
 
-                copyTo3 = complexTypeTransformManual.beanTransforms(from);
+                //  copyTo3 = complexTypeTransformManual.beanTransforms(from);
 
 
                 //  org.springframework.beans.BeanUtils.copyProperties(from, copyTo3);
@@ -320,7 +323,7 @@ public class UnitTest {
             //   System.out.println("manual  copyTo3=" + JSON.toJSONString(copyTo3));
             for (int K = 0; K < times; ++K) {
 
-                copyTo3 = new CopyTo();
+                // copyTo3 = new CopyTo();
                 //  org.apache.commons.beanutils.BeanUtils.copyProperties(from,copyTo3);
 
                 // 深度克隆拷贝
@@ -343,13 +346,13 @@ public class UnitTest {
 
             long time6 = System.nanoTime();
 
-            System.out.println("MapperStructConvert:" + JSON.toJSONString(copyTo5));
-
-
-            System.out.println(" 转换拷贝bean " + times + "次 总时间（毫秒）, " + ",cglib vs BeanTransFormsHandler vs manual " + "： "
-                    + (time2 - time1) / 1000000 + "   "
-                    + (time3 - time3_1) / 1000000 + "  " +
-                    (time4 - time4_1) / 1000000 + "  ");
+//            System.out.println("MapperStructConvert:" + JSON.toJSONString(copyTo5));
+//
+//
+//            System.out.println(" 转换拷贝bean " + times + "次 总时间（毫秒）, " + ",cglib vs BeanTransFormsHandler vs manual " + "： "
+//                    + (time2 - time1) / 1000000 + "   "
+//                    + (time3 - time3_1) / 1000000 + "  " +
+//                    (time4 - time4_1) / 1000000 + "  ");
 
 
 
@@ -359,12 +362,5 @@ public class UnitTest {
     }
 
 
-    public void tes(){
-        tes1();
-    }
 
-    public Object tes1(){
-        int a=3;
-        return a;
-    }
 }

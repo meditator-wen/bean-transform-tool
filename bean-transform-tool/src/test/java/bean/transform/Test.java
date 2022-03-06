@@ -1,5 +1,9 @@
 package bean.transform;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @Classname Test
  * @Description TODO
@@ -7,4 +11,6 @@ package bean.transform;
  * @Created by wen wang
  */
 public class Test {
+
+
 }

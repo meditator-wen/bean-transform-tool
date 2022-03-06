@@ -187,6 +187,16 @@ public class CopyFrom {
     private Map<String, Map<String,Inner>> twoLayerMap;
     private Map<String, List<Inner>> mapContainList;
 
+    public Map<Inner, List<String>> getMapKeyNotPrimitive() {
+        return mapKeyNotPrimitive;
+    }
+
+    public void setMapKeyNotPrimitive(Map<Inner, List<String>> mapKeyNotPrimitive) {
+        this.mapKeyNotPrimitive = mapKeyNotPrimitive;
+    }
+
+    private Map<Inner, List<String>> mapKeyNotPrimitive;
+
     public Map<String, List<Inner>> getMapContainList() {
         return mapContainList;
     }

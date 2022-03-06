@@ -212,6 +212,16 @@ public class CopyTo {
 
     private Map<String, List<Inner>> mapContainList;
 
+//    public Map<Inner, List<String>> getMapKeyNotPrimitive() {
+//        return mapKeyNotPrimitive;
+//    }
+//
+//    public void setMapKeyNotPrimitive(Map<Inner, List<String>> mapKeyNotPrimitive) {
+//        this.mapKeyNotPrimitive = mapKeyNotPrimitive;
+//    }
+
+//    private Map<Inner, List<String>> mapKeyNotPrimitive;
+
     public char[][][] getIntThreeDems() {
         return intThreeDems;
     }
@@ -270,7 +280,7 @@ public class CopyTo {
     private Integer carDirection = -1;
 
     // @BeanFieldInfo(userExtend = true, sourceFieldName = "commonCode", extensionObjectTransformImplClass = "bean.transform.CommonCodeEnumTransform")
-    private CommonCode commonCodeEnum;
+    // private CommonCode commonCodeEnum;
 
 
     public Integer getRoadDirection() {
@@ -349,13 +359,13 @@ public class CopyTo {
         this.ffs = ffs;
     }
 
-    public CommonCode getCommonCodeEnum() {
-        return commonCodeEnum;
-    }
-
-    public void setCommonCodeEnum(CommonCode commonCodeEnum) {
-        this.commonCodeEnum = commonCodeEnum;
-    }
+//    public CommonCode getCommonCodeEnum() {
+//        return commonCodeEnum;
+//    }
+//
+//    public void setCommonCodeEnum(CommonCode commonCodeEnum) {
+//        this.commonCodeEnum = commonCodeEnum;
+//    }
 
     public Integer getOtherDistrict() {
         return otherDistrict;
