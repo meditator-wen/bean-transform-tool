@@ -493,15 +493,17 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
                                 // mv.visitMethodInsn(Opcodes.INVOKESPECIAL,BEAN_TRANSFORM_NAME, PUBLIC_BEAN_TRANSFORM_METHOD_NAME, GENERIC_TRANSFORM_METHOD_DESC, false);
                             } else {
                                 LOG.warn("target class {} field: {} {}，autoTransform={}, 不满足自动转换条件,不予转换，可设置autoTransform=true 或者配置自定义转换类", targetClass.getSimpleName(), iterField.getType().getSimpleName(), iterField.getName(), resloveInfo.isAutoTransform());
-                                mv.visitVarInsn(Opcodes.ALOAD, localVariableMap.get(recursionFunctionVarNameAtStart).getIndex());
-                                mv.visitInsn(Opcodes.ACONST_NULL);
+//                                mv.visitVarInsn(Opcodes.ALOAD, localVariableMap.get(recursionFunctionVarNameAtStart).getIndex());
+//                                mv.visitInsn(Opcodes.ACONST_NULL);
+                                continue;
 
                             }
 
                         } else {
                             // 其他情况不予转换，null 常量入栈,比如Map 或者Collection 接口子类。不自动转换，用户可以自定义拓展类转换
                             LOG.warn("target class {} field: {} {}，userExtend={}, 不满足自动转换条件,不予转换，请实现拓展类转换", targetClass.getSimpleName(), iterField.getType().getSimpleName(), iterField.getName(), resloveInfo.isUserExtend());
-                            mv.visitInsn(Opcodes.ACONST_NULL);
+//                            mv.visitInsn(Opcodes.ACONST_NULL);
+                            continue;
 
                         }
 
@@ -519,8 +521,7 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
 
                     } else {
-                        // 其他情况不予转换，null 常量入栈
-                        // 其他情况不予转换，null 常量入栈,比如Map 或者Collection 接口子类。不自动转换，用户可以自定义拓展类转换
+
                         LOG.warn("自动转换模式不兼容：(调用源类 {} 字段{} ,目标类 {} 字段 {} ),请自定义拓展类转换",
                                 sourceBeanClass.getSimpleName(),
                                 resloveInfo.getSourceFieldName(),
@@ -534,8 +535,8 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
                 mv.visitLabel(fieldBranchExitLabel[fieldOffset]);
             } else {
-                // 调用方法信息不足，无法插入的get 方法字节码
-                LOG.warn("调用源类 {} 字段{} get方法信息不满足要求，无法插入的get 方法字节码 给目标类 {} 字段 {} 赋值",
+
+                LOG.warn("调用源类 {} 字段{} ，目标类 {} 字段 {}， 无法转换，忽略",
                         sourceBeanClass.getSimpleName(),
                         resloveInfo.getSourceFieldName(),
                         targetClass.getSimpleName(),

@@ -212,6 +212,10 @@ public class UnitTest {
         mapContainListField.put("fieldMapwithList", mapContainListList);
         from.setMapContainList(mapContainListField);
 
+        from.setObject(new Object());
+
+        from.setJsonObject(JSON.parseObject(JSON.toJSONString(mapContainListInnerElement)));
+
         return from;
     }
 
@@ -238,7 +242,7 @@ public class UnitTest {
         CopyFrom from=createCopyFrom();
         int times = 1;
 
-        int loop = 10000000;
+        int loop = 1;
 
 //        CopyTo copyTo8 = new CopyTo();
 //        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
@@ -290,7 +294,7 @@ public class UnitTest {
                 from.getInnerDoubleList().get(0).get(1).setPhaseName("修改phase");
 
 //                 System.out.println("修改 from ="+JSON.toJSONString(from));
-//                 System.out.println("修改 copyTo2 ="+JSON.toJSONString(copyTo2));
+                System.out.println("修改 copyTo2 =" + JSON.toJSONString(copyTo2));
 //
 //                  System.out.println("from="+JSON.toJSONString(from));
 //                 System.out.println("copyTo2="+JSON.toJSONString(copyTo2));

@@ -1,5 +1,6 @@
 package bean.transform.unittest.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.shzz.common.tool.bean.BeanFieldInfo;
 import com.shzz.common.tool.code.CommonCode;
 
@@ -138,6 +139,26 @@ public class CopyTo {
      * 阈值序列号
      **/
     private Inner inner;
+
+    public JSONObject getJsonObject() {
+        return jsonObject;
+    }
+
+    public void setJsonObject(JSONObject jsonObject) {
+        this.jsonObject = jsonObject;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
+    }
+
+    private JSONObject jsonObject;
+    private Object object;
+
     //
     @BeanFieldInfo(sourceFieldName = "innerDoubleList")
     Inner[][] innerarray;

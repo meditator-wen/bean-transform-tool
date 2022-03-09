@@ -51,12 +51,6 @@ public class TransformUtilGenerate {
             Type.getType(Class.class)
     );
 
-    // google map，	http://code.google.com/p/concurrentlinkedhashmap，基于LRU 算法清除数据
-//    private static ConcurrentLinkedHashMap<String, BeanTransform> cacheTransformLRU = new ConcurrentLinkedHashMap.Builder<String, BeanTransform>()
-//            .maximumWeightedCapacity(CAPACITY)
-//            .weigher(Weighers.singleton())
-//            .listener(new EvictionListenerImpl<>("cacheTransformLRU"))
-//            .build();
 
 
     /**
@@ -164,8 +158,13 @@ public class TransformUtilGenerate {
 //            cacheTransformLRU.put(hash, beanTransform);
 //        }
         UniversalClassTypeStrategy universalClassTypeStrategy = new UniversalClassTypeStrategy();
-        BeanTransform beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
-        afterGenerate();
+        BeanTransform beanTransform = null;
+        try {
+            beanTransform = universalClassTypeStrategy.generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, actualGenericType);
+        } finally {
+            afterGenerate();
+        }
+
         return beanTransform;
     }
 

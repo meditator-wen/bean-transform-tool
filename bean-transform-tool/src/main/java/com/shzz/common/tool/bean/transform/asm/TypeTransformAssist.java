@@ -30,26 +30,27 @@ public class TypeTransformAssist {
     private static final Logger LOG = LoggerFactory.getLogger("ResloverMetaInfo");
 
     public static boolean isPrimitiveType(Class<?> type) {
-        boolean flag = type.isAssignableFrom(int.class) || type.isAssignableFrom(long.class)
-                || type.isAssignableFrom(double.class)
-                || type.isAssignableFrom(float.class)
-                || type.isAssignableFrom(boolean.class)
-                || type.isAssignableFrom(short.class) || type.isAssignableFrom(char.class)
-                || type.isAssignableFrom(String.class)
-                || type.isAssignableFrom(byte.class);
+        boolean flag = (type == int.class) || (type == long.class)
+                || (type == double.class)
+                || (type == float.class)
+                || (type == boolean.class)
+                || (type == short.class) || (type == char.class)
+                || (type == String.class)
+                || (type == byte.class);
 
         return flag;
 
     }
 
     public static boolean referenceType(Class<?> type) {
-        boolean flag = type.isAssignableFrom(int.class) || type.isAssignableFrom(long.class)
-                || type.isAssignableFrom(double.class)
-                || type.isAssignableFrom(float.class)
-                || type.isAssignableFrom(boolean.class)
-                || type.isAssignableFrom(short.class) || type.isAssignableFrom(char.class)
-                || type.isAssignableFrom(byte.class);
-
+        boolean flag = ((type == int.class)
+                || (type == long.class)
+                || (type == double.class)
+                || (type == float.class)
+                || (type == boolean.class)
+                || (type == short.class)
+                || (type == char.class)
+                || (type == byte.class));
         return !flag;
 
     }
@@ -557,13 +558,13 @@ public class TypeTransformAssist {
     }
 
     public static boolean isWrapsType(Class<?> type) {
-        boolean flag = type.isAssignableFrom(Integer.class) || type.isAssignableFrom(Long.class)
-                || type.isAssignableFrom(Double.class)
-                || type.isAssignableFrom(Float.class)
-                || type.isAssignableFrom(Boolean.class)
-                || type.isAssignableFrom(Short.class)
-                || type.isAssignableFrom(Character.class)
-                || type.isAssignableFrom(Byte.class);
+        boolean flag = (Integer.class == type) || (Long.class == type)
+                || (Double.class == type)
+                || (Float.class == type)
+                || (Boolean.class == type)
+                || (Short.class == type)
+                || (Character.class == type)
+                || (Byte.class == type);
 
         return flag;
 

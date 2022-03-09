@@ -1,6 +1,7 @@
 package bean.transform.unittest.entity;
 
 
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -126,6 +127,25 @@ public class CopyFrom {
      **/
 
     private Integer carDirection =-1;
+
+    public JSONObject getJsonObject() {
+        return jsonObject;
+    }
+
+    public void setJsonObject(JSONObject jsonObject) {
+        this.jsonObject = jsonObject;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
+    }
+
+    private JSONObject jsonObject;
+    private Object object;
 
     public Inner[][] getInnerarray() {
         return innerarray;
