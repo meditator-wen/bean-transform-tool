@@ -30,34 +30,68 @@ import static com.shzz.common.tool.bean.transform.asm.strategy.MapTypeStrategy.w
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Opcodes.ACONST_NULL;
 
+
 /**
- * @Classname SupplementStrategy
- * @Description {@link CollectionTypeStrategy}增补策略，处理N 层 Collection，内部可嵌套Map  Collection 数组等任意情况
- * @Date 2022/2/15 21:29
- * @Created by wen wang
+ * {@link CollectionTypeStrategy}增补策略，处理N 层 Collection，内部可嵌套Map  Collection 数组等任意情况
+ *
+ * @author wen wang
+ * @date 2022/2/15 21:29
  */
 public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("SupplementStrategy");
 
+    /**
+     * 上下文
+     */
     private AbstractContext context;
 
 
+    /**
+     * 当地序列
+     */
     public static volatile ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
 
 
+    /**
+     * 当地目标集合类型
+     */
     private ThreadLocal<Type> targetCollectionType_Local = new ThreadLocal<>();
+    /**
+     * 目标实际类型地方
+     */
     private ThreadLocal<Type> targetActualType_Local = new ThreadLocal<>();
 
+    /**
+     * 源集合类型地方
+     */
     private ThreadLocal<Type> sourceCollectionType_Local = new ThreadLocal<>();
+    /**
+     * 源实际类型地方
+     */
     private ThreadLocal<Type> sourceActualType_Local = new ThreadLocal<>();
-    //基于源类Collection字段和目标类Collection 字段 生成的转换的类原始类名和internal 类名（包路径中"." 替换成 "/" 转成）
+    /**
+     * 内部名称
+     *///基于源类Collection字段和目标类Collection 字段 生成的转换的类原始类名和internal 类名（包路径中"." 替换成 "/" 转成）
     private String internalName;
+    /**
+     * 生成类名
+     */
     private String generateClassname;
 
-    //基于源类Collection字段和目标类Collection  字段 生成的转换的类描述信息
+    /**
+     * 元素变换类描述
+     *///基于源类Collection字段和目标类Collection  字段 生成的转换的类描述信息
     private String elementTransformClassDescription;
 
 
+    /**
+     * 收集补充策略
+     *
+     * @param context 上下文
+     */
     public CollectionSupplementStrategy(AbstractContext context) {
         this.context = context;
         // 如果同一线程再次创建CollectionTypeSupplenemtStrategy 序号累加
@@ -71,6 +105,11 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
     }
 
 
+    /**
+     * 得到业主类内部名称
+     *
+     * @return {@link String}
+     */
     @Override
     protected String getOwnerClassInternalName() {
         String generateClassname = context.geneClassName() + sequence_Local.get().toString();
@@ -79,6 +118,15 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
     }
 
 
+    /**
+     * 基因指令
+     *
+     * @param extensTransformImplClassWriter extens变换impl类作家
+     * @param targetType                     目标类型
+     * @param sourceBeanType                 源bean类型
+     * @param newMethodPrefix                新方法前缀
+     * @throws Exception 异常
+     */
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
         MethodVisitor mv = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
@@ -140,10 +188,9 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
             // 源集合类size
             mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(Collection.class));
             mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Collection.class), "size", "()I", true);
-
             // 避免扩容影响效率，初始大小设置为源对象(Collection 或者array) size的两倍
-            mv.visitLdcInsn(Integer.valueOf(2));
-            mv.visitInsn(Opcodes.IMUL);
+            mv.visitLdcInsn(Integer.valueOf(1));
+            mv.visitInsn(Opcodes.ISHL);
             mv.visitMethodInsn(Opcodes.INVOKESPECIAL, org.objectweb.asm.Type.getInternalName(targetClasImpl), BeanTransformsMethodAdapter.INIT_METHOD_NAME, "(I)V", false);
 
         }
@@ -232,6 +279,16 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 基因转换
+     *
+     * @param sourceBeanType    源bean类型
+     * @param targetType        目标类型
+     * @param generateClassname 生成类名
+     * @param fieldNamePrefix   字段名称前缀
+     * @return {@link Map}
+     * @throws Exception 异常
+     */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
 
@@ -303,15 +360,28 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 将字段名
+     *
+     * @return {@link String}
+     */
     private String transformFieldName() {
         return context.getIdentify() + EXTEND_IMPL_FIELD_NAME_SUFFIX + "_element";
     }
 
+    /**
+     * 集合变换字段名
+     *
+     * @return {@link String}
+     */
     private String collectionTransformFieldName() {
         return context.getIdentify() + EXTEND_IMPL_FIELD_NAME_SUFFIX;
     }
 
 
+    /**
+     * 明确线程本地
+     */
     @Override
     public void clearThreadLocal() {
         super.clearThreadLocal();
@@ -321,6 +391,14 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
         sourceActualType_Local.remove();
     }
 
+    /**
+     * 战略匹配
+     *
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return boolean
+     * @throws Exception 异常
+     */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
         boolean match = false;

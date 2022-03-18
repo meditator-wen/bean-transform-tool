@@ -1,11 +1,6 @@
 package com.shzz.common.tool.bean.transform.asm;
 
-/**
- * @Classname BeanTransformsMethodAdapterRefactor
- * @Description TODO
- * @Date 2021/12/6 10:04
- * @Created by wen wang
- */
+
 
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
 import com.shzz.common.tool.bean.transform.SystemProperties;
@@ -28,60 +23,170 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.*;
 import static org.objectweb.asm.Opcodes.ASM9;
 
+/**
+ * bean转换方法适配器
+ *
+ * @author wen wang
+ * @date 2021/12/6 10:04
+ */
 public class BeanTransformsMethodAdapter extends MethodVisitor {
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("BeanTransformsMethodAdapter");
 
+    /**
+     * init方法名称
+     */
     public static final String INIT_METHOD_NAME = "<init>";
+    /**
+     * init方法描述符
+     */
     public static final String INIT_METHOD_DESCRIPTOR = "()V";
+    /**
+     * 局部变量前缀
+     */
     public static final String LOCAL_VAR_PREFIX = "localVar_";
+    /**
+     * 本地源var名字
+     */
     public static final String LOCAL_SOURCE_CAST_VAR_NAME = "localVar_sourceCast";
 
+    /**
+     * 自我对象var抵消
+     */
     public static final int SELF_OBJECT_VAR_OFFSET = 0;
+    /**
+     * 扩展转换接口名称
+     */
     public static final String EXTENSION_TRANSFORM_INTERFACE_NAME = org.objectweb.asm.Type.getInternalName(ExtensionObjectTransform.class);
+    /**
+     * 扩展转换接口desc
+     */
     public static final String EXTENSION_TRANSFORM_INTERFACE_DESC = org.objectweb.asm.Type.getDescriptor(ExtensionObjectTransform.class);
+    /**
+     * bean转换desc
+     */
     public static final String BEAN_TRANSFORM_DESC = org.objectweb.asm.Type.getDescriptor(BeanTransFormsHandler.class);
+    /**
+     * 豆变换名字
+     */
     public static final String BEAN_TRANSFORM_NAME = org.objectweb.asm.Type.getInternalName(BeanTransFormsHandler.class);
+    /**
+     * 字段类型desc
+     */
     public static final String FIELD_TYPE_DESC = org.objectweb.asm.Type.getDescriptor(Class.class);
+    /**
+     * 数据类型内部名称
+     */
     public static final String DATA_TYPE_INTERNAL_NAME = org.objectweb.asm.Type.getInternalName(Date.class);
+    /**
+     * 数据类型init方法描述符
+     */
     public static final String DATA_TYPE_INIT_METHOD_DESCRIPTOR = "(J)V";
+    /**
+     * 扩展变换方法名称
+     */
     public static final String EXTENSION_TRANSFORM_METHOD_NAME = "extensionObjectTransform";
+    /**
+     * bean转换方法名字
+     */
     public static final String BEAN_TRANSFORM_METHOD_NAME = "beanTransforms";
+    /**
+     * 公共bean转换方法名字
+     */
     public static final String PUBLIC_BEAN_TRANSFORM_METHOD_NAME = "beanTransform";
+    /**
+     * 扩展转换方法desc
+     */
     public static final String EXTENSION_TRANSFORM_METHOD_DESC = "(Ljava/lang/Object;Z)Ljava/lang/Object;";
+    /**
+     * bean转换方法desc
+     */
     public static final String BEAN_TRANSFORM_METHOD_DESC = "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;";
+    /**
+     * 通用转换方法desc
+     */
     public static final String GENERIC_TRANSFORM_METHOD_DESC = "<S:Ljava/lang/Object;T:Ljava/lang/Object;>(Ljava/lang/Class<TS;>;TS;Ljava/lang/Class<TT;>;)TS;";
+    /**
+     * 源bean类
+     */
     private final Class<?> sourceBeanClass;
+    /**
+     * 目标类
+     */
     private final Class<?> targetClass;
+    /**
+     * 深拷贝
+     */
     private final boolean isDeepCopy;
+    /**
+     * 生成类名
+     */
     private final String generateClassname;
+    /**
+     * 允许基类型互变
+     */
     private final boolean permitBaseTypeInterconvert;
     /**
-     * varOffset 变量编号，包含 this 变量以及三个方法参数变量，beanTransforms方法内每次创建变量时该值累加，初始值4
-     * public abstract Object beanTransforms(Class sourceBeanClass,Object sourceBeanObject, Class targetClass) throws Exception;
+     * var抵消
      */
     private volatile int varOffset = 4;
 
     /**
-     * 递归调用 visitCodeRecursion
+     * 递归次数
      */
     private int recursionTimes = 1;
 
+    /**
+     * castsource bean变量信息
+     */
     LocalVariableInfo castsourceBeanVariableInfo = null;
 
     // 录方法体中创建的变量列表信息，method  code 属性 中的LocalVariableTable 属性，具体请查看java虚拟机说明
     // visitCode 方法会遍历该map并写入以下属性
 
+    /**
+     * 局部变量映射
+     */
     private final Map<String, LocalVariableInfo> localVariableMap = new ConcurrentHashMap<>();
 
+    /**
+     * 方法bean转换标签开始
+     */
     private final Label startOfMethodBeanTransformsLable = new Label();
+    /**
+     * 年底bean标签转换方法
+     */
     private final Label endOfMethodBeanTransformsLable = new Label();
+    /**
+     * 改变开始
+     */
     Label transformStart = new Label();
+    /**
+     * 现场过程终止
+     */
     private final Label fieldProcessTerminate = new Label();
 
+    /**
+     * recurision出口标签
+     */
     private Map<Integer, Label> recurisionExitLabel = new ConcurrentHashMap<>(64);
-    // 跳转的字段位置
+    /**
+     * 下一个标签跳
+     */// 跳转的字段位置
     private Map<Integer, Label> nextFieldJumpLabel = new ConcurrentHashMap<>(64);
 
+    /**
+     * bean转换方法适配器
+     *
+     * @param mv                          mv
+     * @param sourceBeanClass             源bean类
+     * @param targetClass                 目标类
+     * @param isDeepCopy                  深拷贝
+     * @param permitWrapsTypeInterconvert 允许包裹式互变
+     * @param generateClassname           生成类名
+     */
     public BeanTransformsMethodAdapter(MethodVisitor mv,
                                        Class<?> sourceBeanClass,
                                        Class<?> targetClass,
@@ -99,6 +204,13 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
     }
 
 
+    /**
+     * 找到源对象索引
+     *
+     * @param recursions             递归
+     * @param tempSourceObjectVarNum 临时var num源对象
+     * @return int
+     */
     public int findSourceObjectIndex(int recursions, int tempSourceObjectVarNum) {
         //第一次调用取beanTransforms方法参数的sourceObject 对象变量，变量编号为1
         // public abstract Object beanTransforms(Class sourceBeanClass,Object sourceBeanObject, Class targetClass) throws Exception;
@@ -114,6 +226,16 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
     }
 
+    /**
+     * 新临时变量
+     *
+     * @param sourceClassInternalName 源类内部名称
+     * @param resloveInfo             解决信息
+     * @param startVarOffSetRecursion 开始var设置递归
+     * @param preSourceObjectVarNum   var num pre源对象
+     * @param recursions              递归
+     * @return {@link LocalVariableInfo}
+     */
     private synchronized LocalVariableInfo newTempVar(String sourceClassInternalName,
                                                       ResloveInfo resloveInfo,
                                                       int startVarOffSetRecursion,
@@ -142,7 +264,14 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
     }
 
 
-
+    /**
+     * 递归访问代码
+     *
+     * @param sourceBeanClass        源bean类
+     * @param targetClass            目标类
+     * @param recursions             递归
+     * @param tempSourceObjectVarNum 临时var num源对象
+     */
     private synchronized void visitCodeRecursion(Class<?> sourceBeanClass,
                                                  Class<?> targetClass,
                                                  int recursions,
@@ -554,6 +683,9 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
     }
 
+    /**
+     * 访问代码
+     */
     @Override
     public void visitCode() {
         /**
@@ -657,6 +789,12 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
     }
 
+    /**
+     * 访问当地varivale
+     *
+     * @param localVariableMap 局部变量映射
+     * @param mv               mv
+     */
     public static void visitLocalVarivale(Map<String, LocalVariableInfo> localVariableMap, MethodVisitor mv) {
 
         // 通过字节码写入变量，（除了异常4个方法参数，代码提中缓存的变量也记录在map 中）
@@ -675,119 +813,261 @@ public class BeanTransformsMethodAdapter extends MethodVisitor {
 
     }
 
+    /**
+     * 访问框架
+     *
+     * @param type     类型
+     * @param numLocal num当地
+     * @param local    当地
+     * @param numStack num堆栈
+     * @param stack    堆栈
+     */
     @Override
     public void visitFrame(int type, int numLocal, Object[] local, int numStack, Object[] stack) {
         super.visitFrame(type, numLocal, local, numStack, stack);
     }
 
+    /**
+     * 访问仍然
+     *
+     * @param opcode 操作码
+     */
     @Override
     public void visitInsn(int opcode) {
         super.visitInsn(opcode);
     }
 
+    /**
+     * 访问int仍然
+     *
+     * @param opcode  操作码
+     * @param operand 操作数
+     */
     @Override
     public void visitIntInsn(int opcode, int operand) {
         super.visitIntInsn(opcode, operand);
     }
 
+    /**
+     * 访问var仍然
+     *
+     * @param opcode 操作码
+     * @param var    var
+     */
     @Override
     public void visitVarInsn(int opcode, int var) {
         super.visitVarInsn(opcode, var);
     }
 
+    /**
+     * 访问仍然跳
+     *
+     * @param opcode 操作码
+     * @param label  标签
+     */
     @Override
     public void visitJumpInsn(int opcode, Label label) {
         super.visitJumpInsn(opcode, label);
     }
 
+    /**
+     * 访问标签
+     *
+     * @param label 标签
+     */
     @Override
     public void visitLabel(Label label) {
         super.visitLabel(label);
     }
 
+    /**
+     * 访问ldc仍然
+     *
+     * @param value 价值
+     */
     @Override
     public void visitLdcInsn(Object value) {
         super.visitLdcInsn(value);
     }
 
+    /**
+     * 访问iinc仍然
+     *
+     * @param var       var
+     * @param increment 增量
+     */
     @Override
     public void visitIincInsn(int var, int increment) {
         super.visitIincInsn(var, increment);
     }
 
+    /**
+     * 访问局部变量
+     *
+     * @param name       名字
+     * @param descriptor 描述符
+     * @param signature  签名
+     * @param start      开始
+     * @param end        结束
+     * @param index      指数
+     */
     @Override
     public void visitLocalVariable(String name, String descriptor, String signature, Label start, Label end, int index) {
 
 
     }
 
+    /**
+     * 访问马克斯
+     *
+     * @param maxStack  马克斯堆栈
+     * @param maxLocals 马克斯当地人
+     */
     @Override
     public void visitMaxs(int maxStack, int maxLocals) {
         mv.visitMaxs(maxStack, maxLocals);
 
     }
 
+    /**
+     * 访问结束
+     */
     @Override
     public void visitEnd() {
         mv.visitEnd();
     }
 
+    /**
+     * 建立var抵消
+     *
+     * @param varOffset var抵消
+     */
     public synchronized void setVarOffset(int varOffset) {
         this.varOffset = varOffset;
     }
 
+    /**
+     * get方法访问
+     *
+     * @return {@link MethodVisitor}
+     */
     public MethodVisitor getMethodVisitor() {
         return mv;
     }
 
+    /**
+     * 得到源bean类
+     *
+     * @return {@link Class}
+     */
     public Class<?> getSourceBeanClass() {
         return sourceBeanClass;
     }
 
+    /**
+     * 得到目标类
+     *
+     * @return {@link Class}
+     */
     public Class<?> getTargetClass() {
         return targetClass;
     }
 
+    /**
+     * 深拷贝
+     *
+     * @return boolean
+     */
     public boolean isDeepCopy() {
         return isDeepCopy;
     }
 
+    /**
+     * 获取生成类名
+     *
+     * @return {@link String}
+     */
     public String getGenerateClassname() {
         return generateClassname;
     }
 
+    /**
+     * 是允许基类型互换吗
+     *
+     * @return boolean
+     */
     public boolean isPermitBaseTypeInterconvert() {
         return permitBaseTypeInterconvert;
     }
 
+    /**
+     * 得到var抵消
+     *
+     * @return int
+     */
     public int getVarOffset() {
         return varOffset;
     }
 
+    /**
+     * 递归乘以
+     *
+     * @return int
+     */
     public int getRecursionTimes() {
         return recursionTimes;
     }
 
+    /**
+     * 得到局部变量映射
+     *
+     * @return {@link Map}
+     */
     public Map<String, LocalVariableInfo> getLocalVariableMap() {
         return localVariableMap;
     }
 
+    /**
+     * 开始bean标签转换方法
+     *
+     * @return {@link Label}
+     */
     public Label getStartOfMethodBeanTransformsLable() {
         return startOfMethodBeanTransformsLable;
     }
 
+    /**
+     * 方法bean转换结束标签
+     *
+     * @return {@link Label}
+     */
     public Label getEndOfMethodBeanTransformsLable() {
         return endOfMethodBeanTransformsLable;
     }
 
+    /**
+     * 改变开始
+     *
+     * @return {@link Label}
+     */
     public Label getTransformStart() {
         return transformStart;
     }
 
+    /**
+     * 得到现场流程终止
+     *
+     * @return {@link Label}
+     */
     public Label getFieldProcessTerminate() {
         return fieldProcessTerminate;
     }
 
+    /**
+     * 得到recurision出口标签
+     *
+     * @return {@link Map}
+     */
     public Map<Integer, Label> getRecurisionExitLabel() {
         return recurisionExitLabel;
     }

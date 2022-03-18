@@ -35,38 +35,83 @@ import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.*;
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 
+
 /**
- * @Classname UniversalClassTypeStrategy
- * @Description TODO
- * @Date 2022/1/15 10:04
- * @Created by wen wang
+ * 通用类类型策略
+ *
+ * @author wen wang
+ * @date 2022/1/15 10:04
  */
 public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
 
+    /**
+     * 上下文
+     */
     AbstractContext context;
 
+    /**
+     * 通用类类型策略
+     *
+     * @param context 上下文
+     */
     public UniversalClassTypeStrategy(AbstractContext context){
         this.context=context;
     }
 
+    /**
+     * 通用类类型策略
+     */
     public UniversalClassTypeStrategy(){
 
     }
 
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("UniversalClassTypeStrategy");
 
+    /**
+     * 扩展对象变换映射
+     */
     private final Map<String, Map<String, ExtensionObjectTransform>> extensionObjectTransformMap = new ConcurrentHashMap<>();
+    /**
+     * 豆反式形式处理程序映射
+     */
     private final Map<String, Map<String, BeanTransFormsHandler>> beanTransFormsHandlerMap = new ConcurrentHashMap<>();
+    /**
+     * 领域类图
+     */
     private final Map<String, Map<String, Class>> fieldClassMap = new ConcurrentHashMap<>();
+    /**
+     * 策略
+     */
     private static final Map<StrategyMode, Class<? extends AbstractComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
-    // cache 缓存 targetClass 实现了 BeanTransFormsHandler 转换对象的字段信息
+    /**
+     * 缓存
+     */// cache 缓存 targetClass 实现了 BeanTransFormsHandler 转换对象的字段信息
     // key 是targetClass fullname + field name ,在BeanTransformsMethodAdapter 使用cache。
     private static final Map<String, Boolean> cache = new ConcurrentHashMap<>();
 
+    /**
+     * 豆反式形式处理程序吗
+     *
+     * @param key 关键
+     * @return boolean
+     */
     public static boolean hasBeanTransFormsHandler(String key) {
         return cache.containsKey(key) && cache.get(key);
     }
 
+    /**
+     * 基因转换
+     *
+     * @param sourceBeanType    源bean类型
+     * @param targetType        目标类型
+     * @param generateClassname 生成类名
+     * @param fieldNamePrefix   字段名称前缀
+     * @return {@link Map}
+     * @throws Exception 异常
+     */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
 
@@ -85,11 +130,17 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
         }
 
 
-
-
     }
 
 
+    /**
+     * 战略匹配
+     *
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return boolean
+     * @throws Exception 异常
+     */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
         boolean flag=false;
@@ -105,6 +156,18 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
     }
 
 
+    /**
+     * 生成bean转换impl类
+     *
+     * @param sourceBeanClass            源bean类
+     * @param targetClass                目标类
+     * @param generateClassname          生成类名
+     * @param isDeepCopy                 深拷贝
+     * @param permitBaseTypeInterconvert 允许基类型互变
+     * @param extendsTransformList       扩展转换列表
+     * @return {@link byte[]}
+     * @throws Exception 异常
+     */
     public <S, T> byte[] generateBeanTransformsImplClass(Class<S> sourceBeanClass, Class<T> targetClass, String generateClassname, boolean isDeepCopy,
                                                          boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
 
@@ -234,6 +297,18 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
 
     }
 
+    /**
+     * 生成
+     *
+     * @param sourceBeanClass            源bean类
+     * @param targetClass                目标类
+     * @param isDeepCopy                 深拷贝
+     * @param permitBaseTypeInterconvert 允许基类型互变
+     * @param extendsTransformList       扩展转换列表
+     * @param actualGenericType          实际泛型类型
+     * @return {@link BeanTransform}
+     * @throws Exception 异常
+     */
     public BeanTransform generate(Class sourceBeanClass, Class targetClass, boolean isDeepCopy, boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList, Type[] actualGenericType) throws Exception {
         /**
          * @description:
@@ -384,7 +459,6 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
             fieldClassMap.put(generateClassname, innerFieldClassMap);
             beanTransFormsHandlerMap.put(generateClassname, innerBeanTransFormsHandlerMap);
         }
-
 
 
         /**

@@ -27,8 +27,17 @@ import java.util.Objects;
  */
 public class TypeTransformAssist {
 
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("ResloverMetaInfo");
 
+    /**
+     * 是原始类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean isPrimitiveType(Class<?> type) {
         boolean flag = (type == int.class) || (type == long.class)
                 || (type == double.class)
@@ -42,6 +51,12 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 引用类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean referenceType(Class<?> type) {
         boolean flag = ((type == int.class)
                 || (type == long.class)
@@ -55,17 +70,37 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 是基本类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean isBaseType(Class<?> type) {
         boolean flag = isWrapsType(type) || isPrimitiveType(type);
         return flag;
 
     }
 
+    /**
+     * istiny
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean istiny(Class type) {
         return ((char.class == type) || (byte.class == type)
                 || (short.class == type) || (int.class == type) || (boolean.class == type));
     }
 
+    /**
+     * 字符串经
+     *
+     * @param warpType 经类型
+     * @param mv       mv
+     * @return boolean
+     * @throws Exception 异常
+     */
     private static boolean stringToWarp(Class warpType, MethodVisitor mv) throws Exception {
 
         if (isWrapsOrStringType(warpType) && (warpType != String.class)) {
@@ -97,6 +132,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 字符串数
+     *
+     * @param numberType 数字类型
+     * @param mv         mv
+     * @return boolean
+     * @throws Exception 异常
+     */
     private static boolean stringToNumber(Class numberType, MethodVisitor mv) throws Exception {
         if (isPrimitiveType(numberType)) {
             //先转换为对应的包装类型,调用 包装类静态方法 valueOf(String s) 转换。
@@ -114,6 +157,14 @@ public class TypeTransformAssist {
     }
 
 
+    /**
+     * 原始,原始
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @throws Exception 异常
+     */
     protected static void primitiveToPrimitive(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         // 处理原始类型之间强转 ,注意，调用该方法前源类对象的字段值要求已经入栈
         if ((!isPrimitiveType(sourceClass)) || (!isPrimitiveType(targetClass))) {
@@ -260,6 +311,12 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 类型图
+     *
+     * @param key 关键
+     * @return {@link Class}
+     */
     public static Class typeMap(Class key) {
         if (key == byte.class) {
             return Byte.class;
@@ -296,6 +353,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 原始包装或字符串
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @throws Exception 异常
+     */
     protected static void wrapsOrStringToPrimitive(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         /**
          * @description: 本函数只处理 包装类或者String 类型到基础类型的转换
@@ -358,7 +423,6 @@ public class TypeTransformAssist {
                 }
 
 
-
             }
 
         } else {
@@ -370,6 +434,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 原始包装或字符串
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @throws Exception 异常
+     */
     protected static void primitiveToWrapsOrString(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         /**
          * @description: 本函数处理原始类型到包装类转换 ,注意，调用该方法前源类对象的字段值要求已经入栈,且是原始类型
@@ -421,6 +493,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 包装包装或字符串或字符串
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @throws Exception 异常
+     */
     protected static void wrapsOrStringToWrapsOrString(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         /**
          * @description: 该方法只处理包装类或者String 类之间的相互转换
@@ -456,6 +536,15 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 基类型处理字节码
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @param isDeepyCopy deepy复制
+     * @throws Exception 异常
+     */
     public static void baseTypeProcessByteCode(Class targetClass, Class sourceClass, MethodVisitor mv, boolean isDeepyCopy) throws Exception {
 
         /**
@@ -551,12 +640,24 @@ public class TypeTransformAssist {
     }
 
 
+    /**
+     * 包装还是字符串类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean isWrapsOrStringType(Class<?> type) {
         boolean flag = isWrapsType(type) || (type.isAssignableFrom(String.class));
         return flag;
 
     }
 
+    /**
+     * 包装类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean isWrapsType(Class<?> type) {
         boolean flag = (Integer.class == type) || (Long.class == type)
                 || (Double.class == type)
@@ -571,6 +672,15 @@ public class TypeTransformAssist {
     }
 
 
+    /**
+     * 源领域过程
+     *
+     * @param targetFieldName 目标字段名称
+     * @param sourceFieldName 源字段名
+     * @param sourceClass     源类
+     * @param targetClass     目标类
+     * @param resloveInfo     解决信息
+     */
     public static void sourceFieldProcess(String targetFieldName,
                                           String sourceFieldName,
                                           Class<?> sourceClass,
@@ -668,6 +778,13 @@ public class TypeTransformAssist {
     }
 
 
+    /**
+     * 检查类
+     *
+     * @param targetClass     目标类
+     * @param sourceBeanClass 源bean类
+     * @throws BeanTransformException bean转换异常
+     */
     public static void checkClass(Class targetClass, Class sourceBeanClass) throws BeanTransformException {
 
         /**
@@ -699,6 +816,12 @@ public class TypeTransformAssist {
         }
     }
 
+    /**
+     * 解决信息检查
+     *
+     * @param resloveInfo 解决信息
+     * @return boolean
+     */
     public static boolean resloveInfoCheck(ResloveInfo resloveInfo) {
         boolean check = true;
         if (Objects.isNull(resloveInfo)) {
@@ -732,6 +855,14 @@ public class TypeTransformAssist {
         return check;
     }
 
+    /**
+     * 解决
+     *
+     * @param field       场
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @return {@link ResloveInfo}
+     */
     public static ResloveInfo reslove(Field field, Class<?> targetClass, Class<?> sourceClass) {
 
         ResloveInfo resloveInfo = new ResloveInfo();
@@ -831,6 +962,13 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 构建获取和设置函数名
+     *
+     * @param field   场
+     * @param getFlag 让国旗
+     * @return {@link String}
+     */
     public static String constructGetAndSetFunctionName(Field field, boolean getFlag) {
         String name = "";
         if (Objects.isNull(field)) {
@@ -854,6 +992,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 检查扩展对象变换impl
+     *
+     * @param extensionObjectTransformImpl 扩展对象变换impl
+     * @param targetClass                  目标类
+     * @param extensionImplFieldName       扩展impl字段名
+     * @return boolean
+     */
     public static boolean checkExtensionObjectTransformImpl(String extensionObjectTransformImpl, Class<?> targetClass, String extensionImplFieldName) {
         boolean checkSuccess = false; //默认无效
         if (Objects.isNull(extensionObjectTransformImpl) || extensionObjectTransformImpl.isEmpty()) {

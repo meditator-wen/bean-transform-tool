@@ -26,25 +26,52 @@ import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.EXTE
 import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_NAME;
 import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 
+
 /**
- * @Classname ArrayTypeStrategy
- * @Description TODO
- * @Date 2021/12/24 16:27
- * @Created by wen wang
+ * 数组类型策略
+ *
+ * @author wen wang
+ * @date 2021/12/24 16:27
  */
 public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("ArrayTypeStrategy");
 
-    // 数组维数targetArrayDems，一维和多维对应的字节码指令不同,每层新建数组时需要更新维度值，
+    /**
+     * 目标数组民主党
+     * 数组维数targetArrayDems，一维和多维对应的字节码指令不同,每层新建数组时需要更新维度值，
+     */
     ThreadLocal<Integer> targetArrayDems = new ThreadLocal<>();
 
+    /**
+     * 源类型列表地方
+     */
     ThreadLocal<List<Type>> sourceTypeList_Local = new ThreadLocal<>();
+    /**
+     * 当地源类列表
+     */
     ThreadLocal<List<Class>> sourceClassList_Local = new ThreadLocal<>();
 
+    /**
+     * 数组类型策略
+     *
+     * @param context 上下文
+     */
     public ArrayTypeStrategy(AbstractContext context) {
         this.registerContext_local.set(context);
     }
 
+    /**
+     * 创建数组
+     *
+     * @param arrayRawClass  原始数组类
+     * @param arrayElemClass 数组elem类
+     * @param dems           民主党
+     * @param mv             mv
+     * @param lengthVarIndex 长度var指数
+     */
     private void createArray(Class arrayRawClass, Class arrayElemClass, int dems, MethodVisitor mv, int lengthVarIndex) {
         //数组长度变量
         mv.visitVarInsn(Opcodes.ILOAD, lengthVarIndex);
@@ -84,6 +111,20 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 访问数组转换代码
+     *
+     * @param transformMethodVisitor 转换方法游客
+     * @param sourceRawType          源原始类型
+     * @param targetRawType          目标原始类型
+     * @param sourceElemType         源elem类型
+     * @param targetElemType         目标elem类型
+     * @param newMethodPrefix        新方法前缀
+     * @param layer                  层
+     * @param pattern                模式
+     * @return boolean
+     * @throws Exception 异常
+     */
     private boolean visitArrayTransformCode(MethodVisitor transformMethodVisitor, Class sourceRawType, Class targetRawType, Class sourceElemType, Class targetElemType, String newMethodPrefix, int layer, StrategyMode pattern) throws Exception {
         if (!((pattern == StrategyMode.COLLECTION_TO_ARRAY_PATTERN) || (pattern == StrategyMode.ARRAY_TO_ARRAY_PATTERN))) {
             return false;
@@ -110,6 +151,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
         transformMethodVisitor.visitLabel(transformStart);
         transformMethodVisitor.visitVarInsn(Opcodes.ALOAD, sourceObjectVar.getIndex());
+
         if (pattern == StrategyMode.COLLECTION_TO_ARRAY_PATTERN) {
             // 源集合类size
             transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(Collection.class));
@@ -121,7 +163,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         }
         LocalVariableInfo arrayLength = localVar.get(ARRAY_LENGTH_VARIABLE_NAME);
         transformMethodVisitor.visitVarInsn(Opcodes.ISTORE, arrayLength.getIndex());
-
+        transformMethodVisitor.visitLabel(arrayLength.getStart());
         createArray(targetRawType, targetElementType_local.get(), this.targetArrayDems.get(), transformMethodVisitor, arrayLength.getIndex());
 
         transformMethodVisitor.visitVarInsn(Opcodes.ASTORE, targetVar.getIndex());
@@ -130,7 +172,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         transformMethodVisitor.visitLdcInsn(Integer.valueOf(0));
         LocalVariableInfo arrayIndex = localVar.get(ARRAY_INDEX_VARIABLE_NAME);
         transformMethodVisitor.visitVarInsn(Opcodes.ISTORE, arrayIndex.getIndex());
-
+        transformMethodVisitor.visitLabel(arrayIndex.getStart());
         LocalVariableInfo transformBaseTypeVar = localVar.get(TRANSFORM_BASETYPE_VAR);
         LocalVariableInfo tempElement = localVar.get(TEMP_ELEMENT_VARIABLE_NAME);
         if (pattern == StrategyMode.COLLECTION_TO_ARRAY_PATTERN) {
@@ -188,9 +230,10 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
             transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceRawType));
             transformMethodVisitor.visitVarInsn(Opcodes.ILOAD, arrayIndex.getIndex());
             arrayElementLoad(sourceElemType, transformMethodVisitor);
-            transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceElemType));
+            //transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceElemType));
             // 迭代元素存入局部变量
             typeStoreByteCode(sourceElemType, transformMethodVisitor, tempElement.getIndex());
+            transformMethodVisitor.visitLabel(tempElement.getStart());
             // 存入数组元素值，1 加载数组对象-> 2 加载索引值 -> 3 加载 需要存入的元素值 -> store
             transformMethodVisitor.visitVarInsn(Opcodes.ALOAD, targetVar.getIndex());
             transformMethodVisitor.visitVarInsn(Opcodes.ILOAD, arrayIndex.getIndex());
@@ -220,6 +263,17 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         return true;
     }
 
+    /**
+     * 迭代基因字节代码
+     *
+     * @param targetClassList                目标类列表
+     * @param newMethodPrefix                新方法前缀
+     * @param extensTransformImplClassWriter extens变换impl类作家
+     * @param extensTransformMethodVisitor   extens转换方法访客
+     * @param mode                           模式
+     * @return boolean
+     * @throws Exception 异常
+     */
     protected boolean iterationGeneByteCode(List<Class> targetClassList, String newMethodPrefix, ClassWriter extensTransformImplClassWriter, MethodVisitor extensTransformMethodVisitor, StrategyMode mode) throws Exception {
         boolean methodGeneSuccess = false;
         for (int layer = 0; layer < targetClassList.size() - 1; ++layer) {
@@ -255,6 +309,15 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         return methodGeneSuccess;
     }
 
+    /**
+     * 基因指令
+     *
+     * @param extensTransformImplClassWriter extens变换impl类作家
+     * @param targetType                     目标类型
+     * @param sourceBeanType                 源bean类型
+     * @param newMethodPrefix                新方法前缀
+     * @throws Exception 异常
+     */
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
         boolean methodGeneSuccess = false;
@@ -264,8 +327,8 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         if (Objects.nonNull(findMode)) {
             if (StrategyMode.ARRAY_TO_ARRAY_PATTERN == findMode) {
                 // 数组类，ComponentType 解析
-                List<Class> targetClassList = resolveArrayElenentType(this.targetRawType_local.get());
-                List<Class> sourceClassList = resolveArrayElenentType(this.sourceRawType_local.get());
+                List<Class> targetClassList = resolveArrayElementType(this.targetRawType_local.get());
+                List<Class> sourceClassList = resolveArrayElementType(this.sourceRawType_local.get());
                 sourceClassList_Local.set(sourceClassList);
                 if (arrayMatchArray(targetClassList, sourceClassList)) {
                     this.targetElementType_local.set(targetClassList.get(targetClassList.size() - 1));
@@ -278,7 +341,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
                 ParameterizedType sourceParameterizedType = (ParameterizedType) sourceBeanType;
                 List<Type> sourceTypeList = resolveCollectionElenentType(sourceParameterizedType);
                 // 数组类，ComponentType 解析
-                List<Class> targetClassList = resolveArrayElenentType(this.targetRawType_local.get());
+                List<Class> targetClassList = resolveArrayElementType(this.targetRawType_local.get());
                 sourceTypeList_Local.set(sourceTypeList);
                 if (collectionMatchArrayType(targetClassList, sourceTypeList)) {
 
@@ -298,6 +361,14 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 匹配数组数组
+     *
+     * @param targetArrayTypeList 目标数组类型列表
+     * @param sourceArrayTypeList 源数组类型列表
+     * @return boolean
+     * @throws Exception 异常
+     */
     public static boolean arrayMatchArray(List<Class> targetArrayTypeList, List<Class> sourceArrayTypeList) throws Exception {
 
         boolean match = true;
@@ -338,11 +409,29 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 基因转换
+     *
+     * @param sourceBeanType    源bean类型
+     * @param targetType        目标类型
+     * @param generateClassname 生成类名
+     * @param fieldNamePrefix   字段名称前缀
+     * @return {@link Map}
+     * @throws Exception 异常
+     */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
         return super.geneTransform(sourceBeanType, targetType, generateClassname, fieldNamePrefix);
     }
 
+    /**
+     * 选择战略模式
+     *
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return {@link StrategyMode}
+     * @throws Exception 异常
+     */
     @Override
     public StrategyMode chooseStrategyMode(Type sourceBeanType, Type targetType) throws Exception {
         StrategyMode strategyMode = null;
@@ -370,6 +459,14 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         return strategyMode;
     }
 
+    /**
+     * 战略匹配
+     *
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return boolean
+     * @throws Exception 异常
+     */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
 
@@ -377,6 +474,9 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 明确线程本地
+     */
     @Override
     public void clearThreadLocal() {
         super.clearThreadLocal();

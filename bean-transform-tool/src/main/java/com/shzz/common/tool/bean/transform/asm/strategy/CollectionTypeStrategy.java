@@ -31,28 +31,57 @@ import static com.shzz.common.tool.bean.transform.asm.BeanTransformsMethodAdapte
 import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.*;
 import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 
+
 /**
- * @Classname ParameterizedTypeStrategy
- * @Description TODO
- * @Date 2021/12/8 15:47
- * @Created by wen wang
+ * 集合类型策略
+ *
+ * @author wen wang
+ * @date 2021/12/8 15:47
  */
 public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
 
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("ParameterizedTypeStrategy");
 
+    /**
+     * 源类型列表地方
+     */
     ThreadLocal<List<Type>> sourceTypeList_Local=new ThreadLocal<>();
+    /**
+     * 当地目标类型列表
+     */
     ThreadLocal<List<Type>> targetTypeList_Local=new ThreadLocal<>();
+    /**
+     * 当地源类列表
+     */
     ThreadLocal<List<Class>> sourceClassList_Local=new ThreadLocal<>();
 
 
+    /**
+     * 集合类型策略
+     *
+     * @param context 上下文
+     */
     public CollectionTypeStrategy(AbstractContext context) {
         this.registerContext_local.set(context);
     }
 
 
+    /**
+     * 超类名字
+     */
     public static final String SUPER_CLASS_NAME = org.objectweb.asm.Type.getInternalName(BeanTransFormsHandler.class);
 
+    /**
+     * 集合匹配集合
+     *
+     * @param typeListSource 源类型列表
+     * @param typeListTarget 目标类型列表
+     * @return boolean
+     * @throws Exception 异常
+     */
     public static boolean collectionMatchCollection(List<Type> typeListSource, List<Type> typeListTarget) throws Exception {
         /**
          * @description: 嵌套Collection 和 嵌套Collection 转换匹配条件判断
@@ -114,6 +143,19 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 访问集合变换代码
+     *
+     * @param extensTransformMethodVisitor extens转换方法访客
+     * @param sourceRawType                源原始类型
+     * @param targetRawType                目标原始类型
+     * @param sourceElemType               源elem类型
+     * @param newMethodPrefix              新方法前缀
+     * @param layer                        层
+     * @param pattern                      模式
+     * @return boolean
+     * @throws Exception 异常
+     */
     private boolean visitCollectionTransformCode(MethodVisitor extensTransformMethodVisitor, Class sourceRawType, Class targetRawType, Class sourceElemType, String newMethodPrefix, int layer, StrategyMode pattern) throws Exception {
         if (!((pattern == StrategyMode.COLLECTION_TO_COLLECTION_PATTERN) || (pattern == StrategyMode.ARRAY_TO_COLLECTION_PATTERN))) {
             return false;
@@ -137,17 +179,15 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
         extensTransformMethodVisitor.visitJumpInsn(Opcodes.IFNONNULL, transformStart);
         extensTransformMethodVisitor.visitInsn(Opcodes.ACONST_NULL);
         extensTransformMethodVisitor.visitInsn(Opcodes.ARETURN);
-
         extensTransformMethodVisitor.visitLabel(transformStart);
         /**
-         *   非空分支字节码
+         *  非空分支字节码
          */
 
         extensTransformMethodVisitor.visitTypeInsn(Opcodes.NEW, org.objectweb.asm.Type.getInternalName(targetClasImpl));
         extensTransformMethodVisitor.visitInsn(Opcodes.DUP);
 
         if (targetClasImpl == Stack.class) {
-
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, org.objectweb.asm.Type.getInternalName(targetClasImpl), BeanTransformsMethodAdapter.INIT_METHOD_NAME, "()V", false);
         } else {
 
@@ -162,11 +202,12 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
                 extensTransformMethodVisitor.visitInsn(Opcodes.ARRAYLENGTH);
                 // 源数组类length值 存储到 int型变量 iterator
                 extensTransformMethodVisitor.visitVarInsn(Opcodes.ISTORE, defineLocalVar.get(ARRAY_LENGTH_VARIABLE_NAME).getIndex());
+                extensTransformMethodVisitor.visitLabel(defineLocalVar.get(ARRAY_LENGTH_VARIABLE_NAME).getStart());
                 extensTransformMethodVisitor.visitVarInsn(Opcodes.ILOAD, defineLocalVar.get(ARRAY_LENGTH_VARIABLE_NAME).getIndex());
             }
             // 避免扩容影响效率，初始大小设置为源对象(Collection 或者array) size的两倍
-            extensTransformMethodVisitor.visitLdcInsn(Integer.valueOf(2));
-            extensTransformMethodVisitor.visitInsn(Opcodes.IMUL);
+            extensTransformMethodVisitor.visitLdcInsn(Integer.valueOf(1));
+            extensTransformMethodVisitor.visitInsn(Opcodes.ISHL);
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, org.objectweb.asm.Type.getInternalName(targetClasImpl), BeanTransformsMethodAdapter.INIT_METHOD_NAME, "(I)V", false);
 
         }
@@ -227,6 +268,18 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
             LocalVariableInfo arrayIndex = defineLocalVar.get(ARRAY_INDEX_VARIABLE_NAME);
             LocalVariableInfo arrayLength = defineLocalVar.get(ARRAY_LENGTH_VARIABLE_NAME);
             extensTransformMethodVisitor.visitVarInsn(Opcodes.ISTORE, arrayIndex.getIndex());
+            extensTransformMethodVisitor.visitLabel(arrayIndex.getStart());
+            if (targetClasImpl == Stack.class) {
+
+                // 源数组类length
+                extensTransformMethodVisitor.visitVarInsn(Opcodes.ALOAD, sourceObjectVar.getIndex());
+                extensTransformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceRawType));
+                extensTransformMethodVisitor.visitInsn(Opcodes.ARRAYLENGTH);
+                // 源数组类length值 存储到 int型变量 iterator
+                extensTransformMethodVisitor.visitVarInsn(Opcodes.ISTORE, arrayLength.getIndex());
+                extensTransformMethodVisitor.visitLabel(arrayLength.getStart());
+
+            }
             Label gotoLabel = new Label();
             extensTransformMethodVisitor.visitLabel(gotoLabel);
             extensTransformMethodVisitor.visitVarInsn(Opcodes.ILOAD, arrayIndex.getIndex());
@@ -254,8 +307,16 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
                 typeLoadByteCode(targetElementType_local.get(), extensTransformMethodVisitor, transformBaseTypeVar.getIndex());
             }
 
+//            if (targetClasImpl == Stack.class) {
+//                extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL,org.objectweb.asm.Type.getInternalName(Stack.class),"push","(Ljava/lang/Object;)Ljava/lang/Object;", false);
+//            }else{
+//                // 调用目标对象(集合)add 方法，转换后对象加入集合
+//                extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Collection.class), "add", "(Ljava/lang/Object;)Z", true);
+//            }
+
             // 调用目标对象(集合)add 方法，转换后对象加入集合
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Collection.class), "add", "(Ljava/lang/Object;)Z", true);
+
             extensTransformMethodVisitor.visitInsn(Opcodes.POP);
             //++index
             extensTransformMethodVisitor.visitIincInsn(arrayIndex.getIndex(), 1);
@@ -280,6 +341,15 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
 
+    /**
+     * 基因指令
+     *
+     * @param extensTransformImplClassWriter extens变换impl类作家
+     * @param targetType                     目标类型
+     * @param sourceBeanType                 源bean类型
+     * @param newMethodPrefix                新方法前缀
+     * @throws Exception 异常
+     */
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
 
@@ -314,25 +384,23 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
 
         } else if (findMode== StrategyMode.ARRAY_TO_COLLECTION_PATTERN) {
 
-                ParameterizedType targetParameterizedType = (ParameterizedType) targetType;
-                Class sourceClass = (Class) sourceBeanType;
-                List<Type> targetTypeList = resolveCollectionElenentType(targetParameterizedType);
-                // 数组类，ComponentType 解析
-                List<Class> sourceClassList = ArrayTypeStrategy.resolveArrayElenentType(sourceClass);
-                this.sourceClassList_Local.set(sourceClassList);
-                this.targetTypeList_Local.set(targetTypeList);
+            ParameterizedType targetParameterizedType = (ParameterizedType) targetType;
+            Class sourceClass = (Class) sourceBeanType;
+            List<Type> targetTypeList = resolveCollectionElenentType(targetParameterizedType);
+            // 数组类，ComponentType 解析
+            List<Class> sourceClassList = ArrayTypeStrategy.resolveArrayElementType(sourceClass);
+            this.sourceClassList_Local.set(sourceClassList);
+            this.targetTypeList_Local.set(targetTypeList);
 
-                if (collectionMatchArrayType(sourceClassList, targetTypeList)) {
-                    Class targetElementType = (Class) targetTypeList.get(targetTypeList.size() - 1);
-                    Class sourceElementType = sourceClassList.get(sourceClassList.size() - 1);
-                    this.targetElementType_local.set(targetElementType);
-                    this.sourceElementType_local.set(sourceElementType);
+            if (collectionMatchArrayType(sourceClassList, targetTypeList)) {
 
-                    methodGeneSuccess= iterationGeneByteCode(targetTypeList,newMethodPrefix,extensTransformImplClassWriter,methodVisitorGen,findMode);
+                Class targetElementType = (Class) targetTypeList.get(targetTypeList.size() - 1);
+                Class sourceElementType = sourceClassList.get(sourceClassList.size() - 1);
+                this.targetElementType_local.set(targetElementType);
+                this.sourceElementType_local.set(sourceElementType);
+                methodGeneSuccess= iterationGeneByteCode(targetTypeList,newMethodPrefix,extensTransformImplClassWriter,methodVisitorGen,findMode);
 
-
-                }
-
+            }
 
 
         }
@@ -345,6 +413,17 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 迭代基因字节代码
+     *
+     * @param targetTypeList  目标类型列表
+     * @param newMethodPrefix 新方法前缀
+     * @param classWriter     类作家
+     * @param mv              mv
+     * @param mode            模式
+     * @return boolean
+     * @throws Exception 异常
+     */
     protected boolean iterationGeneByteCode(List<Type> targetTypeList, String newMethodPrefix, ClassWriter classWriter, MethodVisitor mv, StrategyMode mode) throws Exception {
         boolean methodGeneSuccess=false;
         for (int layer = 0; layer < targetTypeList.size() - 1; ++layer) {
@@ -355,17 +434,17 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
 
             // Class sourceArrayElemClass=null;
             if(StrategyMode.COLLECTION_TO_COLLECTION_PATTERN==mode){
-               targetRawType = (Class) ((ParameterizedType) this.targetTypeList_Local.get().get(layer)).getRawType();
-               sourceRawType = (Class) ((ParameterizedType)  this.sourceTypeList_Local.get().get(layer)).getRawType();
+                targetRawType = (Class) ((ParameterizedType) this.targetTypeList_Local.get().get(layer)).getRawType();
+                sourceRawType = (Class) ((ParameterizedType)  this.sourceTypeList_Local.get().get(layer)).getRawType();
                 if ((sourceTypeList_Local.get().get(layer + 1)) instanceof Class) {
                     sourceElemType = (Class) sourceTypeList_Local.get().get(layer + 1);
                 } else if ((sourceTypeList_Local.get().get(layer + 1)) instanceof ParameterizedType) {
                     sourceElemType = (Class) ((ParameterizedType) sourceTypeList_Local.get().get(layer + 1)).getRawType();
                 }
             }else if(StrategyMode.ARRAY_TO_COLLECTION_PATTERN==mode){
-                 targetRawType = (Class) ((ParameterizedType) this.targetTypeList_Local.get().get(layer)).getRawType();
-                 sourceRawType = sourceClassList_Local.get().get(layer);
-                 sourceElemType =  sourceClassList_Local.get().get(layer + 1);
+                targetRawType = (Class) ((ParameterizedType) this.targetTypeList_Local.get().get(layer)).getRawType();
+                sourceRawType = sourceClassList_Local.get().get(layer);
+                sourceElemType =  sourceClassList_Local.get().get(layer + 1);
 
             }
 
@@ -385,12 +464,30 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
         return methodGeneSuccess;
     }
 
+    /**
+     * 基因转换
+     *
+     * @param sourceBeanType    源bean类型
+     * @param targetType        目标类型
+     * @param generateClassname 生成类名
+     * @param fieldNamePrefix   字段名称前缀
+     * @return {@link Map}
+     * @throws Exception 异常
+     */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
         return super.geneTransform(sourceBeanType, targetType, generateClassname, fieldNamePrefix);
     }
 
 
+    /**
+     * 选择战略模式
+     *
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return {@link StrategyMode}
+     * @throws Exception 异常
+     */
     @Override
     public StrategyMode chooseStrategyMode(Type sourceBeanType, Type targetType) throws Exception {
 
@@ -433,12 +530,23 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
         return findStrategy;
     }
 
+    /**
+     * 战略匹配
+     *
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return boolean
+     * @throws Exception 异常
+     */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
 
         return super.strategyMatch(sourceBeanType, targetType);
     }
 
+    /**
+     * 明确线程本地
+     */
     @Override
     public void clearThreadLocal() {
         super.clearThreadLocal();

@@ -168,6 +168,12 @@ public class TransformUtilGenerate {
         return beanTransform;
     }
 
+    /**
+     * 以十六进制
+     *
+     * @param digest 消化
+     * @return {@link String}
+     */
     @Deprecated
     private static String toHex(byte[] digest) {
         String digestHexString = "";
@@ -184,6 +190,12 @@ public class TransformUtilGenerate {
         return digestHexString;
     }
 
+    /**
+     * 提取信息
+     *
+     * @param classz classz
+     * @return {@link StringBuilder}
+     */
     @Deprecated
     private static StringBuilder extractInfo(Class classz) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -199,11 +211,20 @@ public class TransformUtilGenerate {
 
     }
 
+    /**
+     * 清理数据
+     */
     private static void afterGenerate() {
         MapTypeStrategy.sequence_Local.remove();
         CollectionSupplementStrategy.sequence_Local.remove();
     }
 
+    /**
+     * 类简单名称重建
+     *
+     * @param rawType 原始类型
+     * @return {@link String}
+     */
     public static String classSimpleNameReconstruct(Class rawType) {
 
         if (rawType.isArray()) {
@@ -214,6 +235,14 @@ public class TransformUtilGenerate {
 
     }
 
+    /**
+     * 装入asmgenerate类
+     *
+     * @param bytes             字节
+     * @param generateClassname 生成类名
+     * @return {@link Class}
+     * @throws Exception 异常
+     */
     public static Class loadASMGenerateClass(byte[] bytes, String generateClassname) throws Exception {
         //将二进制流写到本地磁盘上
         FileOutputStream fos = null;

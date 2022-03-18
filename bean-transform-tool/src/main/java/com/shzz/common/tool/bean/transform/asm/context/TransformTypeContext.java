@@ -16,30 +16,48 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.EXTEND_TRANSFORM_IMPL_CLASS_NAME_PREFIX;
 
 /**
- * @Classname AbstractTypeState
- * @Description TODO
- * @Date 2022/1/3 23:03
- * @Created by wen wang
+ * 转换类型上下文
+ *
+ * @author wen wang
+ * @date 2022/1/3 23:03
+ * @author wen wang
  */
 public class TransformTypeContext extends AbstractContext {
 
+    /**
+     * 日志,SLF4J
+     */
     private static final Logger LOG = LoggerFactory.getLogger("TransformUtilGenerate");
 
-    // 缓存 策略，key 为策略优先级，value 为策略类信息
+    /**
+     * 缓存 策略，key 为策略优先级，value 为策略类信息
+     */
     private static Map<Integer, Class<? extends ComplexTypeStrategy>> typeStrategyHashMap = new ConcurrentHashMap<>();
 
+    /**
+     * 转换类型上下文
+     *
+     * @param sourceField 源类字段
+     * @param targetField 目标类字段
+     * @param ownerClass  所有者类
+     */
     public TransformTypeContext(Field sourceField, Field targetField, Class ownerClass) {
         this.sourceField = sourceField;
         this.targetField = targetField;
         this.ownerClass = ownerClass;
-        this.identify = sourceField.getName();
+        this.identify = targetField.getName();
     }
 
+    /**
+     * 转换类型上下文
+     *
+     * @param otherContext 多层递归，比如嵌套Map 或者Collection ,需要传递上下文信息
+     */
     public TransformTypeContext(TransformTypeContext otherContext) {
         this.sourceField = otherContext.getSourceField();
         this.targetField = otherContext.getTargetField();
         this.ownerClass = otherContext.ownerClass;
-        this.identify = sourceField.getName();
+        this.identify = this.targetField.getName();
     }
 
     static {
@@ -64,17 +82,17 @@ public class TransformTypeContext extends AbstractContext {
 
     }
 
+    /**
+     * 注册策略
+     * 开发者拓展场景时，自行继承 {@link ComplexTypeStrategy},
+     * 并调用该方法添加到typeStrategyHashMap 中.
+     * 注册的策略类在整个java 进程中全局可用。
+     *
+     * @param priority      优先级
+     * @param strategyClass 策略类
+     * @throws BeanTransformException bean转换异常
+     */
     public static void registerStrategy(Integer priority, Class<? extends ComplexTypeStrategy> strategyClass) throws BeanTransformException {
-        /**
-         * @Description: 开发者拓展场景时，自行继承 {@link ComplexTypeStrategy},
-         * 并调用该方法添加到typeStrategyHashMap 中.
-         * 注册的策略类在整个java 进程中全局可用。
-         * @Author: wen wang
-         * @Date: 2022/1/22 14:51
-         * @param priority:
-         * @param strategyClass:
-         * @return: void
-         **/
         if (typeStrategyHashMap.containsKey(priority)) {
             Class originalStrategyClass = typeStrategyHashMap.get(priority);
             throw new BeanTransformException(CommonCode.STRATEGY_REGISTER_UNSUPPORT.getErrorCode(), CommonCode.STRATEGY_REGISTER_UNSUPPORT.getErrorOutline(), "指定的优先级 " + priority + " 已经有对应策略类: " + originalStrategyClass.getName());
@@ -86,6 +104,14 @@ public class TransformTypeContext extends AbstractContext {
     }
 
 
+    /**
+     * @param sourceBeanType  源类类型
+     * @param targetType      目标类类型
+     * @param fieldNamePrefix 字段名称前缀
+     * @return {@link Map}
+     * @throws Exception 异常
+     * @see {@link Context#geneTransform(Type, Type, String)}
+     */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String fieldNamePrefix) throws Exception {
         Set<Integer> prioritys = typeStrategyHashMap.keySet();
@@ -131,48 +157,87 @@ public class TransformTypeContext extends AbstractContext {
     }
 
 
-
+    /**
+     * 转换类类名生成函数，需要转换的字段如果是复杂类型，会单独生成实现类.
+     * 类名全路径生成规则：
+     *  前缀： "com.shzz.common.tool.bean.transform.asm.ExtendTransform"
+     *  +字段所有者类类名SimpleName
+     *  + 字段名
+     *
+     * @return {@link String}
+     */
     @Override
     public String geneClassName() {
         String fieldNameRefactor = targetField.getName().substring(0, 1).toUpperCase() + targetField.getName().substring(1);
         return EXTEND_TRANSFORM_IMPL_CLASS_NAME_PREFIX + "$" + ownerClass.getSimpleName() + "$" + fieldNameRefactor;
     }
 
+    /**
+     *
+     * @return {@link String}
+     */
     @Override
     public String getIdentify() {
         return super.getIdentify();
     }
 
+    /**
+     * @param identify
+     */
     @Override
     public void setIdentify(String identify) {
         super.setIdentify(identify);
     }
 
+    /**
+     *
+     * @return {@link Field}
+     */
     @Override
     public Field getSourceField() {
         return super.getSourceField();
     }
 
+    /**
+     *
+     * @param sourceField
+     */
     @Override
     public void setSourceField(Field sourceField) {
         super.setSourceField(sourceField);
     }
 
+    /**
+     *
+     * @return {@link Field}
+     */
     @Override
     public Field getTargetField() {
         return super.getTargetField();
     }
 
+    /**
+     *
+     * @param targetField
+     */
     @Override
     public void setTargetField(Field targetField) {
         super.setTargetField(targetField);
     }
 
+    /**
+     *
+     * @return {@link Class}
+     */
     @Override
     public Class getOwnerClass() {
         return super.getOwnerClass();
     }
 
+    /**
+     *
+     * @param ownerClass
+     */
     @Override
     public void setOwnerClass(Class ownerClass) {
         super.setOwnerClass(ownerClass);

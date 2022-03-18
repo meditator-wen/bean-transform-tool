@@ -9,22 +9,37 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
+
 /**
- * @Classname CustomeClassLoader
- * @Description TODO
- * @Date 2021/11/20 20:30
- * @Created by wen wang
+ * custome类装入器
+ *
+ * @author wen wang
+ * @date 2021/11/20 20:30
  */
 public class CustomeClassLoader extends ClassLoader {
 
 
+    /**
+     * custome类装入器
+     */
     protected CustomeClassLoader() {
 
     }
 
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("CustomeClassLoader");
 
 
+    /**
+     * udf加载类
+     *
+     * @param name  名字
+     * @param bytes 字节
+     * @return {@link Class}
+     * @throws ClassNotFoundException 类没有发现异常
+     */
     public Class<?> udfLoadClass(String name, byte[] bytes) throws ClassNotFoundException {
         Class<?> cla = null;
         try {
