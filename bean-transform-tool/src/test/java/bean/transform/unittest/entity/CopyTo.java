@@ -182,15 +182,29 @@ public class CopyTo {
     @BeanFieldInfo(userExtend = false, sourceFieldName = "nestArray", autoTransform = true)
     private List<List<ListElement>> nestList = new ArrayList<>();
 
-    public Map<String, Map<String, Inner>> getTwoLayerMap() {
-        return twoLayerMap;
+
+    public Stack<List<ListElement>> getNestSetStack() {
+        return nestSetStack;
     }
 
-    public void setTwoLayerMap(Map<String, Map<String, Inner>> twoLayerMap) {
-        this.twoLayerMap = twoLayerMap;
+    public void setNestSetStack(Stack<List<ListElement>> nestSetStack) {
+        this.nestSetStack = nestSetStack;
     }
 
-    private Map<String, Map<String, Inner>> twoLayerMap;
+    @BeanFieldInfo(userExtend = false, sourceFieldName = "nestSetStack", autoTransform = true)
+    private Stack<List<ListElement>> nestSetStack;
+
+
+    public Map<String, Map<String, Inner>> getTwoLayerMapCopyTo() {
+        return twoLayerMapCopyTo;
+    }
+
+    public void setTwoLayerMapCopyTo(Map<String, Map<String, Inner>> twoLayerMapCopyTo) {
+        this.twoLayerMapCopyTo = twoLayerMapCopyTo;
+    }
+
+    @BeanFieldInfo(userExtend = false, sourceFieldName = "twoLayerMap", autoTransform = true)
+    private Map<String, Map<String, Inner>> twoLayerMapCopyTo;
 
     public List<Map<String, Map<String, Inner>>> getListContainTwoLayerMap() {
         return listContainTwoLayerMap;
@@ -233,15 +247,15 @@ public class CopyTo {
 
     private Map<String, List<Inner>> mapContainList;
 
-//    public Map<Inner, List<String>> getMapKeyNotPrimitive() {
-//        return mapKeyNotPrimitive;
-//    }
-//
-//    public void setMapKeyNotPrimitive(Map<Inner, List<String>> mapKeyNotPrimitive) {
-//        this.mapKeyNotPrimitive = mapKeyNotPrimitive;
-//    }
+    public Map<Inner, List<String>> getMapKeyNotPrimitive() {
+        return mapKeyNotPrimitive;
+    }
 
-//    private Map<Inner, List<String>> mapKeyNotPrimitive;
+    public void setMapKeyNotPrimitive(Map<Inner, List<String>> mapKeyNotPrimitive) {
+        this.mapKeyNotPrimitive = mapKeyNotPrimitive;
+    }
+
+    private Map<Inner, List<String>> mapKeyNotPrimitive;
 
     public char[][][] getIntThreeDems() {
         return intThreeDems;

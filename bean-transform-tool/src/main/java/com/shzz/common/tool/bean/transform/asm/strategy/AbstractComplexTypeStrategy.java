@@ -31,7 +31,7 @@ import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 
 
 /**
- * 抽象复杂类型策略
+ * 复杂类型处理策略的抽象类，实现了部分公共方法，定义了公共字段
  *
  * @author wen wang
  * @date 2021/12/25 23:22
@@ -44,7 +44,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     private static final Logger LOG = LoggerFactory.getLogger("AbstractComplexTypeStrategy");
 
     /**
-     * 元素变换值
+     * 转换类字段名称后缀
      */
     public static final String ELEMENT_TRANSFORM_MEDIAN = "_Elememnt";
     /**
@@ -52,7 +52,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
      */
     public static final String TARGET_VARIABLE_NAME = "targetVar";
     /**
-     * 临时元素变量名
+     * 临时元素变量名，临时变量存储 Map、Collection、Array 迭代的内部元素对象
      */
     public static final String TEMP_ELEMENT_VARIABLE_NAME = "tempElement";
     /**
@@ -68,21 +68,21 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
      */
     public static final String ARRAY_INDEX_VARIABLE_NAME = "index";
     /**
-     * 变换基类型变量
+     * 变换后临时变量，比如源类Collection 最内层元素 转换为目标类最内层元素时先生成临时变量保存。
      */
     public static final String TRANSFORM_BASETYPE_VAR = "transformBaseTypeVar";
 
     /**
-     * 寄存器上下文当地
+     * 上下文注册，使用ThreadLoacl 存储，线程隔离
      */
     protected ThreadLocal<AbstractContext> registerContext_local = new ThreadLocal<>();
 
     /**
-     * 源元素类型地方
+     * 源类字段中，如果是Collection、Map、Array类型，解析字段的内部元素类型，使用ThreadLoacl 存储，线程隔离
      */
     protected ThreadLocal<Class> sourceElementType_local = new ThreadLocal<>();
     /**
-     * 当地目标元素类型
+     * 目标类字段中，如果是Collection、Map、Array类型，解析字段的内部元素类型，使用ThreadLoacl 存储，线程隔离
      */
     protected ThreadLocal<Class> targetElementType_local = new ThreadLocal<>();
     /**
@@ -95,30 +95,30 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     protected ThreadLocal<Class> targetRawType_local = new ThreadLocal<>();
 
     /**
-     * 保留当地来源
-     */// 以下两个字段预留拓展
+     * 字段预留拓展
+     */
     protected ThreadLocal<List<Class>> reservedSource_local = new ThreadLocal<>();
     /**
-     * 保留目标地方
+     * 字段预留拓展
      */
     protected ThreadLocal<List<Class>> reservedTarget_local = new ThreadLocal<>();
 
     /**
-     * 当地名称前缀
+     * 名称前缀
      */
     protected ThreadLocal<String> namePrefix_Local = new ThreadLocal<>();
 
 
     /**
-     * 游客当地extens变换方法
+     * 保留递归传递MethodVisitor
      */
     protected ThreadLocal<MethodVisitor> extensTransformMethodVisitor_Local = new ThreadLocal<>();
 
 
     /**
-     * 集序列
      *
-     * @param sequence_Local 当地序列
+     *
+     * @param sequence_Local 递归产生的序列编号，作为类名的后缀
      * @param sourceType     源类型
      * @param targetType     目标类型
      * @throws Exception 异常
@@ -138,12 +138,12 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     /**
      * 定义局部变量
      *
-     * @param startOfMethodBeanTransformsLable 方法bean转换标签开始
-     * @param endOfMethodBeanTransformsLable   年底bean标签转换方法
+     * @param startOfMethodBeanTransformsLable 方法体作用域开始标签
+     * @param endOfMethodBeanTransformsLable   方法体作用域结束标签
      * @param rawType                          原始类型
-     * @param elemType                         初步类型
+     * @param elemType                         元素类型
      * @param pattern                          模式
-     * @param ownerClassInternalName           主人类内部名称
+     * @param ownerClassInternalName           所有者类名称，使用Internal name,即，包路径中"."替换为"/"
      * @return {@link Map}
      */
     protected Map<String, LocalVariableInfo> defineLocalVar(Label startOfMethodBeanTransformsLable, Label endOfMethodBeanTransformsLable, Class rawType, Class elemType, StrategyMode pattern, String ownerClassInternalName) {
@@ -217,7 +217,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 解决element数组类型
+     * 解析数组组件类型
      *
      * @param arrayType 数组类型
      * @return {@link List}
@@ -240,26 +240,19 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 集合匹配数组类型
      *
+     * 嵌套Collection 和 多维数组转换匹配条件判断
+     *  1 层数一致
+     *  2 typeList 除了最内层外，其它层级 是参数化的Collection 类型，arrayTypeList除了最内层外，其它层级是数组类型
+     *  3 最内层，typeList 是Class 类型，arrayTypeList 最内层不是数组类型
+     *  满足以上条件则认为二者具备转换匹配条件
      * @param arrayTypeList 数组类型列表
      * @param typeList      类型列表
      * @return boolean
      * @throws Exception 异常
      */
     public static boolean collectionMatchArrayType(List<Class> arrayTypeList, List<Type> typeList) throws Exception {
-        /**
-         * @description: 嵌套Collection 和 多维数组转换匹配条件判断
-         * 1 层数一致
-         * 2 typeList 除了最内层外，其它层级 是参数化的Collection 类型，arrayTypeList除了最内层外，其它层级是数组类型
-         * 3 最内层，typeList 是Class 类型，arrayTypeList 最内层不是数组类型
-         * 满足以上条件则认为二者具备转换匹配条件
-         * @param arrayTypeList
-         * @param typeList
-         * @return: boolean
-         * @auther: wen wang
-         * @date: 2021/12/10 16:29
-         */
+
         boolean match = true;
         if (Objects.isNull(arrayTypeList) || Objects.isNull(typeList)) {
             match = false;
@@ -312,18 +305,16 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
 
     /**
-     * 找到集合实现类
+     * 字段参数化类型的原始类型可能是接口或者抽象类， 通过new 指令创建会出错。
+     * 需要找到对应接口或者抽象类的可创建型子类类型。如果本身就是可创建型类型，则直接返回该类型
+     * Collection 接口下子接口有三大类
+     * Set   List  Queue, 如果是这几种接口类型,子类实现类可能有多种形式。本工具统一以 HashSet ArrayList  ArrayDeque 来表示
      *
      * @param rawType 原始类型
      * @return {@link Class}
      */
     public static Class findCollectionImplementClass(Class rawType) {
-        /**
-         *  字段参数化类型的原始类型可能是接口或者抽象类， 通过new 指令创建会出错。
-         *  需要找到对应接口或者抽象类的可创建型子类类型。如果本身就是可创建型类型，则直接返回该类型
-         *  Collection 接口下子接口有三大类
-         *  Set   List  Queue, 如果是这几种接口类型,子类实现类可能有多种形式。本工具统一以 HashSet ArrayList  ArrayDeque 来表示
-         */
+
         if ((!Modifier.isAbstract(rawType.getModifiers())) && (Modifier.isPublic(rawType.getModifiers()))) {
             // 接口或者抽象类修饰符为abstract, 非abstract修饰符 的collection 子类都可直接 new 指令生成新对象
             return rawType;
@@ -339,7 +330,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 解决element集合类型
+     * 解析集合类内部参数化泛型，多层集合循环解析
      *
      * @param parameterizedType 参数化类型
      * @return {@link List}
@@ -347,7 +338,6 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
      */
     public static List<Type> resolveCollectionElenentType(ParameterizedType parameterizedType) throws BeanTransformException {
 
-        // 处理集合类 参数化泛型
         List<Type> typeList = new ArrayList<>();
         if (Collection.class.isAssignableFrom((Class) parameterizedType.getRawType())) {
             Type type = parameterizedType;
@@ -385,13 +375,13 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 把字节码
+     * 对象转换的字节码生成函数
      *
      * @param defineLocalVar  定义局部变量
      * @param layer           层
-     * @param sourceElemType  源elem类型
+     * @param sourceElemType  源类字段是Collection、Map、Array,内层元素的类型
      * @param mv              mv
-     * @param newMethodPrefix 新方法前缀
+     * @param newMethodPrefix 新方法前缀，多层集合或者数组每层会单独产生转换方法
      * @throws Exception 异常
      */
     protected void transformByteCode(Map<String, LocalVariableInfo> defineLocalVar, int layer, Class sourceElemType, MethodVisitor mv, String newMethodPrefix) throws Exception {
@@ -483,7 +473,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
 
     /**
-     * 得到业主类内部名称
+     * 所有者类的InternalName
      *
      * @return {@link String}
      */
@@ -498,9 +488,9 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     /**
      * 定义方法参数变量
      *
-     * @param startOfMethodBeanTransformsLable 方法bean转换标签开始
-     * @param endOfMethodBeanTransformsLable   年底bean标签转换方法
-     * @param classOwnerInternalName           类所有者内部名称
+     * @param startOfMethodBeanTransformsLable 方法体作用域的开始标签
+     * @param endOfMethodBeanTransformsLable   方法体作用域的结束标签
+     * @param classOwnerInternalName           类所有者InternalName
      * @return {@link Map}
      */
     protected Map<String, LocalVariableInfo> defineMethodParameterVar(Label startOfMethodBeanTransformsLable, Label endOfMethodBeanTransformsLable, String classOwnerInternalName) {
@@ -544,11 +534,11 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * const型负载
+     * const 类型入栈指令
      *
-     * @param elemType 初步类型
-     * @param mv       mv
-     * @param varIndex var指数
+     * @param elemType 元素类型
+     * @param mv       MethodVisitor访问器，和调用者保持一致
+     * @param varIndex 局部变量的索引编号
      * @return boolean
      */
     protected boolean constTypeLoad(Class elemType, MethodVisitor mv, int varIndex) {
@@ -587,8 +577,8 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     /**
      * 数组元素加载
      *
-     * @param elemType 初步类型
-     * @param mv       mv
+     * @param elemType 元素类型
+     * @param mv       MethodVisitor访问器，和调用者保持一致
      * @return boolean
      */
     protected boolean arrayElementLoad(Class elemType, MethodVisitor mv) {
@@ -620,11 +610,11 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 类型存储字节代码
+     * 变量存储字节码生成函数
      *
-     * @param elemType 初步类型
-     * @param mv       mv
-     * @param varIndex var指数
+     * @param elemType 元素类型
+     * @param mv       MethodVisitor访问器，和调用者保持一致
+     * @param varIndex 局部变量的索引编号
      * @return boolean
      */
     protected boolean typeStoreByteCode(Class elemType, MethodVisitor mv, int varIndex) {
@@ -650,11 +640,11 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 负载类型字节代码
      *
-     * @param elemType 初步类型
-     * @param mv       mv
-     * @param varIndex var指数
+     *
+     * @param elemType 元素类型
+     * @param mv       MethodVisitor访问器，和调用者保持一致
+     * @param varIndex 局部变量的索引编号
      * @return boolean
      */
     protected boolean typeLoadByteCode(Class elemType, MethodVisitor mv, int varIndex) {
@@ -680,10 +670,10 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 数组元素存储
+     * 数组元素存储，不同类型指令不同
      *
-     * @param elemType 初步类型
-     * @param mv       mv
+     * @param elemType 元素类型
+     * @param mv       MethodVisitor访问器，和调用者保持一致
      * @return boolean
      */
     protected boolean arrayElementStore(Class elemType, MethodVisitor mv) {
@@ -715,9 +705,9 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 基因指令
+     * 生成转换函数的字节码指令
      *
-     * @param extensTransformImplClassWriter extens变换impl类作家
+     * @param extensTransformImplClassWriter ClassWriter，由调用者传入，保持一致，用于产生MethodVisitor
      * @param targetType                     目标类型
      * @param sourceBeanType                 源bean类型
      * @param newMethodPrefix                新方法前缀
@@ -727,8 +717,23 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
 
 
     /**
-     * 基因转换
+     * 需要实现类覆写该方法
+     * 生成转换类对象，封装与Map  中，主要针对Collection、Map、Array等复杂类型字段
+     * key 值是该对象对应的上层owner类字段名称
+     * 比如 复杂字段
+     * <code>
+     *    class MySourceClass{
+     *     private List<List<ListElement>> nestList
+     *     }
      *
+     *     class MyTagretClass{
+     *           private List<List<ListElement>> nestList
+     *     }
+     * </code>
+     *  MySourceClass 与 MyTagretClass 转换会生成转换类 A，
+     *  内部nestList 字段会单独生成一个转换类字节码文件B，
+     *  这个转换类B被加载后反射生成对象C存储于A 对象的某个字段中，这个字段的名称和key保持一致。
+     * value 转换类对象，先生成转换类字节码，加载转换类，然后反射生成转换类对象
      * @param sourceBeanType    源bean类型
      * @param targetType        目标类型
      * @param generateClassname 生成类名
@@ -849,7 +854,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 选择战略模式
+     * 选择复杂类型处理模式，需要各个实现类覆写
      *
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型
@@ -861,7 +866,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 明确线程本地
+     * 每次构建完成转换类后清理TheahdLoacl 变量
      */
     public void clearThreadLocal() {
         registerContext_local.remove();
@@ -876,7 +881,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 战略匹配
+     * 策略匹配判断
      *
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型

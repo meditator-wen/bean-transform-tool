@@ -206,7 +206,7 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
                 extensTransformMethodVisitor.visitVarInsn(Opcodes.ILOAD, defineLocalVar.get(ARRAY_LENGTH_VARIABLE_NAME).getIndex());
             }
             // 避免扩容影响效率，初始大小设置为源对象(Collection 或者array) size的两倍
-            extensTransformMethodVisitor.visitLdcInsn(Integer.valueOf(1));
+            extensTransformMethodVisitor.visitLdcInsn(Integer.valueOf(0));
             extensTransformMethodVisitor.visitInsn(Opcodes.ISHL);
             extensTransformMethodVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, org.objectweb.asm.Type.getInternalName(targetClasImpl), BeanTransformsMethodAdapter.INIT_METHOD_NAME, "(I)V", false);
 

@@ -15,9 +15,9 @@ public class VariableDefine {
      */
     private String name;
     /**
-     * 别名
+     * 别名，变量别名，按照规定命名规则处理
      */
-    private String alias;// 变量别名，按照规定命名规则处理
+    private String alias;
     /**
      * 描述符
      */
@@ -27,15 +27,15 @@ public class VariableDefine {
      */
     private String signature;
     /**
-     * 开始
+     * 变量开始标签，变量作用域的初始位置
      */
     private Label start;
     /**
-     * 结束
+     * 结束标签，即，变量作用域的最终位置
      */
     private Label end;
     /**
-     * 指数
+     * 在虚拟机栈局部变量表的索引编号
      */
     private int index;
     /**
@@ -106,9 +106,9 @@ public class VariableDefine {
     }
 
     /**
-     * 开始
      *
-     * @param start 开始
+     *
+     * @param start
      * @return {@link VariableDefine}
      */
     public  VariableDefine start(Label start){
@@ -117,9 +117,9 @@ public class VariableDefine {
     }
 
     /**
-     * 结束
      *
-     * @param end 结束
+     *
+     * @param end
      * @return {@link VariableDefine}
      */
     public  VariableDefine end(Label end){
@@ -128,9 +128,9 @@ public class VariableDefine {
     }
 
     /**
-     * 指数
      *
-     * @param index 指数
+     *
+     * @param index
      * @return {@link VariableDefine}
      */
     public  VariableDefine index(int index){

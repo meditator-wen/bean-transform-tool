@@ -37,9 +37,9 @@ public class TransformTypeContext extends AbstractContext {
     /**
      * 转换类型上下文
      *
-     * @param sourceField 源类字段
-     * @param targetField 目标类字段
-     * @param ownerClass  所有者类
+     * @param sourceField
+     * @param targetField
+     * @param ownerClass
      */
     public TransformTypeContext(Field sourceField, Field targetField, Class ownerClass) {
         this.sourceField = sourceField;

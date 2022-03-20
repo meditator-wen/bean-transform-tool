@@ -189,7 +189,7 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
             mv.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(Collection.class));
             mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Collection.class), "size", "()I", true);
             // 避免扩容影响效率，初始大小设置为源对象(Collection 或者array) size的两倍
-            mv.visitLdcInsn(Integer.valueOf(1));
+            mv.visitLdcInsn(Integer.valueOf(0));
             mv.visitInsn(Opcodes.ISHL);
             mv.visitMethodInsn(Opcodes.INVOKESPECIAL, org.objectweb.asm.Type.getInternalName(targetClasImpl), BeanTransformsMethodAdapter.INIT_METHOD_NAME, "(I)V", false);
 
