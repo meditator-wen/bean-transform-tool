@@ -180,7 +180,7 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
      * @param isDeepCopy                 深拷贝
      * @param permitBaseTypeInterconvert 允许基类型互变
      * @param extendsTransformList       扩展转换列表
-     * @return {@link byte[]}
+     * @return byte[]                    class 文件字节数组
      * @throws Exception 异常
      */
     public <S, T> byte[] generateBeanTransformsImplClass(Class<S> sourceBeanClass, Class<T> targetClass, String generateClassname, boolean isDeepCopy,

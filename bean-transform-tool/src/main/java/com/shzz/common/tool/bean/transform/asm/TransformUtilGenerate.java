@@ -81,7 +81,7 @@ public class TransformUtilGenerate {
      * @param extendsTransformList 扩展转换列表
      * @return {@link BeanTransform}
      * @throws Exception 异常
-     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     * see {@link #generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, true, true, extendsTransformList, null);
@@ -96,7 +96,7 @@ public class TransformUtilGenerate {
      * @param isDeepCopy      深拷贝
      * @return {@link BeanTransform}
      * @throws Exception 异常
-     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     * see {@link #generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, true, null, null);
@@ -111,7 +111,7 @@ public class TransformUtilGenerate {
      * @param extendsTransformList 扩展转换列表
      * @return {@link BeanTransform}
      * @throws Exception 异常
-     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     * see {@link #generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, true, extendsTransformList, null);
@@ -127,6 +127,7 @@ public class TransformUtilGenerate {
      * @param extendsTransformList       扩展转换列表
      * @return {@link BeanTransform}
      * @throws Exception 异常
+     * see {@link #generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, null);

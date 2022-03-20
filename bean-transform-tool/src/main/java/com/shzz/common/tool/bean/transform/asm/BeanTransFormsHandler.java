@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author wen wang
  * @date 2021/11/21 12:15
+ *
  */
 public abstract class BeanTransFormsHandler implements BeanTransform {
 
@@ -50,7 +51,7 @@ public abstract class BeanTransFormsHandler implements BeanTransform {
      * @param sourceBeanClass  源bean类
      * @param sourceBeanObject 源bean对象
      * @param targetClass      目标类
-     * @return {@link T}
+     * @return T
      * @throws Exception 异常
      */
     @Override

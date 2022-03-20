@@ -125,7 +125,7 @@ public class TransformTypeContext extends AbstractContext {
      * @param fieldNamePrefix 字段名称前缀
      * @return {@link Map}
      * @throws Exception 异常
-     * @see {@link Context#geneTransform(Type, Type, String)}
+     * see Context geneTransform(Type, Type, String)}
      */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String fieldNamePrefix) throws Exception {
