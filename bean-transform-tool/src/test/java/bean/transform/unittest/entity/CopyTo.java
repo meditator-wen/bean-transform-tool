@@ -183,16 +183,16 @@ public class CopyTo {
     private List<List<ListElement>> nestList = new ArrayList<>();
 
 
-    public Stack<List<ListElement>> getNestSetStack() {
+    public Stack<Queue<ListElement>> getNestSetStack() {
         return nestSetStack;
     }
 
-    public void setNestSetStack(Stack<List<ListElement>> nestSetStack) {
+    public void setNestSetStack(Stack<Queue<ListElement>> nestSetStack) {
         this.nestSetStack = nestSetStack;
     }
 
     @BeanFieldInfo(userExtend = false, sourceFieldName = "nestSetStack", autoTransform = true)
-    private Stack<List<ListElement>> nestSetStack;
+    private Stack<Queue<ListElement>> nestSetStack;
 
 
     public Map<String, Map<String, Inner>> getTwoLayerMapCopyTo() {

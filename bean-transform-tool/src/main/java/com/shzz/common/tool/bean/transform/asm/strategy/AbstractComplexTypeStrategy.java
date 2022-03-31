@@ -720,7 +720,7 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 生成转换函数的字节码指令
+     * 生成转换函数的字节码指令,子类继承实现该方法
      *
      * @param extensTransformImplClassWriter ClassWriter，由调用者传入，保持一致，用于产生MethodVisitor
      * @param targetType                     目标类型
@@ -896,7 +896,8 @@ public abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategy
     }
 
     /**
-     * 策略匹配判断
+     * 策略匹配判断，该方法由外部调用，判断对应的类型是否符合该策略类的要求
+     * 这个接口函数是类型转换字节码生成模块与策略选择模块解耦的关键
      *
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型

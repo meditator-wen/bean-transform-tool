@@ -65,46 +65,44 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 当地序列
+     * 多层集合转换类的编号，内层元素转换类编号在上层元素转换编号基础上累加
      */
     public static volatile ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
 
 
     /**
-     * 当地目标集合类型
+     * 目标字段集合类型
      */
     private ThreadLocal<Type> targetCollectionType_Local = new ThreadLocal<>();
     /**
-     * 目标实际类型地方
+     * 目标字段实际类型
      */
     private ThreadLocal<Type> targetActualType_Local = new ThreadLocal<>();
 
     /**
-     * 源集合类型地方
+     * 源类字段集合类型
      */
     private ThreadLocal<Type> sourceCollectionType_Local = new ThreadLocal<>();
     /**
-     * 源实际类型地方
+     * 源类字段实际类型
      */
     private ThreadLocal<Type> sourceActualType_Local = new ThreadLocal<>();
     /**
-     * 内部名称
-     *///基于源类Collection字段和目标类Collection 字段 生成的转换的类原始类名和internal 类名（包路径中"." 替换成 "/" 转成）
+     * 基于源类Collection字段和目标类Collection 字段 生成的转换的类原始类名和internal 类名（包路径中"." 替换成 "/" 转成）
+     */
     private String internalName;
     /**
-     * 生成类名
+     * 类名
      */
     private String generateClassname;
 
     /**
-     * 元素变换类描述
-     *///基于源类Collection字段和目标类Collection  字段 生成的转换的类描述信息
+     * 基于源类Collection字段和目标类Collection  字段 生成的转换的类描述信息
+     */
     private String elementTransformClassDescription;
 
 
     /**
-     * 收集补充策略
-     *
      * @param context 上下文
      */
     public CollectionSupplementStrategy(AbstractContext context) {
@@ -121,9 +119,9 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 得到业主类内部名称
+     * 构造主类内部名称
      *
-     * @return {@link String}
+     * @return String
      */
     @Override
     protected String getOwnerClassInternalName() {
@@ -134,12 +132,14 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 基因指令
+     * 转换指令生成函数
+     * 重写抽象方法
+     * {@link AbstractComplexTypeStrategy#geneInstruction(ClassWriter, Type, Type, String)}
      *
-     * @param extensTransformImplClassWriter extens变换impl类作家
-     * @param targetType                     目标类型
-     * @param sourceBeanType                 源bean类型
-     * @param newMethodPrefix                新方法前缀
+     * @param extensTransformImplClassWriter
+     * @param targetType
+     * @param sourceBeanType
+     * @param newMethodPrefix
      * @throws Exception 异常
      */
     @Override
@@ -295,7 +295,8 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 基因转换
+     * 生成转换类对象，封装与Map  中，主要针对Collection、Map、Array等复杂类型字段
+     * 详见{@link AbstractComplexTypeStrategy#geneTransform(Type, Type, String, String)}
      *
      * @param sourceBeanType    源bean类型
      * @param targetType        目标类型
@@ -376,7 +377,7 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 将字段名
+     * 上层类转换类对应的字段名
      *
      * @return {@link String}
      */
@@ -395,7 +396,7 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 明确线程本地
+     * 清理threadlocal
      */
     @Override
     public void clearThreadLocal() {
@@ -407,7 +408,8 @@ public class CollectionSupplementStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 战略匹配
+     * 策略匹配
+     * 详见{@link AbstractComplexTypeStrategy#strategyMatch(Type, Type)}
      *
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型

@@ -102,9 +102,8 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
      */
     private static final Map<StrategyMode, Class<? extends AbstractComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
     /**
-     * 缓存
-     */// cache 缓存 targetClass 实现了 BeanTransFormsHandler 转换对象的字段信息
-    // key 是targetClass fullname + field name ,在BeanTransformsMethodAdapter 使用cache。
+     * cache 缓存 targetClass 实现了 BeanTransFormsHandler 转换对象的字段信息
+     */
     private static final Map<String, Boolean> cache = new ConcurrentHashMap<>();
 
     /**
@@ -286,12 +285,9 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
         methodVisitorInit.visitEnd();
 
         /**
-         * 复写抽象方法  {@link BeanTransFormsHandler }
-         * public abstract Object beanTransforms(Class sourceBeanClass,Object sourceBeanObject, Class targetClass,boolean deepCopy) throws Exception;
-         *
+         * 复写抽象方法  {@link BeanTransFormsHandler#beanTransforms(Class, Object, Class)}  }
          *
          */
-
 
         MethodVisitor beanTransformsMethodVisitor = beanTransformsImplClassWriter.visitMethod(ACC_PUBLIC, TransformUtilGenerate.TRANSFORM_METHOD_NAME, TransformUtilGenerate.TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
 

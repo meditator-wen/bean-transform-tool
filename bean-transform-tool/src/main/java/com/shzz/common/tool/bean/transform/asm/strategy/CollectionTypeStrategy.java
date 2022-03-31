@@ -61,21 +61,21 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     private static final Logger LOG = LoggerFactory.getLogger("ParameterizedTypeStrategy");
 
     /**
-     * 源类型列表地方
+     * 源类型如果是Collection类型，迭代解析Collection类型及其内部元素，存储于sourceTypeList_Local 字段中
      */
     ThreadLocal<List<Type>> sourceTypeList_Local=new ThreadLocal<>();
     /**
-     * 当地目标类型列表
+     * 目标类型如果是Collection类型，迭代解析Collection类型及其内部元素，存储于targetTypeList_Local 字段中
      */
     ThreadLocal<List<Type>> targetTypeList_Local=new ThreadLocal<>();
     /**
-     * 当地源类列表
+     * 源类型如果是数组类型，迭代解析数组类型及其内部组件元素，存储于sourceClassList_Local 字段中
      */
     ThreadLocal<List<Class>> sourceClassList_Local=new ThreadLocal<>();
 
 
     /**
-     * 集合类型策略
+     *
      *
      * @param context 上下文
      */
@@ -90,7 +90,10 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     public static final String SUPER_CLASS_NAME = org.objectweb.asm.Type.getInternalName(BeanTransFormsHandler.class);
 
     /**
-     * 集合匹配集合
+     * 嵌套Collection 和 嵌套Collection 转换匹配条件判断
+     * 1  层数一致
+     * 2  除了最内层外，其它层级 是参数化的Collection 类型
+     * 3  最内层，是Class 类型
      *
      * @param typeListSource 源类型列表
      * @param typeListTarget 目标类型列表
@@ -98,17 +101,6 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
      * @throws Exception 异常
      */
     public static boolean collectionMatchCollection(List<Type> typeListSource, List<Type> typeListTarget) throws Exception {
-        /**
-         * @description: 嵌套Collection 和 嵌套Collection 转换匹配条件判断
-         * 1  层数一致
-         * 2  除了最内层外，其它层级 是参数化的Collection 类型
-         * 3  最内层，是Class 类型
-         * @param typeList1
-         * @param typeList2
-         * @return: boolean
-         * @auther: wen wang
-         * @date: 2021/12/10 16:39
-         */
         boolean match = true;
         if (Objects.isNull(typeListSource) || Objects.isNull(typeListTarget)) {
             match = false;
@@ -159,15 +151,15 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 访问集合变换代码
+     * 集合变换函数，生成集合类转换字节码
      *
-     * @param extensTransformMethodVisitor extens转换方法访客
+     * @param extensTransformMethodVisitor 方法访问器，保持和调用者一致
      * @param sourceRawType                源原始类型
      * @param targetRawType                目标原始类型
-     * @param sourceElemType               源elem类型
+     * @param sourceElemType               源类elem元素类型
      * @param newMethodPrefix              新方法前缀
-     * @param layer                        层
-     * @param pattern                      模式
+     * @param layer                        迭代层数，多层集合依次累加
+     * @param pattern                      转换模式
      * @return boolean
      * @throws Exception 异常
      */
@@ -357,12 +349,13 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 基因指令
+     * 生成转换指令，
+     * 详见{@link AbstractComplexTypeStrategy#geneInstruction(ClassWriter, Type, Type, String)}
      *
-     * @param extensTransformImplClassWriter extens变换impl类作家
-     * @param targetType                     目标类型
-     * @param sourceBeanType                 源bean类型
-     * @param newMethodPrefix                新方法前缀
+     * @param extensTransformImplClassWriter
+     * @param targetType
+     * @param sourceBeanType
+     * @param newMethodPrefix
      * @throws Exception 异常
      */
     @Override
@@ -429,13 +422,13 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 迭代基因字节代码
+     * 迭代函数，多层Collection 依次迭代生成对应层级的转换指令
      *
      * @param targetTypeList  目标类型列表
      * @param newMethodPrefix 新方法前缀
-     * @param classWriter     类作家
+     * @param classWriter     和调用者保持一致
      * @param mv              mv
-     * @param mode            模式
+     * @param mode            转换模式
      * @return boolean
      * @throws Exception 异常
      */
@@ -480,7 +473,8 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 基因转换
+     * 生成转换类对象，封装与Map  中，主要针对Collection、Map、Array等复杂类型字段
+     * 详见{@link AbstractComplexTypeStrategy#geneTransform(Type, Type, String, String)}
      *
      * @param sourceBeanType    源bean类型
      * @param targetType        目标类型
@@ -496,7 +490,7 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 选择战略模式
+     * 选择复杂类型处理模式，实现父类方法
      *
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型
@@ -546,7 +540,8 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 战略匹配
+     * 转换策略匹配
+     * 详见{@link AbstractComplexTypeStrategy#strategyMatch(Type, Type)}
      *
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型
@@ -560,7 +555,7 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 明确线程本地
+     * 清理threadlocal
      */
     @Override
     public void clearThreadLocal() {

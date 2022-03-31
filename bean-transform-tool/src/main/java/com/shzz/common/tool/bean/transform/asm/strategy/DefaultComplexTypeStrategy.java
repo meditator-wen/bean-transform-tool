@@ -42,7 +42,7 @@ import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 
 /**
- * 默认复杂类型策略
+ * 默认复杂类型处理策略
  *
  * @author wen wang
  * @date 2021/12/26 20:36
@@ -69,12 +69,13 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 基因指令
+     * 实现父类抽象方法
+     * 详见{@link AbstractComplexTypeStrategy#geneInstruction(ClassWriter, Type, Type, String)}
      *
-     * @param extensTransformImplClassWriter extens变换impl类作家
-     * @param targetType                     目标类型
-     * @param sourceBeanType                 源bean类型
-     * @param newMethodPrefix                新方法前缀
+     * @param extensTransformImplClassWriter
+     * @param targetType
+     * @param sourceBeanType
+     * @param newMethodPrefix
      * @throws Exception 异常
      */
     @Override
@@ -101,7 +102,8 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 基因转换
+     * 实现接口方法
+     * 详见{@link ComplexTypeStrategy#geneTransform(Type, Type, String, String)}
      *
      * @param sourceBeanType    源bean类型
      * @param targetType        目标类型
@@ -156,12 +158,13 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 战略匹配
+     * 策略匹配，实现父类方法
+     * 详见{@link AbstractComplexTypeStrategy#strategyMatch(Type, Type)}
      *
-     * @param sourceBeanType 源bean类型
-     * @param targetType     目标类型
+     * @param sourceBeanType
+     * @param targetType
      * @return boolean
-     * @throws Exception 异常
+     * @throws Exception
      */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {

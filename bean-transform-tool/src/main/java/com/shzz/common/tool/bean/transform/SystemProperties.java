@@ -33,7 +33,7 @@ public class SystemProperties {
     /**
      * 阈值大小
      */
-    public static final int THRESHOLD_SIZE = 1 * 1024 * 1024;
+//    public static final int THRESHOLD_SIZE = 1 * 1024 * 1024;
     /**
      * 班级规模阈值
      */
@@ -54,7 +54,7 @@ public class SystemProperties {
     public static final String WRAPS_TYPE_DEEPY_COPY="wraps.types.deepcopy";
 
     static {
-        System.setProperty(CLASS_SIZE_THRESHOLD,String.valueOf(THRESHOLD_SIZE));
+        // System.setProperty(CLASS_SIZE_THRESHOLD,String.valueOf(THRESHOLD_SIZE));
         System.setProperty(CLASS_OUTPUT_FLAG,"true");
         /**
          * 包装类型深拷贝标志，如果源类和目标类对应字段是包装类且类型相同，则直接赋值。实际上还是引用赋值，
@@ -65,22 +65,18 @@ public class SystemProperties {
         System.setProperty(STRICT_MODE_FLAG, "true");
     }
 
-    /**
-     * 得到班级规模阈值
-     *
-     * @return int
-     */
-    public static int getClassSizeThreshold(){
-        int sizeThreshold=THRESHOLD_SIZE;
 
-        String config=System.getProperty(CLASS_SIZE_THRESHOLD);;
-        try {
-            sizeThreshold=Integer.parseInt(config);
-        } catch (NumberFormatException e) {
-            LOG.error("系统配置：{} value {} 无法转换为int,使用默认值 50*1024*1024B ",CLASS_SIZE_THRESHOLD,config);
-        }
-        return  sizeThreshold;
-    }
+//    public static int getClassSizeThreshold(){
+//        int sizeThreshold=THRESHOLD_SIZE;
+//
+//        String config=System.getProperty(CLASS_SIZE_THRESHOLD);;
+//        try {
+//            sizeThreshold=Integer.parseInt(config);
+//        } catch (NumberFormatException e) {
+//            LOG.error("系统配置：{} value {} 无法转换为int,使用默认值 50*1024*1024B ",CLASS_SIZE_THRESHOLD,config);
+//        }
+//        return  sizeThreshold;
+//    }
 
     /**
      * 得到严格模式国旗

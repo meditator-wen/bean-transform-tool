@@ -34,7 +34,7 @@ public abstract class BeanTransFormsHandler implements BeanTransform {
 
 
     /**
-     * bean转换
+     * bean转换内部接口函数
      *
      * @param sourceBeanClass  源bean类
      * @param sourceBeanObject 源bean对象
@@ -46,7 +46,7 @@ public abstract class BeanTransFormsHandler implements BeanTransform {
 
 
     /**
-     * bean转换
+     * bean转换用户接口函数
      *
      * @param sourceBeanClass  源bean类
      * @param sourceBeanObject 源bean对象

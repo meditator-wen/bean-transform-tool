@@ -42,7 +42,7 @@ import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
- * 映射类型策略
+ * Map 类型转换策略
  *
  * @author wen wang
  * @date 2022/1/10 20:54
@@ -117,8 +117,8 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
      */
     private AbstractContext registerContext;
     /**
-     * 键变换类描述
-     *///基于源类 Map 字段和目标类Map 字段 key 值生成的转换的类描述信息
+     * 基于源类 Map 字段和目标类Map 字段 key 值生成的转换的类描述信息
+     */
     private String keyTransformClassDescription;
     /**
      * 基于源类 Map 字段和目标类Map 字段 value 值生成的转换的类描述信息
@@ -158,7 +158,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 解决键和值类型
+     * 解析Map 类型内部key 和v alued的类型
      *
      * @param type 类型
      * @return {@link Class}
@@ -180,7 +180,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 解决地图
+     * 解析Map 类型
      *
      * @param targetType 目标类型
      * @param sourceType 源类型
@@ -222,7 +222,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 得到业主类内部名称
+     * 得到主类内部名称
      *
      * @return {@link String}
      */
@@ -456,7 +456,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     /**
      * 定义方法局部变量
      *
-     * @param startOfMethodBeanTransformsLable 方法bean转换标签开始
+     * @param startOfMethodBeanTransformsLable 方法体开始标签
      * @param endOfMethodBeanTransformsLable   年底bean标签转换方法
      * @return {@link Map}
      */
@@ -527,7 +527,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 关键转换字段名
+     * Map 类型 key 值类型转换字段名
      *
      * @return {@link String}
      */
@@ -536,7 +536,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 值转换字段名
+     * Map 类型 value 值类型转换字段名
      *
      * @return {@link String}
      */
@@ -545,7 +545,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 映射变换字段名
+     * Map类型对应的转换类作为上层类中一个字段，mapTransformFieldName生成具体的字段名
      *
      * @return {@link String}
      */
@@ -554,10 +554,10 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 地图匹配
+     * 策略匹配
      *
-     * @param targetValueType 目标价值类型
-     * @param sourceKeyType   源键类型
+     * @param targetValueType 目标类是Map类型，targetValueType 表示Map 的value类型
+     * @param sourceKeyType   源类是Map类型，sourceKeyType 表示Map 的key类型
      * @return boolean
      */
     private boolean mapMatch(Type targetValueType, Type sourceKeyType) {
@@ -567,11 +567,11 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 写字段
+     * 通过ClassWriter 生成类字段
      *
-     * @param classWriter        类作家
-     * @param transform          变换
-     * @param transformFieldName 将字段名
+     * @param classWriter
+     * @param transform          转换类对象，调用该方法前需要先生成对应字段的转换对象
+     * @param transformFieldName 转换类在上层类所属的字段的名称
      * @return {@link String}
      */
     protected static String writeField(ClassWriter classWriter, Transform transform, String transformFieldName) {
@@ -596,7 +596,8 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 基因转换
+     * 重写父类方法
+     * 详见{@link AbstractComplexTypeStrategy#geneTransform(Type, Type, String, String)}
      *
      * @param sourceBeanType    源bean类型
      * @param targetType        目标类型
@@ -680,7 +681,8 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 战略匹配
+     * 重写父类方法
+     * 详见{@link AbstractComplexTypeStrategy#strategyMatch(Type, Type)}
      *
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型
@@ -714,7 +716,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 明确线程本地
+     * 清理threadlocal
      */
     @Override
     public void clearThreadLocal(){

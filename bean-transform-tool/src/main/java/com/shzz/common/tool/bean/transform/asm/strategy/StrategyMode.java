@@ -28,25 +28,25 @@ import java.lang.reflect.Type;
 public enum StrategyMode {
 
     /**
-     * 映射到地图模式
+     * Map转换Map模式
      */
     MAP_TO_MAP_PATTERN(5,"map_to_map_pattern"),
 
     /**
-     * 集合数组模式
+     * 集合转换数组模式
      */
     COLLECTION_TO_ARRAY_PATTERN(4,"collection_to_array_pattern"),
 
     /**
-     * 数组,数组模式
+     * 数组转换数组模式
      */
     ARRAY_TO_ARRAY_PATTERN(3,"array_to_array_pattern"),
     /**
-     * 数组集合模式
+     * 数组转换集合模式
      */
     ARRAY_TO_COLLECTION_PATTERN(2,"array_to_collection_pattern"),
     /**
-     * 收集收集模式
+     * 集合转换集合模式
      */
     COLLECTION_TO_COLLECTION_PATTERN(1,"collection_to_collection_pattern"),
     /**
@@ -76,7 +76,7 @@ public enum StrategyMode {
     }
 
     /**
-     * 字符串
+     *
      *
      * @return {@link String}
      */

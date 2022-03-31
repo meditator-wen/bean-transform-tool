@@ -32,9 +32,9 @@ public class ErrorInfoStack {
     private final static Logger LOG = LoggerFactory.getLogger(ErrorInfoStack.class);
 
     /**
-     * 得到异常堆栈信息
+     * 提取异常堆栈信息并打印
      *
-     * @param e e
+     * @param e
      * @return {@link String}
      */
     public static String getExceptionStackInfo(Exception e){

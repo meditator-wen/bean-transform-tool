@@ -43,34 +43,39 @@ import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 
 
 /**
- * 数组类型策略
+ * 数组类型字节码处理策略
+ * 目标类某字段是数组类型，对应的源类字段可以是数组或者集合类型。该策略均可实现对应的转换字节码
  *
  * @author wen wang
  * @date 2021/12/24 16:27
  */
 public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     /**
-     * 日志
+     * 日志，SLF4J
      */
     private static final Logger LOG = LoggerFactory.getLogger("ArrayTypeStrategy");
 
     /**
-     * 目标数组民主党
+     *
      * 数组维数targetArrayDems，一维和多维对应的字节码指令不同,每层新建数组时需要更新维度值，
      */
     ThreadLocal<Integer> targetArrayDems = new ThreadLocal<>();
 
     /**
-     * 源类型列表地方
+     * 源类字段的类型列表，
+     * 多层嵌套Collection类型需要层层解析内层组件类型或者元素类型，Type 类型，
+     * 创建对象指令需要对应类型信息
      */
     ThreadLocal<List<Type>> sourceTypeList_Local = new ThreadLocal<>();
     /**
-     * 当地源类列表
+     *源类字段的类型列表，
+     *多维数组需要层层解析内层组件类型或者元素类型，Class 类型，
+     *创建对象指令需要对应类型信息
      */
     ThreadLocal<List<Class>> sourceClassList_Local = new ThreadLocal<>();
 
     /**
-     * 数组类型策略
+     * 数组类型转换字节码策略类的构造方法，多层嵌套情况下处理内层元素时需要传入上层的 {@link AbstractContext}
      *
      * @param context 上下文
      */
@@ -82,10 +87,10 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
      * 创建数组
      *
      * @param arrayRawClass  原始数组类
-     * @param arrayElemClass 数组elem类
-     * @param dems           民主党
-     * @param mv             mv
-     * @param lengthVarIndex 长度var指数
+     * @param arrayElemClass 数组内部元素类
+     * @param dems           维度
+     * @param mv             ASM 方法访问器，保持和调用者一致
+     * @param lengthVarIndex 数组长度变量索引
      */
     private void createArray(Class arrayRawClass, Class arrayElemClass, int dems, MethodVisitor mv, int lengthVarIndex) {
         //数组长度变量
@@ -127,18 +132,18 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 访问数组转换代码
+     * 数组转换代码
      *
-     * @param transformMethodVisitor 转换方法游客
-     * @param sourceRawType          源原始类型
-     * @param targetRawType          目标原始类型
-     * @param sourceElemType         源elem类型
-     * @param targetElemType         目标elem类型
+     * @param transformMethodVisitor 转换方法访问器
+     * @param sourceRawType          源类字段的RawType。源类字段如果是 ParameterizedType、TypeVariable、GenericArrayType、WildCardType类型，调用getRawType
+     * @param targetRawType          目标类字段的RawType。 目标字段如果是ParameterizedType,TypeVariable,GenericArrayType,WildCardType类型，调用getRawType
+     * @param sourceElemType         源类字段如果是集合类或者数组类，sourceElemType记录内部原始类型
+     * @param targetElemType         目标类是数组类，sourceElemType记录内部组件类型
      * @param newMethodPrefix        新方法前缀
-     * @param layer                  层
-     * @param pattern                模式
+     * @param layer                  递归层次
+     * @param pattern                模式，{@link StrategyMode}
      * @return boolean
-     * @throws Exception 异常
+     * @throws Exception
      */
     private boolean visitArrayTransformCode(MethodVisitor transformMethodVisitor, Class sourceRawType, Class targetRawType, Class sourceElemType, Class targetElemType, String newMethodPrefix, int layer, StrategyMode pattern) throws Exception {
         if (!((pattern == StrategyMode.COLLECTION_TO_ARRAY_PATTERN) || (pattern == StrategyMode.ARRAY_TO_ARRAY_PATTERN))) {
@@ -279,13 +284,13 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 迭代基因字节代码
+     * 多维数组迭代生成转换字节
      *
      * @param targetClassList                目标类列表
      * @param newMethodPrefix                新方法前缀
-     * @param extensTransformImplClassWriter extens变换impl类作家
-     * @param extensTransformMethodVisitor   extens转换方法访客
-     * @param mode                           模式
+     * @param extensTransformImplClassWriter ClassWriter由调用者传入，内部会基于ClassWriter 生成新的方法
+     * @param extensTransformMethodVisitor   方法访问器
+     * @param mode                           模式，{@link StrategyMode}
      * @return boolean
      * @throws Exception 异常
      */
@@ -325,13 +330,14 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 基因指令
      *
-     * @param extensTransformImplClassWriter extens变换impl类作家
-     * @param targetType                     目标类型
-     * @param sourceBeanType                 源bean类型
-     * @param newMethodPrefix                新方法前缀
+     * {@link AbstractComplexTypeStrategy#geneInstruction(ClassWriter, Type, Type, String)}
+     * @param extensTransformImplClassWriter
+     * @param targetType
+     * @param sourceBeanType
+     * @param newMethodPrefix                
      * @throws Exception 异常
+     *
      */
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
@@ -377,7 +383,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 匹配数组数组
+     * 源类字段和目标类字段如果都是数组类型，判断是否符合转换要求。
      *
      * @param targetArrayTypeList 目标数组类型列表
      * @param sourceArrayTypeList 源数组类型列表
@@ -425,14 +431,17 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 基因转换
+     * 生成数组类型的转换对象
+     * {@link AbstractComplexTypeStrategy#geneTransform(Type, Type, String, String)}
      *
-     * @param sourceBeanType    源bean类型
-     * @param targetType        目标类型
-     * @param generateClassname 生成类名
-     * @param fieldNamePrefix   字段名称前缀
+     * @param sourceBeanType
+     * @param targetType
+     * @param generateClassname
+     * @param fieldNamePrefix
      * @return {@link Map}
      * @throws Exception 异常
+     *
+     *
      */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
@@ -440,7 +449,8 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 选择战略模式
+     * 模式选择
+     * {@link AbstractComplexTypeStrategy#chooseStrategyMode(Type, Type)}
      *
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型
@@ -475,8 +485,9 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 战略匹配
-     *
+     * 策略匹配判断，该方法由外部调用，判断对应的类型是否符合该策略类的要求
+     * 这个接口函数实现了类型转换字节码生成模块与策略选择模块的解耦
+     * {@link AbstractComplexTypeStrategy#strategyMatch(Type, Type)}
      * @param sourceBeanType 源bean类型
      * @param targetType     目标类型
      * @return boolean
@@ -490,7 +501,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 明确线程本地
+     * 清理ThreadLoacl 变量
      */
     @Override
     public void clearThreadLocal() {
