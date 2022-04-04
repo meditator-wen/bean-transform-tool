@@ -17,7 +17,7 @@ package com.shzz.common.tool.bean.transform;
 
 
 /**
- * 标签类，无实际功能，子接口：{@link ExtensionObjectTransform,BeanTransform},
+ * 标签类，无实际功能，子接口：{@link ExtensionObjectTransform},{@link BeanTransform}
  *
  * @author wen wang
  * @date 2022/1/14 21:40
