@@ -1,3 +1,18 @@
+/*
+ * Copyright 2022 The bean-transform-tool Project
+ *
+ * The bean-transform-tool Project licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package com.shzz.common.tool.bean.transform.asm;
 
 import com.shzz.common.tool.bean.BeanFieldInfo;
@@ -27,8 +42,17 @@ import java.util.Objects;
  */
 public class TypeTransformAssist {
 
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("ResloverMetaInfo");
 
+    /**
+     * 判断是否为原始类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean isPrimitiveType(Class<?> type) {
         boolean flag = (type == int.class) || (type == long.class)
                 || (type == double.class)
@@ -42,6 +66,12 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 判断是否为引用类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean referenceType(Class<?> type) {
         boolean flag = ((type == int.class)
                 || (type == long.class)
@@ -55,17 +85,37 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 判断是否为基本类型：包装类或者原始类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean isBaseType(Class<?> type) {
         boolean flag = isWrapsType(type) || isPrimitiveType(type);
         return flag;
 
     }
 
+    /**
+     * char byte short int 统一用int 变量的操作指令
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean istiny(Class type) {
         return ((char.class == type) || (byte.class == type)
                 || (short.class == type) || (int.class == type) || (boolean.class == type));
     }
 
+    /**
+     * 字符串类型转换类包装类
+     *
+     * @param warpType 包装类型
+     * @param mv       mv
+     * @return boolean
+     * @throws Exception 异常
+     */
     private static boolean stringToWarp(Class warpType, MethodVisitor mv) throws Exception {
 
         if (isWrapsOrStringType(warpType) && (warpType != String.class)) {
@@ -97,6 +147,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 字符串转换为数值类型，先转成包装类，在拆箱获得数值
+     *
+     * @param numberType 数字类型
+     * @param mv         mv
+     * @return boolean
+     * @throws Exception 异常
+     */
     private static boolean stringToNumber(Class numberType, MethodVisitor mv) throws Exception {
         if (isPrimitiveType(numberType)) {
             //先转换为对应的包装类型,调用 包装类静态方法 valueOf(String s) 转换。
@@ -114,6 +172,14 @@ public class TypeTransformAssist {
     }
 
 
+    /**
+     * 原始类型之间转换
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @throws Exception 异常
+     */
     protected static void primitiveToPrimitive(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         // 处理原始类型之间强转 ,注意，调用该方法前源类对象的字段值要求已经入栈
         if ((!isPrimitiveType(sourceClass)) || (!isPrimitiveType(targetClass))) {
@@ -260,6 +326,12 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 原始类和包装类之间的映射关系
+     *
+     * @param key 关键
+     * @return {@link Class}
+     */
     public static Class typeMap(Class key) {
         if (key == byte.class) {
             return Byte.class;
@@ -296,6 +368,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 包装类或字符串类转换为原始类型
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @throws Exception 异常
+     */
     protected static void wrapsOrStringToPrimitive(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         /**
          * @description: 本函数只处理 包装类或者String 类型到基础类型的转换
@@ -358,7 +438,6 @@ public class TypeTransformAssist {
                 }
 
 
-
             }
 
         } else {
@@ -370,6 +449,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 原始类型转换为包装类或字符串类
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @throws Exception 异常
+     */
     protected static void primitiveToWrapsOrString(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         /**
          * @description: 本函数处理原始类型到包装类转换 ,注意，调用该方法前源类对象的字段值要求已经入栈,且是原始类型
@@ -421,6 +508,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 包装类或字符串类之间互转
+     *
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @throws Exception 异常
+     */
     protected static void wrapsOrStringToWrapsOrString(Class targetClass, Class sourceClass, MethodVisitor mv) throws Exception {
         /**
          * @description: 该方法只处理包装类或者String 类之间的相互转换
@@ -456,19 +551,17 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 基础类型转换字节码
+     * 该方法服务于 {@link BeanTransformsMethodAdapter}
+     * 只在源类和目标类都是原始类型或者包装类型情况下调用
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @param mv          mv
+     * @param isDeepyCopy deepy复制
+     * @throws Exception 异常
+     */
     public static void baseTypeProcessByteCode(Class targetClass, Class sourceClass, MethodVisitor mv, boolean isDeepyCopy) throws Exception {
-
-        /**
-         * @description: 该方法服务于 {@link BeanTransformsMethodAdapter}
-         * 只在源类和目标类都是原始类型或者包装类型情况下调用
-         * @param targetClass
-         * @param sourceClass
-         * @param mv
-         * @param isDeepyCopy
-         * @return: void
-         * @auther: wen wang
-         * @date: 2021/11/25 21:31
-         */
 
         if (isBaseType(targetClass) && isBaseType(sourceClass)) {
 
@@ -496,6 +589,12 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 包装类拆箱方法名枚举
+     *
+     * @author wen wang
+     * @date 2022/04/04
+     */
     public static enum TypeValueMethod {
 
         CHARVALUE_METHOD("charValue", char.class),
@@ -529,6 +628,12 @@ public class TypeTransformAssist {
         }
 
 
+        /**
+         * 根据原始类型找到对应包装类的拆箱方法
+         *
+         * @param returnPrimitiveType 返回原始类型
+         * @return {@link TypeValueMethod}
+         */
         public static TypeValueMethod getTypeValueMethod(Class<?> returnPrimitiveType) {
             if (byte.class == returnPrimitiveType) {
                 return BYTEVALUE_METHOD;
@@ -551,12 +656,24 @@ public class TypeTransformAssist {
     }
 
 
+    /**
+     * 判断是否是包装还是字符串类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean isWrapsOrStringType(Class<?> type) {
         boolean flag = isWrapsType(type) || (type.isAssignableFrom(String.class));
         return flag;
 
     }
 
+    /**
+     * 判断是否是包装类型
+     *
+     * @param type 类型
+     * @return boolean
+     */
     public static boolean isWrapsType(Class<?> type) {
         boolean flag = (Integer.class == type) || (Long.class == type)
                 || (Double.class == type)
@@ -571,22 +688,20 @@ public class TypeTransformAssist {
     }
 
 
+    /**
+     * 解析目标类字段对应的源类字段信息
+     *
+     * @param targetFieldName 目标字段名称
+     * @param sourceFieldName 源字段名
+     * @param sourceClass     源类
+     * @param targetClass     目标类
+     * @param resloveInfo     解析后的信息封装到ResloveInfo 对象并返回
+     */
     public static void sourceFieldProcess(String targetFieldName,
                                           String sourceFieldName,
                                           Class<?> sourceClass,
                                           Class<?> targetClass,
                                           ResloveInfo resloveInfo) {
-        /**
-         * @description: 解析目标类字段对应的源类字段信息
-         * @param targetFieldName
-         * @param sourceFieldName
-         * @param sourceClass
-         * @param targetClass
-         * @param resloveInfo
-         * @return: void
-         * @auther: wen wang
-         * @date: 2021/11/30 9:56
-         */
 
         if (Objects.isNull(sourceFieldName) || sourceFieldName.isEmpty()) {
 
@@ -668,6 +783,13 @@ public class TypeTransformAssist {
     }
 
 
+    /**
+     * 检查类型是否符合转换要求
+     *
+     * @param targetClass     目标类
+     * @param sourceBeanClass 源bean类
+     * @throws BeanTransformException bean转换异常
+     */
     public static void checkClass(Class targetClass, Class sourceBeanClass) throws BeanTransformException {
 
         /**
@@ -699,6 +821,12 @@ public class TypeTransformAssist {
         }
     }
 
+    /**
+     * 解析信息检查，判断内部信息是否有效
+     *
+     * @param resloveInfo 解决信息
+     * @return boolean
+     */
     public static boolean resloveInfoCheck(ResloveInfo resloveInfo) {
         boolean check = true;
         if (Objects.isNull(resloveInfo)) {
@@ -732,6 +860,14 @@ public class TypeTransformAssist {
         return check;
     }
 
+    /**
+     * 解析字段及其源类字段的信息
+     *
+     * @param field
+     * @param targetClass 目标类
+     * @param sourceClass 源类
+     * @return {@link ResloveInfo}
+     */
     public static ResloveInfo reslove(Field field, Class<?> targetClass, Class<?> sourceClass) {
 
         ResloveInfo resloveInfo = new ResloveInfo();
@@ -831,6 +967,13 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * get/set函数名，如果用户未通过注解{@link BeanFieldInfo}指定，则按照默认方法构建
+     *
+     * @param field   场
+     * @param getFlag 让国旗
+     * @return {@link String}
+     */
     public static String constructGetAndSetFunctionName(Field field, boolean getFlag) {
         String name = "";
         if (Objects.isNull(field)) {
@@ -854,6 +997,14 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 检查用户扩展实现类是否有效
+     *
+     * @param extensionObjectTransformImpl 拓展类名
+     * @param targetClass                  目标类
+     * @param extensionImplFieldName       字段名
+     * @return boolean
+     */
     public static boolean checkExtensionObjectTransformImpl(String extensionObjectTransformImpl, Class<?> targetClass, String extensionImplFieldName) {
         boolean checkSuccess = false; //默认无效
         if (Objects.isNull(extensionObjectTransformImpl) || extensionObjectTransformImpl.isEmpty()) {

@@ -1,28 +1,39 @@
-package bean.transform.unittest;
+package bean.transform.unittest.jmhtest;
 
-import bean.transform.unittest.jmhtest.BeanTo;
+import bean.transform.unittest.entity.*;
+import bean.transform.unittest.jmhtest.selma.SelmaComplexFieldMapper;
+import bean.transform.unittest.jmhtest.selma.SelmaMapper;
+import com.alibaba.fastjson.JSON;
 import com.shzz.common.tool.bean.transform.BeanTransform;
 import com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate;
-import bean.transform.unittest.entity.*;
-import com.alibaba.fastjson.JSON;
-import net.sf.cglib.beans.BeanCopier;
-import org.junit.Test;
+import fr.xebia.extras.selma.Selma;
+import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.io.File;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
- * @Classname UnitTest
- * @Description TODO
- * @Date 2022/1/16 11:21
- * @Created by wen wang
+ * @author by wen wang
+ * @description TODO
+ * @created 2022/3/18 20:45
  */
-public class UnitTest {
-
-
-    BeanCopier copier = BeanCopier.create(CopyFrom.class, CopyTo.class, false);
-
-    BeanTransform beanTransFormsHandler = null;
-
+@BenchmarkMode({Mode.Throughput}) // 指定mode为Mode.AverageTime
+@OutputTimeUnit(TimeUnit.SECONDS) // 指定输出的耗时时长的单位
+@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 50, time = 3, timeUnit = TimeUnit.SECONDS)
+@Fork(1)
+@Threads(1)
+@State(Scope.Benchmark)
+public class JmhComplexFieldTest {
+    //Get SelmaMapper
+    SelmaComplexFieldMapper selmaMapper = Selma.builder(SelmaComplexFieldMapper.class).build();
+    BeanTransform beanTransFormsHandler;
+    ComplexFieldEntity complexFieldEntity;
 
     public CopyFrom createCopyFrom() {
         CopyFrom from = new CopyFrom();
@@ -225,161 +236,56 @@ public class UnitTest {
         return from;
     }
 
-
-    public UnitTest() {
-
-
+    public JmhComplexFieldTest() {
         try {
-            //  beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
+            BeanTransform beanTransFormsHandler1 = TransformUtilGenerate.generate(CopyFrom.class, ComplexFieldEntity.class, true, true, null);
+            CopyFrom copyFrom = createCopyFrom();
+            System.out.println("copyFrom=" + JSON.toJSONString(copyFrom));
+            complexFieldEntity = beanTransFormsHandler1.beanTransform(CopyFrom.class, copyFrom, ComplexFieldEntity.class);
+            System.out.println("complexFieldEntity=" + JSON.toJSONString(complexFieldEntity));
+            beanTransFormsHandler = TransformUtilGenerate.generate(ComplexFieldEntity.class, TargetComplexFieldEntity.class, true, true, null);
+
+            TargetComplexFieldEntity beanTransformTarget = beanTransFormsHandler.beanTransform(ComplexFieldEntity.class,
+                    complexFieldEntity,
+                    TargetComplexFieldEntity.class);
+
+            System.out.println("beanTransformTarget=" + JSON.toJSONString(beanTransformTarget));
+
+            TargetComplexFieldEntity selmaTarget = selmaMapper.mapper(complexFieldEntity);
+
+            System.out.println("selmaTarget=" + JSON.toJSONString(selmaTarget));
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    CopyFrom from = createCopyFrom();
+    @Benchmark
+    public void benchMarkBeanTransformsHandler() throws Exception {
 
-
-    public void testBaseType() throws Exception {
-        CopyFrom from = createCopyFrom();
-        BeanTransform beanTransFormsBase = TransformUtilGenerate.generate(CopyFrom.class, BaseEntity.class, true, true, null);
-
-
+        TargetComplexFieldEntity beanTransformTarget = beanTransFormsHandler.beanTransform(ComplexFieldEntity.class,
+                complexFieldEntity,
+                TargetComplexFieldEntity.class);
     }
 
-    public void testComplexType() throws Exception {
-        CopyFrom from = createCopyFrom();
-        BeanTransform beanTransFormsComplex = TransformUtilGenerate.generate(CopyFrom.class, ComplexFieldEntity.class, true, true, null);
+    @Benchmark
+    public void benchMarkSelmaMapper() throws Exception {
 
-
+        TargetComplexFieldEntity selmaTarget = selmaMapper.mapper(complexFieldEntity);
     }
 
-
-    @Test
-    public void test() throws Exception {
-
-
-        CopyFrom from = createCopyFrom();
-        int times = 1;
-
-        int loop = 1;
-
-//        CopyTo copyTo8 = new CopyTo();
-//        org.springframework.beans.BeanUtils.copyProperties(from, copyTo8);
-
-
-        //   System.out.println(" cglib  BeanTransFormsHandler  springBeanUtils   Copier 转换拷贝bean 对比测试");
-
-
-        //  BeanUtils.copyProperties(from,new CopyTo());
-        //   org.apache.commons.beanutils.BeanUtils.cloneBean(from);
-
-        CopyTo copyTo1 = new CopyTo();
-        CopyTo copyTo2 = new CopyTo();
-        CopyTo copyTo3 = new CopyTo();
-        CopyTo copyTo4 = new CopyTo();
-        CopyTo copyTo5 = new CopyTo();
-
-
-        for (int lo = 0; lo < loop; ++lo) {
-
-            Thread.sleep(100);
-
-            BeanTransform beanTransFormsHandler = TransformUtilGenerate.generate(CopyFrom.class, CopyTo.class, true, true, null);
-
-
-            long time1 = System.nanoTime();
-
-            for (int j = 0; j < times; ++j) {
-
-                copyTo1 = new CopyTo();
-                copier.copy(from, copyTo1, null);
-
-                // System.out.println(JSON.toJSONString(compareTo));
-            }
-            long time2 = System.nanoTime();
-            // System.out.println("from=" + JSON.toJSONString(from));
-            // System.out.println(" copyTo1=" + JSON.toJSONString(copyTo1));
-            long time3_1 = System.nanoTime();
-
-
-            for (int K = 0; K < times; ++K) {
-
-
-                copyTo2 = beanTransFormsHandler.beanTransform(CopyFrom.class,
-                        from,
-                        CopyTo.class);
-
-                from.getInnerDoubleList().get(0).get(1).setPhaseName("修改phase");
-
-                System.out.println("修改 from =" + JSON.toJSONString(from));
-                System.out.println(" copyTo2 =" + JSON.toJSONString(copyTo2));
-//
-//                  System.out.println("from="+JSON.toJSONString(from));
-//                 System.out.println("copyTo2="+JSON.toJSONString(copyTo2));
-
-
-            }
-
-
-            long time3 = System.nanoTime();
-            //   System.out.println("from=" + JSON.toJSONString(from));
-            //   System.out.println("beanTransFormsHandler  copyTo2=" + JSON.toJSONString(copyTo2));
-            // System.out.println("copyTo2.getIntThreeDems()[0][0][0]=="+copyTo2.getIntThreeDems()[0][0][0]);
-
-
-            ComplexTypeTransformManual complexTypeTransformManual = new ComplexTypeTransformManual();
-            long time4_1 = System.nanoTime();
-            for (int K = 0; K < times; ++K) {
-
-                //  copyTo3 = complexTypeTransformManual.beanTransforms(from);
-
-
-                //  org.springframework.beans.BeanUtils.copyProperties(from, copyTo3);
-                //   org.springframework.beans.BeanUtils.copyProperties(from,copyTo3);
-
-
-            }
-
-            long time4 = System.nanoTime();
-            //  System.out.println("from=" + JSON.toJSONString(from));
-            //   System.out.println("manual  copyTo3=" + JSON.toJSONString(copyTo3));
-            for (int K = 0; K < times; ++K) {
-
-                // copyTo3 = new CopyTo();
-                //  org.apache.commons.beanutils.BeanUtils.copyProperties(from,copyTo3);
-
-                // 深度克隆拷贝
-                // CopyFrom from1= (CopyFrom) org.apache.commons.beanutils.BeanUtils.cloneBean(from);
-
-
-            }
-
-            long time5 = System.nanoTime();
-
-            //  MapperStructConvert mapperStructConvert=  MapperStructConvert.INSTANCE;
-            long time6_1 = System.nanoTime();
-
-            for (int K = 0; K < times; ++K) {
-
-                //    copyTo5 =mapperStructConvert.transform(from);
-
-
-            }
-
-            long time6 = System.nanoTime();
-
-//            System.out.println("MapperStructConvert:" + JSON.toJSONString(copyTo5));
-//
-//
-//            System.out.println(" 转换拷贝bean " + times + "次 总时间（毫秒）, " + ",cglib vs BeanTransFormsHandler vs manual " + "： "
-//                    + (time2 - time1) / 1000000 + "   "
-//                    + (time3 - time3_1) / 1000000 + "  " +
-//                    (time4 - time4_1) / 1000000 + "  ");
-
-
-        }
-
-
+    public static void main(String[] args) throws RunnerException {
+        //String[] args
+        //String[] args
+        String docPath = System.getProperty("user.dir") + File.separator + "doc" + File.separator + "benchMarkJmhComplexFieldTest.log";
+        ;
+        System.out.println("JmhComplexFieldTest output path: " + docPath);
+        Options options = new OptionsBuilder()
+                .include(JmhComplexFieldTest.class.getSimpleName())
+                .output(docPath)
+                .build();
+        new Runner(options).run();
     }
 
 

@@ -1,0 +1,71 @@
+Note: Use "gpg --full-generate-key" for a full featured key generation dialog.
+
+GnuPG needs to construct a user ID to identify your key.
+
+Real name: wen wang
+Email address: tongjiwangwen@163.com
+You selected this USER-ID:
+    "wen wang <tongjiwangwen@163.com>"
+
+Change (N)ame, (E)mail, or (O)kay/(Q)uit? O
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+gpg: directory 'C:\\Users\\Administrator\\AppData\\Roaming\\gnupg\\openpgp-revocs.d' created
+gpg: revocation certificate stored as 'C:\\Users\\Administrator\\AppData\\Roaming\\gnupg\\openpgp-revocs.d\\A441BABC9592B68E5E4DEEE06365F1FDEF563188.rev'
+public and secret key created and signed.
+
+pub   ed25519 2022-03-12 [SC] [expires: 2024-03-11]
+      A441BABC9592B68E5E4DEEE06365F1FDEF563188
+uid                      wen wang <tongjiwangwen@163.com>
+sub   cv25519 2022-03-12 [E] [expires: 2024-03-11]
+
+
+In case you have multiple keys, the local gpg will use the first listed signature key (gpg --list-signatures) for any publishing steps, if you need to use a specific key you could add the details of the gpg key inside a <configuration> section in your pom.xml and use local settings.xml to discover the passphrase via the signature keyname. You may need to use the signature keyid in hexadecimal format:
+
+C:\Users\Administrator>gpg --list-signatures --keyid-format 0xshort
+C:\Users\Administrator\AppData\Roaming\gnupg\pubring.kbx
+--------------------------------------------------------
+pub   ed25519/0xEF563188 2022-03-12 [SC] [expires: 2024-03-11]
+      A441BABC9592B68E5E4DEEE06365F1FDEF563188
+uid           [ultimate] wen wang <tongjiwangwen@163.com>
+sig 3        0xEF563188 2022-03-12  wen wang <tongjiwangwen@163.com>
+sub   cv25519/0xE00A5815 2022-03-12 [E] [expires: 2024-03-11]
+sig          0xEF563188 2022-03-12  wen wang <tongjiwangwen@163.com>
+
+sub key 删除方法
+https://central.sonatype.org/publish/requirements/gpg/#delete-a-sub-key
+
+gpg --keyserver keyserver.ubuntu.com --send-keys  A441BABC9592B68E5E4DEEE06365F1FDEF563188
+或者 
+gpg --keyserver keys.openpgp.org --send-keys  A441BABC9592B68E5E4DEEE06365F1FDEF563188
+
+或者
+gpg --keyserver pgp.mit.edu --send-keys  A441BABC9592B68E5E4DEEE06365F1FDEF563188
+
+ow other people can import your public key from the key server to their local machines:
+
+gpg --keyserver keyserver.ubuntu.com --recv-keys A441BABC9592B68E5E4DEEE06365F1FDEF563188
+C:\Users\Administrator>gpg --keyserver keyserver.ubuntu.com --recv-keys A441BABC9592B68E5E4DEEE06365F1FDEF563188
+gpg: key 6365F1FDEF563188: "wen wang <tongjiwangwen@163.com>" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+
+
+
+Delete a Sub Key
+Some PGP tools generates sub keys and use them for signing by default, but to make Maven tools recognize the signature, you must use the primary key to sign your artifacts.
+
+This is a problem if you use it to sign artifacts and deploy artifacts to the Central Repository, because Maven as well as Nexus Repository Manager can only verify against a primary key.
+
+To fix this problem you have to delete the sub signing key so PGP will use the primary key for signing. To get an idea whether you have a sub signing key, run command below with your own key ID:
+gpg --edit-key A441BABC9592B68E5E4DEEE06365F1FDEF563188
+
+D:\Program Files (x86)\Gpg4win\..\GnuPG\bin
+
+D:\Program Files (x86)\GnuPG

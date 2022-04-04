@@ -1,3 +1,18 @@
+/*
+ * Copyright 2022 The bean-transform-tool Project
+ *
+ * The bean-transform-tool Project licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package com.shzz.common.tool.bean.transform.asm.strategy;
 
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
@@ -26,25 +41,57 @@ import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.EXTE
 import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_NAME;
 import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 
+
 /**
- * @Classname ArrayTypeStrategy
- * @Description TODO
- * @Date 2021/12/24 16:27
- * @Created by wen wang
+ * 数组类型字节码处理策略
+ * 目标类某字段是数组类型，对应的源类字段可以是数组或者集合类型。该策略均可实现对应的转换字节码
+ *
+ * @author wen wang
+ * @date 2021/12/24 16:27
  */
 public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
+    /**
+     * 日志，SLF4J
+     */
     private static final Logger LOG = LoggerFactory.getLogger("ArrayTypeStrategy");
 
-    // 数组维数targetArrayDems，一维和多维对应的字节码指令不同,每层新建数组时需要更新维度值，
+    /**
+     *
+     * 数组维数targetArrayDems，一维和多维对应的字节码指令不同,每层新建数组时需要更新维度值，
+     */
     ThreadLocal<Integer> targetArrayDems = new ThreadLocal<>();
 
+    /**
+     * 源类字段的类型列表，
+     * 多层嵌套Collection类型需要层层解析内层组件类型或者元素类型，Type 类型，
+     * 创建对象指令需要对应类型信息
+     */
     ThreadLocal<List<Type>> sourceTypeList_Local = new ThreadLocal<>();
+    /**
+     *源类字段的类型列表，
+     *多维数组需要层层解析内层组件类型或者元素类型，Class 类型，
+     *创建对象指令需要对应类型信息
+     */
     ThreadLocal<List<Class>> sourceClassList_Local = new ThreadLocal<>();
 
+    /**
+     * 数组类型转换字节码策略类的构造方法，多层嵌套情况下处理内层元素时需要传入上层的 {@link AbstractContext}
+     *
+     * @param context 上下文
+     */
     public ArrayTypeStrategy(AbstractContext context) {
         this.registerContext_local.set(context);
     }
 
+    /**
+     * 创建数组
+     *
+     * @param arrayRawClass  原始数组类
+     * @param arrayElemClass 数组内部元素类
+     * @param dems           维度
+     * @param mv             ASM 方法访问器，保持和调用者一致
+     * @param lengthVarIndex 数组长度变量索引
+     */
     private void createArray(Class arrayRawClass, Class arrayElemClass, int dems, MethodVisitor mv, int lengthVarIndex) {
         //数组长度变量
         mv.visitVarInsn(Opcodes.ILOAD, lengthVarIndex);
@@ -84,6 +131,20 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 数组转换代码
+     *
+     * @param transformMethodVisitor 转换方法访问器
+     * @param sourceRawType          源类字段的RawType。源类字段如果是 ParameterizedType、TypeVariable、GenericArrayType、WildCardType类型，调用getRawType
+     * @param targetRawType          目标类字段的RawType。 目标字段如果是ParameterizedType,TypeVariable,GenericArrayType,WildCardType类型，调用getRawType
+     * @param sourceElemType         源类字段如果是集合类或者数组类，sourceElemType记录内部原始类型
+     * @param targetElemType         目标类是数组类，sourceElemType记录内部组件类型
+     * @param newMethodPrefix        新方法前缀
+     * @param layer                  递归层次
+     * @param pattern                模式，{@link StrategyMode}
+     * @return boolean
+     * @throws Exception
+     */
     private boolean visitArrayTransformCode(MethodVisitor transformMethodVisitor, Class sourceRawType, Class targetRawType, Class sourceElemType, Class targetElemType, String newMethodPrefix, int layer, StrategyMode pattern) throws Exception {
         if (!((pattern == StrategyMode.COLLECTION_TO_ARRAY_PATTERN) || (pattern == StrategyMode.ARRAY_TO_ARRAY_PATTERN))) {
             return false;
@@ -110,6 +171,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
         transformMethodVisitor.visitLabel(transformStart);
         transformMethodVisitor.visitVarInsn(Opcodes.ALOAD, sourceObjectVar.getIndex());
+
         if (pattern == StrategyMode.COLLECTION_TO_ARRAY_PATTERN) {
             // 源集合类size
             transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(Collection.class));
@@ -121,7 +183,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         }
         LocalVariableInfo arrayLength = localVar.get(ARRAY_LENGTH_VARIABLE_NAME);
         transformMethodVisitor.visitVarInsn(Opcodes.ISTORE, arrayLength.getIndex());
-
+        transformMethodVisitor.visitLabel(arrayLength.getStart());
         createArray(targetRawType, targetElementType_local.get(), this.targetArrayDems.get(), transformMethodVisitor, arrayLength.getIndex());
 
         transformMethodVisitor.visitVarInsn(Opcodes.ASTORE, targetVar.getIndex());
@@ -130,7 +192,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         transformMethodVisitor.visitLdcInsn(Integer.valueOf(0));
         LocalVariableInfo arrayIndex = localVar.get(ARRAY_INDEX_VARIABLE_NAME);
         transformMethodVisitor.visitVarInsn(Opcodes.ISTORE, arrayIndex.getIndex());
-
+        transformMethodVisitor.visitLabel(arrayIndex.getStart());
         LocalVariableInfo transformBaseTypeVar = localVar.get(TRANSFORM_BASETYPE_VAR);
         LocalVariableInfo tempElement = localVar.get(TEMP_ELEMENT_VARIABLE_NAME);
         if (pattern == StrategyMode.COLLECTION_TO_ARRAY_PATTERN) {
@@ -188,9 +250,10 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
             transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceRawType));
             transformMethodVisitor.visitVarInsn(Opcodes.ILOAD, arrayIndex.getIndex());
             arrayElementLoad(sourceElemType, transformMethodVisitor);
-            transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceElemType));
+            //transformMethodVisitor.visitTypeInsn(Opcodes.CHECKCAST, org.objectweb.asm.Type.getInternalName(sourceElemType));
             // 迭代元素存入局部变量
             typeStoreByteCode(sourceElemType, transformMethodVisitor, tempElement.getIndex());
+            transformMethodVisitor.visitLabel(tempElement.getStart());
             // 存入数组元素值，1 加载数组对象-> 2 加载索引值 -> 3 加载 需要存入的元素值 -> store
             transformMethodVisitor.visitVarInsn(Opcodes.ALOAD, targetVar.getIndex());
             transformMethodVisitor.visitVarInsn(Opcodes.ILOAD, arrayIndex.getIndex());
@@ -220,6 +283,17 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         return true;
     }
 
+    /**
+     * 多维数组迭代生成转换字节
+     *
+     * @param targetClassList                目标类列表
+     * @param newMethodPrefix                新方法前缀
+     * @param extensTransformImplClassWriter ClassWriter由调用者传入，内部会基于ClassWriter 生成新的方法
+     * @param extensTransformMethodVisitor   方法访问器
+     * @param mode                           模式，{@link StrategyMode}
+     * @return boolean
+     * @throws Exception 异常
+     */
     protected boolean iterationGeneByteCode(List<Class> targetClassList, String newMethodPrefix, ClassWriter extensTransformImplClassWriter, MethodVisitor extensTransformMethodVisitor, StrategyMode mode) throws Exception {
         boolean methodGeneSuccess = false;
         for (int layer = 0; layer < targetClassList.size() - 1; ++layer) {
@@ -246,7 +320,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
                 methodGeneSuccess = visitArrayTransformCode(extensTransformMethodVisitor, sourceRawType, targetRawType, sourceElemType, targetElemType, newMethodPrefix, layer, mode);
 
             } else {
-                MethodVisitor newCollectionTransformMethod = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PRIVATE, methodName(newMethodPrefix, layer), EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+                MethodVisitor newCollectionTransformMethod = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PRIVATE + Opcodes.ACC_FINAL, methodName(newMethodPrefix, layer), EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
                 // 内部元素转换方法，非接口方法，private修饰，内部调用。 方法名是 公共前缀+层级信息，内层集合类依次循环创建转换方法
                 visitArrayTransformCode(newCollectionTransformMethod, sourceRawType, targetRawType, sourceElemType, targetElemType, newMethodPrefix, layer, mode);
             }
@@ -255,17 +329,27 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         return methodGeneSuccess;
     }
 
+    /**
+     *
+     * {@link AbstractComplexTypeStrategy#geneInstruction(ClassWriter, Type, Type, String)}
+     * @param extensTransformImplClassWriter
+     * @param targetType
+     * @param sourceBeanType
+     * @param newMethodPrefix                
+     * @throws Exception 异常
+     *
+     */
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
         boolean methodGeneSuccess = false;
-        MethodVisitor extensTransformMethodVisitor = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+        MethodVisitor extensTransformMethodVisitor = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC + Opcodes.ACC_FINAL, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
         this.namePrefix_Local.set(newMethodPrefix);
         StrategyMode findMode = chooseStrategyMode(sourceBeanType, targetType);
         if (Objects.nonNull(findMode)) {
             if (StrategyMode.ARRAY_TO_ARRAY_PATTERN == findMode) {
                 // 数组类，ComponentType 解析
-                List<Class> targetClassList = resolveArrayElenentType(this.targetRawType_local.get());
-                List<Class> sourceClassList = resolveArrayElenentType(this.sourceRawType_local.get());
+                List<Class> targetClassList = resolveArrayElementType(this.targetRawType_local.get());
+                List<Class> sourceClassList = resolveArrayElementType(this.sourceRawType_local.get());
                 sourceClassList_Local.set(sourceClassList);
                 if (arrayMatchArray(targetClassList, sourceClassList)) {
                     this.targetElementType_local.set(targetClassList.get(targetClassList.size() - 1));
@@ -278,7 +362,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
                 ParameterizedType sourceParameterizedType = (ParameterizedType) sourceBeanType;
                 List<Type> sourceTypeList = resolveCollectionElenentType(sourceParameterizedType);
                 // 数组类，ComponentType 解析
-                List<Class> targetClassList = resolveArrayElenentType(this.targetRawType_local.get());
+                List<Class> targetClassList = resolveArrayElementType(this.targetRawType_local.get());
                 sourceTypeList_Local.set(sourceTypeList);
                 if (collectionMatchArrayType(targetClassList, sourceTypeList)) {
 
@@ -298,6 +382,14 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 源类字段和目标类字段如果都是数组类型，判断是否符合转换要求。
+     *
+     * @param targetArrayTypeList 目标数组类型列表
+     * @param sourceArrayTypeList 源数组类型列表
+     * @return boolean
+     * @throws Exception 异常
+     */
     public static boolean arrayMatchArray(List<Class> targetArrayTypeList, List<Class> sourceArrayTypeList) throws Exception {
 
         boolean match = true;
@@ -338,11 +430,33 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 生成数组类型的转换对象
+     * {@link AbstractComplexTypeStrategy#geneTransform(Type, Type, String, String)}
+     *
+     * @param sourceBeanType
+     * @param targetType
+     * @param generateClassname
+     * @param fieldNamePrefix
+     * @return {@link Map}
+     * @throws Exception 异常
+     *
+     *
+     */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
         return super.geneTransform(sourceBeanType, targetType, generateClassname, fieldNamePrefix);
     }
 
+    /**
+     * 模式选择
+     * {@link AbstractComplexTypeStrategy#chooseStrategyMode(Type, Type)}
+     *
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return {@link StrategyMode}
+     * @throws Exception 异常
+     */
     @Override
     public StrategyMode chooseStrategyMode(Type sourceBeanType, Type targetType) throws Exception {
         StrategyMode strategyMode = null;
@@ -370,6 +484,15 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
         return strategyMode;
     }
 
+    /**
+     * 策略匹配判断，该方法由外部调用，判断对应的类型是否符合该策略类的要求
+     * 这个接口函数实现了类型转换字节码生成模块与策略选择模块的解耦
+     * {@link AbstractComplexTypeStrategy#strategyMatch(Type, Type)}
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return boolean
+     * @throws Exception 异常
+     */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
 
@@ -377,6 +500,9 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 清理ThreadLoacl 变量
+     */
     @Override
     public void clearThreadLocal() {
         super.clearThreadLocal();

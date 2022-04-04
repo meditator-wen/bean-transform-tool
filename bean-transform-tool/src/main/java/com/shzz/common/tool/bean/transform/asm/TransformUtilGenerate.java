@@ -1,3 +1,18 @@
+/*
+ * Copyright 2022 The bean-transform-tool Project
+ *
+ * The bean-transform-tool Project licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package com.shzz.common.tool.bean.transform.asm;
 
 import com.shzz.common.tool.bean.transform.*;
@@ -13,7 +28,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.util.*;
-
 
 
 /**
@@ -52,7 +66,6 @@ public class TransformUtilGenerate {
     );
 
 
-
     /**
      * 不可创建实例
      */
@@ -68,7 +81,7 @@ public class TransformUtilGenerate {
      * @param extendsTransformList 扩展转换列表
      * @return {@link BeanTransform}
      * @throws Exception 异常
-     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     * see {@link #generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, true, true, extendsTransformList, null);
@@ -83,7 +96,7 @@ public class TransformUtilGenerate {
      * @param isDeepCopy      深拷贝
      * @return {@link BeanTransform}
      * @throws Exception 异常
-     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     * see {@link #generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, true, null, null);
@@ -98,7 +111,7 @@ public class TransformUtilGenerate {
      * @param extendsTransformList 扩展转换列表
      * @return {@link BeanTransform}
      * @throws Exception 异常
-     * @see {@link TransformUtilGenerate#generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
+     * see {@link #generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, true, extendsTransformList, null);
@@ -114,6 +127,7 @@ public class TransformUtilGenerate {
      * @param extendsTransformList       扩展转换列表
      * @return {@link BeanTransform}
      * @throws Exception 异常
+     * see {@link #generate(Class, Class, boolean, boolean, List, java.lang.reflect.Type[])} }
      */
     public static <S, T> BeanTransform generate(Class<S> sourceBeanClass, Class<T> targetClass, boolean isDeepCopy, boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList) throws Exception {
         return generate(sourceBeanClass, targetClass, isDeepCopy, permitBaseTypeInterconvert, extendsTransformList, null);
@@ -168,6 +182,10 @@ public class TransformUtilGenerate {
         return beanTransform;
     }
 
+    /**
+     * @param digest
+     * @return {@link String}
+     */
     @Deprecated
     private static String toHex(byte[] digest) {
         String digestHexString = "";
@@ -184,6 +202,10 @@ public class TransformUtilGenerate {
         return digestHexString;
     }
 
+    /**
+     * @param classz classz
+     * @return {@link StringBuilder}
+     */
     @Deprecated
     private static StringBuilder extractInfo(Class classz) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -199,11 +221,19 @@ public class TransformUtilGenerate {
 
     }
 
+    /**
+     * 清理数据
+     */
     private static void afterGenerate() {
         MapTypeStrategy.sequence_Local.remove();
         CollectionSupplementStrategy.sequence_Local.remove();
     }
 
+    /**
+     * @param rawType
+     * @return {@link String}
+     */
+    @Deprecated
     public static String classSimpleNameReconstruct(Class rawType) {
 
         if (rawType.isArray()) {
@@ -214,6 +244,14 @@ public class TransformUtilGenerate {
 
     }
 
+    /**
+     * 装载字节码数组，生成Class 对象，内部调用自定义类加载器实现
+     *
+     * @param bytes             字节
+     * @param generateClassname 生成类名
+     * @return {@link Class}
+     * @throws Exception 异常
+     */
     public static Class loadASMGenerateClass(byte[] bytes, String generateClassname) throws Exception {
         //将二进制流写到本地磁盘上
         FileOutputStream fos = null;
@@ -252,6 +290,13 @@ public class TransformUtilGenerate {
         return geneImplClass;
     }
 
+    /**
+     * 检查生成类名是否为空，类名异常则内部无法通过ASM生成对应类，抛出异常
+     *
+     * @param generateClassname 生成类名
+     * @return boolean
+     * @throws Exception 异常
+     */
     public static boolean checkGenerateClassname(String generateClassname) throws Exception {
 
         if (Objects.isNull(generateClassname)) {

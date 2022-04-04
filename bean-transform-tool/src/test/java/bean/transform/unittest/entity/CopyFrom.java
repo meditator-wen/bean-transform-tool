@@ -3,10 +3,7 @@ package bean.transform.unittest.entity;
 
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Classname CompareFrom
@@ -146,6 +143,16 @@ public class CopyFrom {
 
     private JSONObject jsonObject;
     private Object object;
+
+    public Set<Stack<ListElement>> getNestSetStack() {
+        return nestSetStack;
+    }
+
+    public void setNestSetStack(Set<Stack<ListElement>> nestSetStack) {
+        this.nestSetStack = nestSetStack;
+    }
+
+    private Set<Stack<ListElement>> nestSetStack;
 
     public Inner[][] getInnerarray() {
         return innerarray;

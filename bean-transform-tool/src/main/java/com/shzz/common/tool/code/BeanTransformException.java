@@ -1,18 +1,48 @@
+/*
+ * Copyright 2022 The bean-transform-tool Project
+ *
+ * The bean-transform-tool Project licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package com.shzz.common.tool.code;
 
+
 /**
- * @Classname TdeBussinessException
- * @Description TODO
- * @Date 2020/6/10 18:21
- * @Created by wen wang
+ * bean转换异常
+ *
+ * @author wen wang
+ * @date 2020/6/10 18:21
  */
 public class BeanTransformException extends Exception implements ErrorEncoder{
 
 
+    /**
+     * 错误代码
+     */
     private String errorCode="not specific";
+    /**
+     * 错误信息概述
+     */
     private String errorOutline="not specific";
+    /**
+     * 错误链细节
+     */
     private String errorChainDetail="not specific";
 
+    /**
+     * bean转换异常
+     *
+     * @param errorEncoder 错误编码器
+     */
     public BeanTransformException(ErrorEncoder  errorEncoder){
         errorCode=errorEncoder.getErrorCode();
         errorOutline=errorEncoder.getErrorOutline();
@@ -21,17 +51,38 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
 
     }
 
+    /**
+     * bean转换异常
+     *
+     * @param ex 上层异常
+     */
     public BeanTransformException(Exception  ex){
         super(ex.getCause());
 
     }
 
+    /**
+     * bean转换异常
+     *
+     * @param errorCode        错误代码
+     * @param errorOutline     错误概要
+     * @param errorChainDetail 错误链细节
+     */
     public BeanTransformException(String errorCode, String errorOutline, String errorChainDetail){
         this.errorChainDetail=errorChainDetail;
         this.errorCode=errorCode;
         this.errorOutline=errorOutline;
 
     }
+
+    /**
+     * bean转换异常
+     *
+     * @param errorCode        错误代码
+     * @param errorOutline     错误概要
+     * @param errorChainDetail 错误链细节
+     * @param ex               上层异常
+     */
     public BeanTransformException(String errorCode, String errorOutline, String errorChainDetail, Exception ex){
         super(ex.getCause());
         this.errorChainDetail=errorChainDetail;
@@ -41,21 +92,37 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
     }
 
 
+    /**
+     *
+     * @return {@link String}
+     */
     @Override
     public String getErrorCode() {
         return errorCode;
     }
 
+    /**
+     *
+     * @return {@link String}
+     */
     @Override
     public String getErrorOutline() {
         return errorOutline;
     }
 
+    /**
+     *
+     * @return {@link String}
+     */
     @Override
     public String getErrorChainDetail() {
         return errorChainDetail;
     }
 
+    /**
+     *
+     * @return {@link String}
+     */
     @Override
     public String toString() {
         return "TdeBussinessException{" +

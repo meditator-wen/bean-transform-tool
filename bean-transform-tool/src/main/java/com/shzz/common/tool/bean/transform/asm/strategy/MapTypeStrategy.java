@@ -1,3 +1,18 @@
+/*
+ * Copyright 2022 The bean-transform-tool Project
+ *
+ * The bean-transform-tool Project licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package com.shzz.common.tool.bean.transform.asm.strategy;
 
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
@@ -27,55 +42,108 @@ import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
- * @Classname MapTypeStrategy
- * @Description TODO
- * @Date 2022/1/10 20:54
- * @Created by wen wang
+ * Map 类型转换策略
+ *
+ * @author wen wang
+ * @date 2022/1/10 20:54
  */
 public class MapTypeStrategy extends AbstractComplexTypeStrategy {
+    /**
+     * 日志
+     */
     private static final Logger LOG = LoggerFactory.getLogger("MapTypeStrategy");
+    /**
+     * 键设置变量名
+     */
     public static final String KEY_SET_VARIABLE_NAME = "sourceMapKeySet";
+    /**
+     * 键设置迭代器变量名称
+     */
     public static final String KEY_SET_ITERATOR_VARIABLE_NAME = "keySetIterator";
+    /**
+     * 临时关键变量名
+     */
     public static final String TEMP_KEY_VARIABLE_NAME = "tempKey";
+    /**
+     * 临时值变量名
+     */
     public static final String TEMP_VALUE_VARIABLE_NAME = "tempValue";
+    /**
+     * 源映射变量名
+     */
     public static final String SOURCE_MAP_VARIABLE_NAME = "sourceMapVar";
-    // 目标类Map 字段 key值 类型
+    /**
+     * 目标类Map 字段 key值 类型
+     */
     private Type targetKeyType;
-    // 目标类Map 字段 key值 RawClass
+    /**
+     * 目标类Map 字段 key值 RawClass
+     */
     private Class targetKeyRawClass;
-    //  源类 Map 字段 key值 Type
+    /**
+     * 源类 Map 字段 key值 Type
+     */
     private Type sourceKeyType;
-    //  源类 Map 字段 key值 RawClass
+    /**
+     * 源类 Map 字段 key值 RawClass
+     */
     private Class sourceKeyRawClass;
-    //  目标类Map 字段 value值 Type
+    /**
+     *   目标类Map 字段 value值 Type
+     */
     private Type targetValueType;
-    //  目标类Map 字段 value值 RawClass
+    /**
+     *   目标类Map 字段 value值 RawClass
+     */
     private Class targetValueRawClass;
-    //  源类 Map 字段 value值 Type
+    /**
+     *   源类 Map 字段 value值 Type
+     */
     private Type sourceValueType;
-    //  源类 Map 字段 value值 RawClass
+    /**
+     *   源类 Map 字段 value值 RawClass
+     */
     private Class sourceValueRawClass;
-    // 目标类Map 字段RawClass
+    /**
+     *  目标类Map 字段RawClass
+     */
     private Class targetMapRawClass;
-    // 源类Map 字段RawClass
+    /**
+     * 源类Map 字段RawClass
+     */
     private Class sourceMapRawClass;
-    //上下文信息，记录需要转换的两个字段信息
+    /**
+     * 上下文信息，记录需要转换的两个字段信息
+     */
     private AbstractContext registerContext;
-    //基于源类 Map 字段和目标类Map 字段 key 值生成的转换的类描述信息
+    /**
+     * 基于源类 Map 字段和目标类Map 字段 key 值生成的转换的类描述信息
+     */
     private String keyTransformClassDescription;
-    //基于源类 Map 字段和目标类Map 字段 value 值生成的转换的类描述信息
+    /**
+     * 基于源类 Map 字段和目标类Map 字段 value 值生成的转换的类描述信息
+     */
     private String valueTransformClassDescription;
-    //基于源类 Map 字段和目标类Map 字段 生成的转换的类类名，（包路径中"." 替换成 "/" 转成）
+    /**
+     * 基于源类 Map 字段和目标类Map 字段 生成的转换的类类名，（包路径中"." 替换成 "/" 转成）
+     */
     private String internalName;
 
-    // Map 类型转换类命名编号，如果有多层嵌套Map或者多个Map类型 字段,编号依次增加
+    /**
+     *  Map 类型转换类命名编号，如果有多层嵌套Map或者多个Map类型 字段,编号依次增加
+     */
     public static ThreadLocal<Integer> sequence_Local = new ThreadLocal<>();
 
 
+    /**
+     * 映射类型策略
+     *
+     * @param context 上下文
+     */
     public MapTypeStrategy(AbstractContext context) {
         registerContext = context;
         // 如果同一线程再次创建MapTypeStrategy 序号累加
-       // LOG.info("new MapTypeStrategy source field={}, target field={}",context.getSourceField().getName(),context.getTargetField().getName());
+        // LOG.info("new MapTypeStrategy source field={}, target field={}",context.getSourceField().getName(),context.getTargetField().getName());
         try {
 
             setSequence(sequence_Local, context.getSourceField().getGenericType(), context.getTargetField().getGenericType());
@@ -89,7 +157,12 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
 
-
+    /**
+     * 解析Map 类型内部key 和v alued的类型
+     *
+     * @param type 类型
+     * @return {@link Class}
+     */
     private Class resloveKeyAndValueType(Type type) {
         Class resloveRawClass = null;
         if (type instanceof ParameterizedType) {
@@ -106,6 +179,14 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 解析Map 类型
+     *
+     * @param targetType 目标类型
+     * @param sourceType 源类型
+     * @return boolean
+     * @throws Exception 异常
+     */
     private boolean resloveMap(Type targetType, Type sourceType) throws Exception {
         boolean resloveSuccess = true;
         if (strategyMatch(targetType, sourceType)) {
@@ -140,6 +221,11 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 主类内部名称
+     *
+     * @return {@link String}
+     */
     @Override
     public String getOwnerClassInternalName() {
         String generateClassname = registerContext.geneClassName() + sequence_Local.get().toString();
@@ -147,10 +233,20 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
         return generateClassInternalName;
     }
 
+    /**
+     * 生成转换指令
+     * 详见{@link AbstractComplexTypeStrategy#geneInstruction(ClassWriter, Type, Type, String)}
+     *
+     * @param extensTransformImplClassWriter
+     * @param targetType
+     * @param sourceBeanType
+     * @param newMethodPrefix
+     * @throws Exception 异常
+     */
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
 
-        MethodVisitor mv = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+        MethodVisitor mv = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC + ACC_FINAL, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
         mv.visitCode();
         final Label startOfMethodLable = new Label();
 
@@ -195,8 +291,8 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
             mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, org.objectweb.asm.Type.getInternalName(Map.class), "size", "()I", true);
 
             //  to avoid inner array scale up,please set double size when instantiate Map Object
-            mv.visitLdcInsn(Integer.valueOf(2));
-            mv.visitInsn(Opcodes.IMUL);
+            mv.visitLdcInsn(Integer.valueOf(1));
+            mv.visitInsn(Opcodes.ISHL);
             mv.visitMethodInsn(Opcodes.INVOKESPECIAL, org.objectweb.asm.Type.getInternalName(targetClasImpl), INIT_METHOD_NAME, "(I)V", false);
 
         }
@@ -324,14 +420,14 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
 
+    /**
+     * find the implement class of interface or abstract class
+     *
+     * @param original 原始接口类或者抽象类
+     * @return {@link Class}
+     */
     private Class findImplementMapClass(Class original) {
-        /**
-         * @description: find the implement class of interface or abstract class
-         * @param original
-         * @return: java.lang.Class
-         * @auther: wen wang
-         * @date: 2022/1/18 10:33
-         */
+
         if ((!Modifier.isAbstract(original.getModifiers())) && (!Modifier.isPublic(original.getModifiers()))) {
             return original;
         } else {
@@ -352,6 +448,13 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 定义方法局部变量
+     *
+     * @param startOfMethodBeanTransformsLable 方法体开始标签
+     * @param endOfMethodBeanTransformsLable   年底bean标签转换方法
+     * @return {@link Map}
+     */
     protected Map<String, LocalVariableInfo> defineMethodLocalVar(Label startOfMethodBeanTransformsLable, Label endOfMethodBeanTransformsLable) {
 
 
@@ -418,24 +521,54 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * Map 类型 key 值类型转换字段名
+     *
+     * @return {@link String}
+     */
     private String keyTransformFieldName() {
         return registerContext.getIdentify() + EXTEND_IMPL_FIELD_NAME_SUFFIX + "_key";
     }
 
+    /**
+     * Map 类型 value 值类型转换字段名
+     *
+     * @return {@link String}
+     */
     private String valueTransformFieldName() {
         return registerContext.getIdentify() + EXTEND_IMPL_FIELD_NAME_SUFFIX + "_value";
     }
 
+    /**
+     * Map类型对应的转换类作为上层类中一个字段，mapTransformFieldName生成具体的字段名
+     *
+     * @return {@link String}
+     */
     private String mapTransformFieldName() {
         return registerContext.getIdentify() + EXTEND_IMPL_FIELD_NAME_SUFFIX;
     }
 
+    /**
+     * 策略匹配
+     *
+     * @param targetValueType 目标类是Map类型，targetValueType 表示Map 的value类型
+     * @param sourceKeyType   源类是Map类型，sourceKeyType 表示Map 的key类型
+     * @return boolean
+     */
     private boolean mapMatch(Type targetValueType, Type sourceKeyType) {
 
 
         return false;
     }
 
+    /**
+     * 通过ClassWriter 生成类字段
+     *
+     * @param classWriter
+     * @param transform          转换类对象，调用该方法前需要先生成对应字段的转换对象
+     * @param transformFieldName 转换类在上层类所属的字段的名称
+     * @return {@link String}
+     */
     protected static String writeField(ClassWriter classWriter, Transform transform, String transformFieldName) {
 
         String transformFieldTypeDesc = "";
@@ -457,6 +590,17 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
         return transformFieldTypeDesc;
     }
 
+    /**
+     * 重写父类方法
+     * 详见{@link AbstractComplexTypeStrategy#geneTransform(Type, Type, String, String)}
+     *
+     * @param sourceBeanType    源bean类型
+     * @param targetType        目标类型
+     * @param generateClassname 生成类名
+     * @param fieldNamePrefix   字段名称前缀
+     * @return {@link Map}
+     * @throws Exception 异常
+     */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
         // 传入类名基础上增加编号
@@ -531,6 +675,15 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
         return innerExtensionObjectTransformMap;
     }
 
+    /**
+     * 重写父类方法
+     * 详见{@link AbstractComplexTypeStrategy#strategyMatch(Type, Type)}
+     *
+     * @param sourceBeanType 源bean类型
+     * @param targetType     目标类型
+     * @return boolean
+     * @throws Exception 异常
+     */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
         boolean match = false;
@@ -557,6 +710,9 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
         return match;
     }
 
+    /**
+     * 清理threadlocal
+     */
     @Override
     public void clearThreadLocal(){
         super.clearThreadLocal();

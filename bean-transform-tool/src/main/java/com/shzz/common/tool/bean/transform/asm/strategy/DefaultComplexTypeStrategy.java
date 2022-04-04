@@ -1,3 +1,18 @@
+/*
+ * Copyright 2022 The bean-transform-tool Project
+ *
+ * The bean-transform-tool Project licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package com.shzz.common.tool.bean.transform.asm.strategy;
 
 import com.shzz.common.tool.bean.transform.ExtensionObjectTransform;
@@ -25,24 +40,44 @@ import static com.shzz.common.tool.bean.transform.asm.TransformUtilGenerate.*;
 import static org.objectweb.asm.Opcodes.ACC_FINAL;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static com.shzz.common.tool.bean.transform.asm.strategy.StrategyMode.*;
+
 /**
- * @Classname DefaultComplexTypeStrategy
- * @Description TODO
- * @Date 2021/12/26 20:36
- * @Created by wen wang
+ * 默认复杂类型处理策略
+ *
+ * @author wen wang
+ * @date 2021/12/26 20:36
  */
 public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
 
+    /**
+     * 默认复杂类型策略
+     *
+     * @param context 上下文
+     */
     public DefaultComplexTypeStrategy(AbstractContext context){
         this.registerContext_local.set(context);
     }
 
+    /**
+     * 默认复杂类型策略
+     *
+     * @param mv mv
+     */
     public DefaultComplexTypeStrategy(MethodVisitor mv){
-          extensTransformMethodVisitor_Local.set(mv);
+        extensTransformMethodVisitor_Local.set(mv);
     }
 
 
-
+    /**
+     * 实现父类抽象方法
+     * 详见{@link AbstractComplexTypeStrategy#geneInstruction(ClassWriter, Type, Type, String)}
+     *
+     * @param extensTransformImplClassWriter
+     * @param targetType
+     * @param sourceBeanType
+     * @param newMethodPrefix
+     * @throws Exception 异常
+     */
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
 
@@ -50,7 +85,7 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
         MethodVisitor methodVisitorLoacl = extensTransformMethodVisitor_Local.get();
         if (Objects.isNull(methodVisitorLoacl)) {
 
-            methodVisitorLoacl = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC, TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_NAME, TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+            methodVisitorLoacl = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC + ACC_FINAL, TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_NAME, TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
             extensTransformMethodVisitor_Local.set(methodVisitorLoacl);
         }
 
@@ -66,6 +101,17 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
         methodVisitorLoacl.visitEnd();
     }
 
+    /**
+     * 实现接口方法
+     * 详见{@link ComplexTypeStrategy#geneTransform(Type, Type, String, String)}
+     *
+     * @param sourceBeanType    源bean类型
+     * @param targetType        目标类型
+     * @param generateClassname 生成类名
+     * @param fieldNamePrefix   字段名称前缀
+     * @return {@link Map}
+     * @throws Exception 异常
+     */
     @Override
     public Map<String, ? extends Transform> geneTransform(Type sourceBeanType, Type targetType, String generateClassname, String fieldNamePrefix) throws Exception {
 
@@ -80,7 +126,7 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
                 internalName,
                 null,
                 TransformUtilGenerate.OBJECT_CLASS_INTERNAL_NAME, new String[]{TransformUtilGenerate.EXTENSION_TRANSFORM_CLASS_INTERNAL_NAME});
-        MethodVisitor defaultMethodVisitor = extensTransformImplClassWriter.visitMethod(ACC_PUBLIC,
+        MethodVisitor defaultMethodVisitor = extensTransformImplClassWriter.visitMethod(ACC_PUBLIC + ACC_FINAL,
                 BeanTransformsMethodAdapter.INIT_METHOD_NAME,
                 BeanTransformsMethodAdapter.INIT_METHOD_DESCRIPTOR,
                 null,
@@ -111,6 +157,15 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
 
     }
 
+    /**
+     * 策略匹配，实现父类方法
+     * 详见{@link AbstractComplexTypeStrategy#strategyMatch(Type, Type)}
+     *
+     * @param sourceBeanType
+     * @param targetType
+     * @return boolean
+     * @throws Exception
+     */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
         return true;
