@@ -48,8 +48,8 @@ public abstract class BeanTransFormsHandler implements BeanTransform {
     /**
      * bean转换用户接口函数
      *
-     * @param sourceBeanClass  源bean类
-     * @param sourceBeanObject 源bean对象
+     * @param sourceBeanClass  源类类型
+     * @param sourceBeanObject 源类对象
      * @param targetClass      目标类
      * @return T
      * @throws Exception 异常

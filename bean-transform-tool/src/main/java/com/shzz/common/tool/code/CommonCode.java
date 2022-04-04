@@ -24,27 +24,27 @@ package com.shzz.common.tool.code;
  */
 public enum CommonCode {
     /**
-     * 元素类型空异常
+     * 集合或者数组最内层元素类型为null
      */
     ELEMENT_TYPE_NULL_EXCEPTION("0xff07", "集合或者数组最内层元素类型为null", "集合或者数组最内层元素类型无法解析"),
     /**
-     * 类名零异常
+     * 类名为空异常
      */
     CLASS_NAME_NULL_EXCEPTION("0xff06", "类名为空", "请传入正确类名"),
     /**
-     * 泛型类型unsupport
+     * 泛型实参类型不符合要求
      */
     GENERIC_TYPE_UNSUPPORT("0xff05", "泛型实参类型不符合要求", "泛型实参类型不符合要求"),
     /**
-     * 扩展转换错误
+     * extendsTransformList参数不符合要求
      */
     EXTENDS_TRANSFORM_ERROR("0xff04", "extendsTransformList参数不符合要求", "extendsTransformList参数为空或缺少指定的转换类对象"),
     /**
-     * 战略unsupport登记
+     * 注册转换策略异常
      */
     STRATEGY_REGISTER_UNSUPPORT("0xff03", "注册转换策略异常", "注册转换策略优先级不正确"),
     /**
-     * 类型unsupport
+     * 类型不符合要求
      */
     TYPE_UNSUPPORT("0xff02", "类型不符合要求", "类型不符合要求"),
     /**
@@ -57,7 +57,7 @@ public enum CommonCode {
      */
     private String errorCode = "not specific";
     /**
-     * 错误轮廓
+     * 错误概要
      */
     private String errorOutline = "not specific";
     /**
@@ -69,7 +69,7 @@ public enum CommonCode {
      * 通用代码
      *
      * @param errorCode        错误代码
-     * @param errorOutline     错误轮廓
+     * @param errorOutline     错误概要
      * @param errorChainDetail 错误链细节
      */
     private CommonCode(String errorCode, String errorOutline, String errorChainDetail) {
@@ -79,8 +79,6 @@ public enum CommonCode {
     }
 
     /**
-     * 得到错误代码
-     *
      * @return {@link String}
      */
     public String getErrorCode() {
@@ -88,8 +86,6 @@ public enum CommonCode {
     }
 
     /**
-     * 得到轮廓误差
-     *
      * @return {@link String}
      */
     public String getErrorOutline() {
@@ -97,8 +93,6 @@ public enum CommonCode {
     }
 
     /**
-     * 得到错误链细节
-     *
      * @return {@link String}
      */
     public String getErrorChainDetail() {

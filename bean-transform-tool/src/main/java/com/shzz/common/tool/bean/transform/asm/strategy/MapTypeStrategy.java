@@ -222,7 +222,7 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 得到主类内部名称
+     * 主类内部名称
      *
      * @return {@link String}
      */
@@ -234,18 +234,19 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
     }
 
     /**
-     * 基因指令
+     * 生成转换指令
+     * 详见{@link AbstractComplexTypeStrategy#geneInstruction(ClassWriter, Type, Type, String)}
      *
-     * @param extensTransformImplClassWriter extens变换impl类作家
-     * @param targetType                     目标类型
-     * @param sourceBeanType                 源bean类型
-     * @param newMethodPrefix                新方法前缀
+     * @param extensTransformImplClassWriter
+     * @param targetType
+     * @param sourceBeanType
+     * @param newMethodPrefix
      * @throws Exception 异常
      */
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
 
-        MethodVisitor mv = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+        MethodVisitor mv = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC + ACC_FINAL, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
         mv.visitCode();
         final Label startOfMethodLable = new Label();
 
@@ -420,19 +421,13 @@ public class MapTypeStrategy extends AbstractComplexTypeStrategy {
 
 
     /**
-     * 找到实现地图类
+     * find the implement class of interface or abstract class
      *
-     * @param original 原始
+     * @param original 原始接口类或者抽象类
      * @return {@link Class}
      */
     private Class findImplementMapClass(Class original) {
-        /**
-         * @description: find the implement class of interface or abstract class
-         * @param original
-         * @return: java.lang.Class
-         * @auther: wen wang
-         * @date: 2022/1/18 10:33
-         */
+
         if ((!Modifier.isAbstract(original.getModifiers())) && (!Modifier.isPublic(original.getModifiers()))) {
             return original;
         } else {

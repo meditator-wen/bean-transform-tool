@@ -30,26 +30,19 @@ public class SystemProperties {
      * 日志
      */
     private static final Logger LOG = LoggerFactory.getLogger("CustomeClassLoader");
-    /**
-     * 阈值大小
-     */
-//    public static final int THRESHOLD_SIZE = 1 * 1024 * 1024;
-    /**
-     * 班级规模阈值
-     */
-    public static final String CLASS_SIZE_THRESHOLD="com.akfd.generalduty.tool.bean.transform.meta.size.threshold";
-    /**
-     * 类输出标志
-     */
-    public static final String CLASS_OUTPUT_FLAG="class.output.flag";
+
     /**
      * 严格模式国旗
+     */
+    public static final String CLASS_OUTPUT_FLAG = "class.output.flag";
+    /**
+     * 严格模式，为true 时只转换类型相同的实体
      */
     public static final String STRICT_MODE_FLAG = "strict.mode.flag";
 
 
     /**
-     * 包装类型deepy副本
+     * 对于包装类是否先拆箱然后重新生成包装类对象（对于JDK中缓存包装类对象不起作用）
      */
     public static final String WRAPS_TYPE_DEEPY_COPY="wraps.types.deepcopy";
 
@@ -79,8 +72,6 @@ public class SystemProperties {
 //    }
 
     /**
-     * 得到严格模式国旗
-     *
      * @return boolean
      */
     public static boolean getStrictModeFlag() {
@@ -97,8 +88,6 @@ public class SystemProperties {
     }
 
     /**
-     * 得到类输出标志
-     *
      * @return boolean
      */
     public static boolean getClassOutputFlag(){
@@ -114,8 +103,6 @@ public class SystemProperties {
     }
 
     /**
-     * 包装类型deepy复制标志
-     *
      * @return boolean
      */
     public static boolean getWrapsTypeDeepyCopyFlag(){

@@ -42,22 +42,20 @@ public class LocalVariableInfo {
      */
     private String signature;
     /**
-     * 开始
+     * 开始标签
      */
     private Label start;
     /**
-     * 结束
+     * 结束标签
      */
     private Label end;
     /**
-     * 指数
+     * 变量索引
      */
     private int index;
 
 
     /**
-     * 得到名字
-     *
      * @return {@link String}
      */
     public String getName() {
@@ -65,17 +63,13 @@ public class LocalVariableInfo {
     }
 
     /**
-     * 集名称
-     *
-     * @param name 名字
+     * @param name
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * 获取描述符
-     *
      * @return {@link String}
      */
     public String getDescriptor() {
@@ -83,17 +77,13 @@ public class LocalVariableInfo {
     }
 
     /**
-     * 组描述符
-     *
-     * @param descriptor 描述符
+     * @param descriptor
      */
     public void setDescriptor(String descriptor) {
         this.descriptor = descriptor;
     }
 
     /**
-     * 得到签名
-     *
      * @return {@link String}
      */
     public String getSignature() {
@@ -101,17 +91,13 @@ public class LocalVariableInfo {
     }
 
     /**
-     * 设置签名
-     *
-     * @param signature 签名
+     * @param signature
      */
     public void setSignature(String signature) {
         this.signature = signature;
     }
 
     /**
-     * 开始
-     *
      * @return {@link Label}
      */
     public Label getStart() {
@@ -119,17 +105,13 @@ public class LocalVariableInfo {
     }
 
     /**
-     * 设置开始
-     *
-     * @param start 开始
+     * @param start
      */
     public void setStart(Label start) {
         this.start = start;
     }
 
     /**
-     * 会结束
-     *
      * @return {@link Label}
      */
     public Label getEnd() {
@@ -137,17 +119,13 @@ public class LocalVariableInfo {
     }
 
     /**
-     * 设置结束
-     *
-     * @param end 结束
+     * @param end
      */
     public void setEnd(Label end) {
         this.end = end;
     }
 
     /**
-     * 得到指数
-     *
      * @return int
      */
     public int getIndex() {
@@ -155,17 +133,13 @@ public class LocalVariableInfo {
     }
 
     /**
-     * 设置索引
-     *
-     * @param index 指数
+     * @param index
      */
     public void setIndex(int index) {
         this.index = index;
     }
 
     /**
-     * 得到别名
-     *
      * @return {@link String}
      */
     public String getAlias() {
@@ -173,9 +147,7 @@ public class LocalVariableInfo {
     }
 
     /**
-     * 设置别名
-     *
-     * @param alias 别名
+     * @param alias
      */
     public void setAlias(String alias) {
         this.alias = alias;

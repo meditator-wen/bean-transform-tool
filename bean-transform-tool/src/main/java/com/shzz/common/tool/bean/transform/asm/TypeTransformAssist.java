@@ -48,7 +48,7 @@ public class TypeTransformAssist {
     private static final Logger LOG = LoggerFactory.getLogger("ResloverMetaInfo");
 
     /**
-     * 是原始类型
+     * 判断是否为原始类型
      *
      * @param type 类型
      * @return boolean
@@ -67,7 +67,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 引用类型
+     * 判断是否为引用类型
      *
      * @param type 类型
      * @return boolean
@@ -86,7 +86,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 是基本类型
+     * 判断是否为基本类型：包装类或者原始类型
      *
      * @param type 类型
      * @return boolean
@@ -98,7 +98,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * istiny
+     * char byte short int 统一用int 变量的操作指令
      *
      * @param type 类型
      * @return boolean
@@ -109,9 +109,9 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 字符串经
+     * 字符串类型转换类包装类
      *
-     * @param warpType 经类型
+     * @param warpType 包装类型
      * @param mv       mv
      * @return boolean
      * @throws Exception 异常
@@ -148,7 +148,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 字符串数
+     * 字符串转换为数值类型，先转成包装类，在拆箱获得数值
      *
      * @param numberType 数字类型
      * @param mv         mv
@@ -173,7 +173,7 @@ public class TypeTransformAssist {
 
 
     /**
-     * 原始,原始
+     * 原始类型之间转换
      *
      * @param targetClass 目标类
      * @param sourceClass 源类
@@ -327,7 +327,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 类型图
+     * 原始类和包装类之间的映射关系
      *
      * @param key 关键
      * @return {@link Class}
@@ -369,7 +369,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 原始包装或字符串
+     * 包装类或字符串类转换为原始类型
      *
      * @param targetClass 目标类
      * @param sourceClass 源类
@@ -450,7 +450,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 原始包装或字符串
+     * 原始类型转换为包装类或字符串类
      *
      * @param targetClass 目标类
      * @param sourceClass 源类
@@ -509,7 +509,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 包装包装或字符串或字符串
+     * 包装类或字符串类之间互转
      *
      * @param targetClass 目标类
      * @param sourceClass 源类
@@ -552,8 +552,9 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 基类型处理字节码
-     *
+     * 基础类型转换字节码
+     * 该方法服务于 {@link BeanTransformsMethodAdapter}
+     * 只在源类和目标类都是原始类型或者包装类型情况下调用
      * @param targetClass 目标类
      * @param sourceClass 源类
      * @param mv          mv
@@ -561,18 +562,6 @@ public class TypeTransformAssist {
      * @throws Exception 异常
      */
     public static void baseTypeProcessByteCode(Class targetClass, Class sourceClass, MethodVisitor mv, boolean isDeepyCopy) throws Exception {
-
-        /**
-         * @description: 该方法服务于 {@link BeanTransformsMethodAdapter}
-         * 只在源类和目标类都是原始类型或者包装类型情况下调用
-         * @param targetClass
-         * @param sourceClass
-         * @param mv
-         * @param isDeepyCopy
-         * @return: void
-         * @auther: wen wang
-         * @date: 2021/11/25 21:31
-         */
 
         if (isBaseType(targetClass) && isBaseType(sourceClass)) {
 
@@ -600,6 +589,12 @@ public class TypeTransformAssist {
 
     }
 
+    /**
+     * 包装类拆箱方法名枚举
+     *
+     * @author wen wang
+     * @date 2022/04/04
+     */
     public static enum TypeValueMethod {
 
         CHARVALUE_METHOD("charValue", char.class),
@@ -633,6 +628,12 @@ public class TypeTransformAssist {
         }
 
 
+        /**
+         * 根据原始类型找到对应包装类的拆箱方法
+         *
+         * @param returnPrimitiveType 返回原始类型
+         * @return {@link TypeValueMethod}
+         */
         public static TypeValueMethod getTypeValueMethod(Class<?> returnPrimitiveType) {
             if (byte.class == returnPrimitiveType) {
                 return BYTEVALUE_METHOD;
@@ -656,7 +657,7 @@ public class TypeTransformAssist {
 
 
     /**
-     * 包装还是字符串类型
+     * 判断是否是包装还是字符串类型
      *
      * @param type 类型
      * @return boolean
@@ -668,7 +669,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 包装类型
+     * 判断是否是包装类型
      *
      * @param type 类型
      * @return boolean
@@ -688,30 +689,19 @@ public class TypeTransformAssist {
 
 
     /**
-     * 源领域过程
+     * 解析目标类字段对应的源类字段信息
      *
      * @param targetFieldName 目标字段名称
      * @param sourceFieldName 源字段名
      * @param sourceClass     源类
      * @param targetClass     目标类
-     * @param resloveInfo     解决信息
+     * @param resloveInfo     解析后的信息封装到ResloveInfo 对象并返回
      */
     public static void sourceFieldProcess(String targetFieldName,
                                           String sourceFieldName,
                                           Class<?> sourceClass,
                                           Class<?> targetClass,
                                           ResloveInfo resloveInfo) {
-        /**
-         * @description: 解析目标类字段对应的源类字段信息
-         * @param targetFieldName
-         * @param sourceFieldName
-         * @param sourceClass
-         * @param targetClass
-         * @param resloveInfo
-         * @return: void
-         * @auther: wen wang
-         * @date: 2021/11/30 9:56
-         */
 
         if (Objects.isNull(sourceFieldName) || sourceFieldName.isEmpty()) {
 
@@ -794,7 +784,7 @@ public class TypeTransformAssist {
 
 
     /**
-     * 检查类
+     * 检查类型是否符合转换要求
      *
      * @param targetClass     目标类
      * @param sourceBeanClass 源bean类
@@ -832,7 +822,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 解决信息检查
+     * 解析信息检查，判断内部信息是否有效
      *
      * @param resloveInfo 解决信息
      * @return boolean
@@ -871,9 +861,9 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 解决
+     * 解析字段及其源类字段的信息
      *
-     * @param field       场
+     * @param field
      * @param targetClass 目标类
      * @param sourceClass 源类
      * @return {@link ResloveInfo}
@@ -978,7 +968,7 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 构建获取和设置函数名
+     * get/set函数名，如果用户未通过注解{@link BeanFieldInfo}指定，则按照默认方法构建
      *
      * @param field   场
      * @param getFlag 让国旗
@@ -1008,11 +998,11 @@ public class TypeTransformAssist {
     }
 
     /**
-     * 检查扩展对象变换impl
+     * 检查用户扩展实现类是否有效
      *
-     * @param extensionObjectTransformImpl 扩展对象变换impl
+     * @param extensionObjectTransformImpl 拓展类名
      * @param targetClass                  目标类
-     * @param extensionImplFieldName       扩展impl字段名
+     * @param extensionImplFieldName       字段名
      * @return boolean
      */
     public static boolean checkExtensionObjectTransformImpl(String extensionObjectTransformImpl, Class<?> targetClass, String extensionImplFieldName) {

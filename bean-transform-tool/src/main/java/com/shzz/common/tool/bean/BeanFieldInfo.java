@@ -41,8 +41,8 @@ import java.lang.reflect.Type;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BeanFieldInfo {
     /**
-     * 用户扩展
-     *
+     * 标注是否用户自定义转换，默认为false，
+     * 为true 说明该字段由用户自定义实现，且需要同步设置extensionObjectTransformImplClass 属性，标志拓展类的全路径，工具内部反射生成对象
      * @return boolean
      */
     boolean userExtend() default false;

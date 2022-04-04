@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 
 /**
- * custome类装入器
+ * 自定义类加载器
  *
  * @author wen wang
  * @date 2021/11/20 20:30
@@ -35,20 +35,20 @@ public class CustomeClassLoader extends ClassLoader {
 
 
     /**
-     * custome类装入器
+     * 构造器
      */
     protected CustomeClassLoader() {
 
     }
 
     /**
-     * 日志
+     * 日志, SLF4J
      */
     private static final Logger LOG = LoggerFactory.getLogger("CustomeClassLoader");
 
 
     /**
-     * udf加载类
+     * 传入字节码byte 数组生成Class 类信息。byte 数组 通过ASM 产生
      *
      * @param name  名字
      * @param bytes 字节

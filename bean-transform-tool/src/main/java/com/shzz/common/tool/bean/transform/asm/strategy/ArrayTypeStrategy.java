@@ -320,7 +320,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
                 methodGeneSuccess = visitArrayTransformCode(extensTransformMethodVisitor, sourceRawType, targetRawType, sourceElemType, targetElemType, newMethodPrefix, layer, mode);
 
             } else {
-                MethodVisitor newCollectionTransformMethod = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PRIVATE, methodName(newMethodPrefix, layer), EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+                MethodVisitor newCollectionTransformMethod = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PRIVATE + Opcodes.ACC_FINAL, methodName(newMethodPrefix, layer), EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
                 // 内部元素转换方法，非接口方法，private修饰，内部调用。 方法名是 公共前缀+层级信息，内层集合类依次循环创建转换方法
                 visitArrayTransformCode(newCollectionTransformMethod, sourceRawType, targetRawType, sourceElemType, targetElemType, newMethodPrefix, layer, mode);
             }
@@ -342,7 +342,7 @@ public class ArrayTypeStrategy extends AbstractComplexTypeStrategy {
     @Override
     public void geneInstruction(ClassWriter extensTransformImplClassWriter, Type targetType, Type sourceBeanType, String newMethodPrefix) throws Exception {
         boolean methodGeneSuccess = false;
-        MethodVisitor extensTransformMethodVisitor = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+        MethodVisitor extensTransformMethodVisitor = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC + Opcodes.ACC_FINAL, EXTEND_TRANSFORM_METHOD_NAME, EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
         this.namePrefix_Local.set(newMethodPrefix);
         StrategyMode findMode = chooseStrategyMode(sourceBeanType, targetType);
         if (Objects.nonNull(findMode)) {

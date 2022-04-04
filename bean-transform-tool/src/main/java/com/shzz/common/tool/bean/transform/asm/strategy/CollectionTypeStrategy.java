@@ -462,7 +462,7 @@ public class CollectionTypeStrategy extends AbstractComplexTypeStrategy {
                 methodGeneSuccess = visitCollectionTransformCode(mv, sourceRawType, targetRawType,  sourceElemType, newMethodPrefix, layer, mode);
 
             } else {
-                MethodVisitor newArrayTransformMethod = classWriter.visitMethod(Opcodes.ACC_PRIVATE, methodName(newMethodPrefix, layer), TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+                MethodVisitor newArrayTransformMethod = classWriter.visitMethod(Opcodes.ACC_PRIVATE + Opcodes.ACC_FINAL, methodName(newMethodPrefix, layer), TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
                 // 内部元素转换方法，非接口方法，private修饰，内部调用。 方法名是 公共前缀+层级信息，内层集合类依次循环创建转换方法
                 // 注意，只需要第一层转换执行结果赋值给 methodGeneSuccess 即可
                 visitCollectionTransformCode(newArrayTransformMethod, sourceRawType, targetRawType, sourceElemType, newMethodPrefix, layer, mode);

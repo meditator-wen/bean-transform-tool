@@ -21,8 +21,8 @@ import java.lang.reflect.Type;
 
 /**
  * 策略模式
+ * @author wen wang
  *
- * @author Administrator
  * @date 2022/03/09
  */
 public enum StrategyMode {
@@ -66,7 +66,6 @@ public enum StrategyMode {
 
     /**
      * 策略模式
-     *
      * @param mode        模式
      * @param description 描述
      */
@@ -76,8 +75,6 @@ public enum StrategyMode {
     }
 
     /**
-     *
-     *
      * @return {@link String}
      */
     @Override

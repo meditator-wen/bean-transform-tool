@@ -183,9 +183,7 @@ public class TransformUtilGenerate {
     }
 
     /**
-     * 以十六进制
-     *
-     * @param digest 消化
+     * @param digest
      * @return {@link String}
      */
     @Deprecated
@@ -205,8 +203,6 @@ public class TransformUtilGenerate {
     }
 
     /**
-     * 提取信息
-     *
      * @param classz classz
      * @return {@link StringBuilder}
      */
@@ -234,11 +230,10 @@ public class TransformUtilGenerate {
     }
 
     /**
-     * 类简单名称重建
-     *
-     * @param rawType 原始类型
+     * @param rawType
      * @return {@link String}
      */
+    @Deprecated
     public static String classSimpleNameReconstruct(Class rawType) {
 
         if (rawType.isArray()) {
@@ -250,7 +245,7 @@ public class TransformUtilGenerate {
     }
 
     /**
-     * 装入asmgenerate类
+     * 装载字节码数组，生成Class 对象，内部调用自定义类加载器实现
      *
      * @param bytes             字节
      * @param generateClassname 生成类名
@@ -295,6 +290,13 @@ public class TransformUtilGenerate {
         return geneImplClass;
     }
 
+    /**
+     * 检查生成类名是否为空，类名异常则内部无法通过ASM生成对应类，抛出异常
+     *
+     * @param generateClassname 生成类名
+     * @return boolean
+     * @throws Exception 异常
+     */
     public static boolean checkGenerateClassname(String generateClassname) throws Exception {
 
         if (Objects.isNull(generateClassname)) {

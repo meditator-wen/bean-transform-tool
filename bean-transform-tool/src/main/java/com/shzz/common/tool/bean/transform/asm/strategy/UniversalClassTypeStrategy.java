@@ -52,7 +52,9 @@ import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 
 
 /**
- * 通用类类型策略
+ * 通用类型策略，工具框架的核心功能类
+ * 用户传入需要转换的目标类和源类类型，UniversalClassTypeStrategy 负责生成对应的转换字节码，
+ * 目标类和源类类型的内部字段如果是复杂类型会选择对应处理策略递归生成内部转换类
  *
  * @author wen wang
  * @date 2022/1/15 10:04
@@ -86,19 +88,27 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
     private static final Logger LOG = LoggerFactory.getLogger("UniversalClassTypeStrategy");
 
     /**
-     * 扩展对象变换映射
+     * 扩展对象缓存，第一层Map 的key 是 ASM 生成的生成{@link ExtensionObjectTransform} 子类类名
+     * 第二层 Map key 是字段名称，value 是 ExtensionObjectTransform 类型的对象，
      */
     private final Map<String, Map<String, ExtensionObjectTransform>> extensionObjectTransformMap = new ConcurrentHashMap<>();
     /**
-     * 豆反式形式处理程序映射
+     * 转换对象缓存
+     * 如果字段是第三方实体类，除了Map,Collection,数组，通配泛型、泛型数组、类型变量等复杂数据场景
+     * 则会生成BeanTransFormsHandler 转换接口的子类，第一层的key 是 ASM 生成的生成{@link BeanTransFormsHandler} 子类类名
+     * 第二层 Map key 是字段名称，value 是 BeanTransFormsHandler 类型的对象，
      */
     private final Map<String, Map<String, BeanTransFormsHandler>> beanTransFormsHandlerMap = new ConcurrentHashMap<>();
     /**
-     * 领域类图
+     * 转换类类型缓存
+     * 字节码调用方法{@link BeanTransFormsHandler#beanTransforms(Class, Object, Class)}
+     * 需要传入 源类和目标类某字段的类型信息，fieldClassMap 缓存解析后的字段类型
+     * 第一层的key 是 ASM 生成的生成{@link BeanTransFormsHandler} 子类类名
+     * 第二层 Map key 是字段名称，value 是 类型信息
      */
     private final Map<String, Map<String, Class>> fieldClassMap = new ConcurrentHashMap<>();
     /**
-     * 策略
+     * 策略缓存
      */
     private static final Map<StrategyMode, Class<? extends AbstractComplexTypeStrategy>> strategy = new ConcurrentHashMap<>();
     /**
@@ -107,9 +117,10 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
     private static final Map<String, Boolean> cache = new ConcurrentHashMap<>();
 
     /**
-     * 豆反式形式处理程序吗
+     * 判断是否已经存在key值对应的BeanTransFormsHandler Class 信息
+     * 实体类中可能包含同类型的不同字段或者数组的组件类型和某字段类型一致时，会使用相同的转换对象。
      *
-     * @param key 关键
+     * @param key
      * @return boolean
      */
     public static boolean hasBeanTransFormsHandler(String key) {
@@ -117,12 +128,13 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
     }
 
     /**
-     * 基因转换
+     * 生成转换类对象，封装与Map  中，主要针对Collection、Map、Array等复杂类型字段
+     * 详见{@link ComplexTypeStrategy#geneTransform(Type, Type, String, String)}
      *
-     * @param sourceBeanType    源bean类型
-     * @param targetType        目标类型
-     * @param generateClassname 生成类名
-     * @param fieldNamePrefix   字段名称前缀
+     * @param sourceBeanType
+     * @param targetType
+     * @param generateClassname
+     * @param fieldNamePrefix
      * @return {@link Map}
      * @throws Exception 异常
      */
@@ -148,12 +160,12 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
 
 
     /**
-     * 战略匹配
+     * 详见接口类说明{@link  ComplexTypeStrategy#strategyMatch(Type, Type)}
      *
-     * @param sourceBeanType 源bean类型
-     * @param targetType     目标类型
+     * @param sourceBeanType
+     * @param targetType
      * @return boolean
-     * @throws Exception 异常
+     * @throws Exception
      */
     @Override
     public boolean strategyMatch(Type sourceBeanType, Type targetType) throws Exception {
@@ -171,14 +183,14 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
 
 
     /**
-     * 生成bean转换impl类
+     *  生成转换类字节码byte 数组，返回值通过自定义类加载器生成Class 信息
      *
      * @param sourceBeanClass            源bean类
      * @param targetClass                目标类
      * @param generateClassname          生成类名
-     * @param isDeepCopy                 深拷贝
-     * @param permitBaseTypeInterconvert 允许基类型互变
-     * @param extendsTransformList       扩展转换列表
+     * @param isDeepCopy                 深拷贝标志
+     * @param permitBaseTypeInterconvert 允许不相同的原始类或者包装类互相转换，比如 Double to Integer、Double to char、double to int
+     * @param extendsTransformList       扩展转换列表，用户自定义实现的拓展类，用户拓展实现多个字段均存放于List中一并传入
      * @return byte[]                    class 文件字节数组
      * @throws Exception 异常
      */
@@ -289,7 +301,7 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
          *
          */
 
-        MethodVisitor beanTransformsMethodVisitor = beanTransformsImplClassWriter.visitMethod(ACC_PUBLIC, TransformUtilGenerate.TRANSFORM_METHOD_NAME, TransformUtilGenerate.TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+        MethodVisitor beanTransformsMethodVisitor = beanTransformsImplClassWriter.visitMethod(ACC_PUBLIC + ACC_FINAL, TransformUtilGenerate.TRANSFORM_METHOD_NAME, TransformUtilGenerate.TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
 
         BeanTransformsMethodAdapter beanTransformsMethodAdapter = new BeanTransformsMethodAdapter(beanTransformsMethodVisitor,
                 sourceBeanClass,
@@ -309,31 +321,20 @@ public class UniversalClassTypeStrategy implements ComplexTypeStrategy{
     }
 
     /**
-     * 生成
+     * 生成转换类对象
      *
      * @param sourceBeanClass            源bean类
      * @param targetClass                目标类
      * @param isDeepCopy                 深拷贝
-     * @param permitBaseTypeInterconvert 允许基类型互变
-     * @param extendsTransformList       扩展转换列表
-     * @param actualGenericType          实际泛型类型
+     * @param permitBaseTypeInterconvert 允许不相同的原始类或者包装类互相转换，比如 Double to Integer、Double to char、double to int
+     *                                   如果是false,则只能实现相同的基础类型拷贝
+     * @param extendsTransformList       扩展转换列表，用户自定义实现的拓展类，用户拓展实现多个字段均存放于List中一并传入
+     * @param actualGenericType          实际泛型类型，预留，暂未使用，转换泛型类型、参数化泛型、通配泛型、泛型数组时需要传入实际泛型类型
      * @return {@link BeanTransform}
      * @throws Exception 异常
      */
     public BeanTransform generate(Class sourceBeanClass, Class targetClass, boolean isDeepCopy, boolean permitBaseTypeInterconvert, List<ExtensionObjectTransform> extendsTransformList, Type[] actualGenericType) throws Exception {
-        /**
-         * @description:
-         * @param sourceBeanClass
-         * @param targetClass
-         * @param isDeepCopy
-         * @param permitBaseTypeInterconvert
-         * @param extendsTransformList
-         * @param actualGenericType
-         * @return: com.shzz.common.tool.bean.transform.asm.BeanTransFormsHandler
-         * @auther: wen wang
-         * @date: 2021/12/8 13:59
-         */
-        // todo  提取出实体类中所有嵌套类信息
+
         if (Objects.isNull(sourceBeanClass)) {
             throw new Exception("generate方法 传入的sourceBeanClass 类型参数为空");
         }

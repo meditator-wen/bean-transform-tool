@@ -85,7 +85,7 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
         MethodVisitor methodVisitorLoacl = extensTransformMethodVisitor_Local.get();
         if (Objects.isNull(methodVisitorLoacl)) {
 
-            methodVisitorLoacl = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC, TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_NAME, TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
+            methodVisitorLoacl = extensTransformImplClassWriter.visitMethod(Opcodes.ACC_PUBLIC + ACC_FINAL, TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_NAME, TransformUtilGenerate.EXTEND_TRANSFORM_METHOD_DESC, null, new String[]{"java/lang/Exception"});
             extensTransformMethodVisitor_Local.set(methodVisitorLoacl);
         }
 
@@ -126,7 +126,7 @@ public class DefaultComplexTypeStrategy extends AbstractComplexTypeStrategy {
                 internalName,
                 null,
                 TransformUtilGenerate.OBJECT_CLASS_INTERNAL_NAME, new String[]{TransformUtilGenerate.EXTENSION_TRANSFORM_CLASS_INTERNAL_NAME});
-        MethodVisitor defaultMethodVisitor = extensTransformImplClassWriter.visitMethod(ACC_PUBLIC,
+        MethodVisitor defaultMethodVisitor = extensTransformImplClassWriter.visitMethod(ACC_PUBLIC + ACC_FINAL,
                 BeanTransformsMethodAdapter.INIT_METHOD_NAME,
                 BeanTransformsMethodAdapter.INIT_METHOD_DESCRIPTOR,
                 null,

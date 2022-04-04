@@ -30,7 +30,7 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
      */
     private String errorCode="not specific";
     /**
-     * 错误轮廓
+     * 错误信息概述
      */
     private String errorOutline="not specific";
     /**
@@ -54,7 +54,7 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
     /**
      * bean转换异常
      *
-     * @param ex 前女友
+     * @param ex 上层异常
      */
     public BeanTransformException(Exception  ex){
         super(ex.getCause());
@@ -65,7 +65,7 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
      * bean转换异常
      *
      * @param errorCode        错误代码
-     * @param errorOutline     错误轮廓
+     * @param errorOutline     错误概要
      * @param errorChainDetail 错误链细节
      */
     public BeanTransformException(String errorCode, String errorOutline, String errorChainDetail){
@@ -79,9 +79,9 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
      * bean转换异常
      *
      * @param errorCode        错误代码
-     * @param errorOutline     错误轮廓
+     * @param errorOutline     错误概要
      * @param errorChainDetail 错误链细节
-     * @param ex               前女友
+     * @param ex               上层异常
      */
     public BeanTransformException(String errorCode, String errorOutline, String errorChainDetail, Exception ex){
         super(ex.getCause());
@@ -93,7 +93,6 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
 
 
     /**
-     * 得到错误代码
      *
      * @return {@link String}
      */
@@ -103,7 +102,6 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
     }
 
     /**
-     * 得到轮廓误差
      *
      * @return {@link String}
      */
@@ -113,7 +111,6 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
     }
 
     /**
-     * 得到错误链细节
      *
      * @return {@link String}
      */
@@ -123,7 +120,6 @@ public class BeanTransformException extends Exception implements ErrorEncoder{
     }
 
     /**
-     * 字符串
      *
      * @return {@link String}
      */
