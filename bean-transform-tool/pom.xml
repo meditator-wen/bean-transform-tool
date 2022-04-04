@@ -16,6 +16,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>bean-transform-tool</name>
+    <url>https://github.com/meditator-wen/bean-transform-tool</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gpg.keyname>0xEF563188</gpg.keyname>
