@@ -63,12 +63,12 @@
         </dependency>
 
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-core &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework</groupId>-->
-<!--            <artifactId>spring-core</artifactId>-->
+<!--            <artifactId>org.springframework.beans</artifactId>-->
 <!--            <version>3.2.2.RELEASE</version>-->
-<!--            <scope>test</scope>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}/lib/org.springframework.beans-3.2.5.RELEASE.jar</systemPath>-->
 <!--        </dependency>-->
 
         <!-- scope provided because the processor is only needed at compile time-->
