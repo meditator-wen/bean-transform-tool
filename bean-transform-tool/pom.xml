@@ -13,7 +13,7 @@
 
     <groupId>io.github.meditator-wen</groupId>
     <artifactId>bean-transform-tool</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>bean-transform-tool</name>
     <url>https://github.com/meditator-wen/bean-transform-tool</url>
